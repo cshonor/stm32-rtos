@@ -51,4 +51,4 @@
 ## 前置 / 后续
 
 - 前置：[第 1 章 Hello World](../01-hello-world/README.md)——四步编译流程
-- 后续：[第 3 章 嵌入式系统编程](../ch03-board-startup-gpio.md)——真正上板子
+- 后续：[第 3 章 嵌入式系统编程](../03-embedded-system-programming/README.md)——真正上板子

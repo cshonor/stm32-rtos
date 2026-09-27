@@ -27,7 +27,9 @@ book-notes/
 │   ├── 1.1-安装GCC.md
 │   └── ...
 └── 03-embedded-system-programming/ ← 第 3 章
-    └── 3.1-NUCLEO-F030R8开发板.md
+    ├── README.md                   ← 章导航
+    ├── 3.1-使用NUCLEO-F030R8开发板.md
+    └── ... 3.10-其他问题.md
 ```
 
 **三条规则**：
@@ -65,7 +67,7 @@ book-notes/
 | 00 | **地基篇**（自加，书里没有） | —— | 00.1–00.3 | ✅ [目录](00-mental-model/README.md) |
 | 01 | Hello World | 3–15 | 1.1–1.8 | ✅ [目录](01-hello-world/README.md) |
 | 02 | 集成开发环境介绍 | 16–26 | 2.1–2.6 | ✅ [目录](02-ide/README.md) |
-| 03 | 嵌入式系统编程 | 27–43 | 3.1–3.10 | 🚧 [ch03-board-startup-gpio.md](ch03-board-startup-gpio.md) |
+| 03 | 嵌入式系统编程 | 27–43 | 3.1–3.10 | ✅ [目录](03-embedded-system-programming/README.md) |
 | 04 | 数字和变量 | 44–64 | 4.1–4.7 | 🚧 [ch04-numbers-and-bitops.md](ch04-numbers-and-bitops.md) |
 | 05 | 决策和控制语句 | 65–77 | 5.1–5.8 | 🚧 [ch05-control-flow-button.md](ch05-control-flow-button.md) |
 | 06 | 数组、指针和字符串 | 78–88 | 6.1–6.4 | 🚧 [ch06-arrays-pointers-strings.md](ch06-arrays-pointers-strings.md) |
@@ -122,7 +124,7 @@ book-notes/
 |---|---|---|
 | 0 | 工具链（clang + ld.lld） | [01 Hello World](01-hello-world/README.md) |
 | 1 | 烧录链路 + OpenOCD/ST-Link | [02 IDE](02-ide/README.md) |
-| 2 | 启动文件、向量表、上电到 main | [03 嵌入式系统编程](ch03-board-startup-gpio.md) |
+| 2 | 启动文件、向量表、上电到 main | [03 嵌入式系统编程](03-embedded-system-programming/README.md) |
 | 3 | 链接脚本（Flash/RAM 布局） | [11 链接器](ch11-linker.md) |
 | 4 | 寄存器与 CMSIS 头（GPIO 点灯） | 03 / 04 |
 | 5 | 时钟树与 UART | 09（+ 补充 ch21） |
@@ -163,6 +165,15 @@ book-notes/
 | 批次 | 范围 | 篇数 | 状态 |
 |---|---|---|---|
 | 第 1 批 | 00 地基篇 3 篇 + 01（8 篇）+ 02（6 篇） | **17 篇 + 3 个章导航** | ✅ 2026-09-27 |
-| 第 2 批 | 03（10）+ 04（7）+ 05（8） | 25 篇 | ⬜ |
+| 第 2 批 | 03（10）+ 04（7）+ 05（8） | 25 篇 | 🚧 03 已完成（10 篇 + 章导航）｜04/05 待做 |
 | 第 3 批 | 06–12（4+8+9+5+7+9+8） | 50 篇 | ⬜ |
 | 第 4 批 | 13–18 + 附录 + 补充篇（6+8+5+7+7+5+1+3） | 42 篇 | ⬜ |
+
+**同步落地的实验**（笔记里的实测数据全部来自这里）：
+
+| 实验目录 | 对应书 | 状态 |
+|---|---|---|
+| [`stm32/00-toolchain-clang`](../stm32/00-toolchain-clang/README.md) | 1.1 | ✅ 主机侧 |
+| [`stm32/01-bare-metal`](../stm32/01-bare-metal/README.md) | 3.1–3.3 的启动部分 | ✅ 真机实测 |
+| [`stm32/02-libopencm3`](../stm32/02-libopencm3/README.md) | 2.x 的库路线 | ✅ |
+| [`stm32/03-gpio-blink`](../stm32/03-gpio-blink/README.md) | **3.3–3.7（本章核心）** | ✅ 真机实测（烧录 Verified OK、gdb 单步、探针） |
