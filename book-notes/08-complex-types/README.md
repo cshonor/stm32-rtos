@@ -111,7 +111,7 @@ const str_t p             →  编译器诊断：aka 'char *const'（const 的�
 - 前置：[第 4 章 数字和位操作](../04-numbers-and-bitops/README.md)（位操作、读-改-写）、
   [第 6 章 数组、指针和字符串](../06-arrays-pointers-strings/README.md)（数组退化）、
   [第 7 章 局部变量和函数](../07-stack-frame-functions/README.md)（栈帧与 `.su`）
-- 后续：[ch09 串口](../ch09-uart-serial.md)（UART 驱动用"结构体 + 回调"成型）、
+- 后续：[第 9 章 串口输出](../09-uart-serial/README.md)（UART 驱动用"结构体 + 回调"成型）、
   [ch10 中断](../ch10-interrupts.md)（向量表就是 `isr_t` 数组）、
   [ch17 模块化编程](../ch17-modular-programming.md)（结构体 + 函数指针 = 裸机的"面向对象"）
 - 横向：[ch11 链接器](../ch11-linker.md)（链接期 `ASSERT` 是编译期断言的补充）、

@@ -33,7 +33,7 @@
 |---|---|
 | 装 arm-none-eabi-gcc | 用 clang 23.1.0 + ld.lld（[理由](1.1-安装GCC.md)） |
 | 装 System Workbench for STM32 | 不装。SW4STM32 **已停止维护**（[理由](1.2-下载STM32系统工作台.md)） |
-| 第一个程序是 `printf("Hello World")` | 裸机上没有 printf。第 1 章的"第一个程序"只能验证**编译链通**，真正的输出在 [第 9 章串口](../ch09-uart-serial.md) |
+| 第一个程序是 `printf("Hello World")` | 裸机上没有 printf。第 1 章的"第一个程序"只能验证**编译链通**，真正的输出在 [第 9 章串口](../09-uart-serial/README.md)（[9.5 串口 Hello World](../09-uart-serial/9.5-串口HelloWorld.md)） |
 | 讲 PC 版 Makefile | 讲裸机版（多了链接脚本依赖、`.S` 规则、elf/bin 分离） |
 
 ## 读完本章你应该能回答

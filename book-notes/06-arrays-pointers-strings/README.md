@@ -53,5 +53,5 @@
   [第 5 章 决策和控制语句](../05-control-flow-button/README.md)（循环与下标）
 - 后续：[第 7 章 局部变量与函数](../07-stack-frame-functions/README.md)（数组传参在栈帧里怎么传）
 - 横向：[第 8 章 复杂数据类型](../08-complex-types/README.md)（结构体映射替代裸下标，见 [8.12](../08-complex-types/8.12-结构体与嵌入式编程.md)）、
-  [ch09 串口](../ch09-uart-serial.md)（字符串终于有去处）、
+  [第 9 章 串口输出](../09-uart-serial/README.md)（字符串终于有去处）、
   [ch10 中断](../ch10-interrupts.md)（环形缓冲 = 数组 + 指针算术 + unsigned 回绕）
