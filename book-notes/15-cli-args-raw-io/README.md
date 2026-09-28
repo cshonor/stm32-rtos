@@ -138,7 +138,7 @@ _IOR('n',1,int) = 0x40046e01                            ← 只有魔数不同 �
   [第 9 章 串口](../09-uart-serial/README.md)（裸机的字节通道、手动补 `\r`）、
   [第 10 章 中断](../10-interrupts/README.md)（环形缓冲的"拒绝写入" = 裸机版短写）、
   [第 14 章 缓冲文件 I/O](../14-buffered-file-io/README.md)（本章的对照面）
-- 后续：[第 16 章 浮点数](../ch16-floating-point.md)
+- 后续：[第 16 章 浮点数](../16-floating-point/README.md)
 - **LDD- / TLPI 侧**：
   - `open/read/write/close` 就是 **TLPI Ch4（文件 I/O）** 的主角，
     本章只是"STM32 书视角的速写"——真正的展开在 TLPI；

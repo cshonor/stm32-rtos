@@ -115,6 +115,6 @@ const str_t p             →  编译器诊断：aka 'char *const'（const 的�
   [ch10 中断](../10-interrupts/10.2-串口IO中断.md)（向量表就是 `isr_t` 数组）、
   [ch17 模块化编程](../ch17-modular-programming.md)（结构体 + 函数指针 = 裸机的"面向对象"）
 - 横向：[11.2 链接过程](../11-linker/11.2-链接过程.md)（链接期 `ASSERT` 是编译期断言的补充）、
-  [ch16 浮点](../ch16-floating-point.md)（`0.1f` 的位模式 `0x3dcccccd`）
+  [16.1 数字表示](../16-floating-point/16.1-数字表示.md)（`0.1f` 的位模式 `0x3dcccccd`）
 - **LDD- 侧**：Linux 驱动的 `struct file_operations` 就是"函数指针表"的终极形态；
   `ioremap()` 之后用结构体映射寄存器，和本章 [8.12](8.12-结构体与嵌入式编程.md) 完全同源。
