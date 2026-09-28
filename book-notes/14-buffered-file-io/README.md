@@ -143,7 +143,7 @@ mini_printf：.text 340 B(-Os) / 548 B(-O0)，栈 40 B，llvm-nm -u 空
   [第 8 章 复杂数据类型](../08-complex-types/README.md)（**结构体对齐与填充**、`packed` 的危险）、
   [第 9 章 串口](../09-uart-serial/README.md)（裸机的 `mini_printf`、86.8 µs/字节）、
   [第 10 章 中断](../10-interrupts/README.md)（环形缓冲 = 裸机版的缓冲）
-- 后续：[第 15 章 命令行参数与原始 I/O](../ch15-cli-args-raw-io.md)
+- 后续：[第 15 章 命令行参数与原始 I/O](../15-cli-args-raw-io/README.md)
 - **LDD- 侧**：
   - 内核的 `struct file` + `address_space`（页缓存）就是本章"缓冲"的放大版；
   - `fsync()` / `fdatasync()` 对应本章"数据还在页缓存里没落盘"；
