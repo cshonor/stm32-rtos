@@ -114,6 +114,6 @@ which screen → /usr/bin/screen（系统自带）；minicom 未装；pyserial �
 - 后续：[ch10 中断](../10-interrupts/10.4-用缓冲区提速.md)（**接收必须走中断 + 环形缓冲**）、
   [11.1 内存模型](../11-linker/11.1-编译和链接的内存模型.md)（`.rodata` 里的日志字符串）、
   [ch19 SysTick](../ch19-systick-and-timer.md)（给日志加毫秒时间戳）
-- 横向：[ch12 预处理器](../ch12-preprocessor.md)（`__FILE__`/`__LINE__` 的 Flash 代价）
+- 横向：[12.4 条件编译](../12-preprocessor/12.4-条件编译.md)（`__FILE__`/`__LINE__` 的 Flash 代价）
 - **LDD- 侧**：Linux 的 `printk` → 串口驱动 → `uart_driver`，
   层次和本章完全对应，只是中间几层是内核写的。
