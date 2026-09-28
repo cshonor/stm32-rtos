@@ -109,7 +109,7 @@ llvm-nm -u：空（零外部依赖）
   [第 6 章 数组指针](../06-arrays-pointers-strings/README.md)（环形缓冲的 `buf`）、
   [第 7 章 栈帧](../07-stack-frame-functions/README.md)（ISR 额外压 32 字节）、
   [第 9 章 串口](../09-uart-serial/README.md)（轮询发送的完整实测）
-- 后续：[ch11 链接器](../ch11-linker.md)（`.bss` 布局、栈预算、链接期 `ASSERT`）、
+- 后续：[11.5 映射文件](../11-linker/11.5-映射文件.md)（`.bss` 布局、栈预算、链接期 `ASSERT`）、
   [ch19 SysTick](../ch19-systick-and-timer.md)（最简单的中断，比 EXTI 少两步骤）、
   [ch20 FreeRTOS](../README.md)（`xQueueSendFromISR` 把环形缓冲换成 RTOS 队列）
 - **LDD- 侧**：Linux 的"上半部/下半部"在裸机上就是本章的
