@@ -64,7 +64,7 @@
 
 - 前置：[第 1 章 Hello World](../01-hello-world/README.md)（工具链与编译四步）、
   [第 3 章 嵌入式系统编程](../03-embedded-system-programming/README.md)（启动文件 / 链接布局）
-- 后续：[第 5 章 决策与控制语句](../ch05-control-flow-button.md)——
+- 后续：[第 5 章 决策与控制语句](../05-control-flow-button/README.md)——
   把 `if (reg & BIT(5))` 放进循环里读按键
 - 横向：[ch08 复杂数据类型](../ch08-complex-types.md)（寄存器块 → struct）、
   [ch10 中断](../ch10-interrupts.md)（读-改-写的并发风险真正致命的地方）、
