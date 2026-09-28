@@ -151,7 +151,7 @@ cmd.c:3:19: error: use of undeclared identifier 'LOG_LEVEL'
   [第 8 章 复杂数据类型](../08-complex-types/README.md)（`enum` / `_Static_assert` 替代宏）、
   [第 10 章 中断](../10-interrupts/README.md)（读 DR 清 RXNE——重复求值为什么致命）、
   [第 11 章 链接器](../11-linker/README.md)（宏展开后的 `.rodata` 在 map 里能看到）
-- 后续：[第 17 章 模块化编程](../ch17-modular-programming.md)（头文件守卫是模块化的基础设施）
+- 后续：[第 17 章 模块化编程](../17-modular-programming/README.md)（头文件守卫是模块化的基础设施）
 - **LDD- 侧**：内核的 `BUILD_BUG_ON()`、`IS_ENABLED()`、
   以及 Kconfig 生成的 `CONFIG_*` 宏，都是本章机制的**规模化应用**：
   - `IS_ENABLED(CONFIG_X)` 就是"把 `#ifdef` 变成值判断"，

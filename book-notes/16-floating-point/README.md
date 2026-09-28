@@ -166,7 +166,7 @@ snprintf 整数拆分     : 100 ns/次 → "23.450"
   [第 10 章 中断](../10-interrupts/README.md)（ISR 里别用浮点）、
   [第 11 章 链接器](../11-linker/README.md)（Flash 预算、软浮点库）、
   [第 15 章 原始 I/O](../15-cli-args-raw-io/README.md)（二进制位模式传输）
-- 后续：[第 17 章 模块化编程](../ch17-modular-programming.md)
+- 后续：[第 17 章 模块化编程](../17-modular-programming/README.md)
 - **LDD- / 内核侧**：
   - **内核里默认禁用浮点**，要用必须 `kernel_fpu_begin/end`——
     和裸机的"谨慎使用"是同一个理由：保存/恢复 FPU 寄存器代价高；

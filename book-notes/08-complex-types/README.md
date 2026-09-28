@@ -113,7 +113,7 @@ const str_t p             →  编译器诊断：aka 'char *const'（const 的�
   [第 7 章 局部变量和函数](../07-stack-frame-functions/README.md)（栈帧与 `.su`）
 - 后续：[第 9 章 串口输出](../09-uart-serial/README.md)（UART 驱动用"结构体 + 回调"成型）、
   [ch10 中断](../10-interrupts/10.2-串口IO中断.md)（向量表就是 `isr_t` 数组）、
-  [ch17 模块化编程](../ch17-modular-programming.md)（结构体 + 函数指针 = 裸机的"面向对象"）
+  [17.1 模块设计](../17-modular-programming/17.1-模块设计.md)（结构体 + 函数指针 = 裸机的"面向对象"）
 - 横向：[11.2 链接过程](../11-linker/11.2-链接过程.md)（链接期 `ASSERT` 是编译期断言的补充）、
   [16.1 数字表示](../16-floating-point/16.1-数字表示.md)（`0.1f` 的位模式 `0x3dcccccd`）
 - **LDD- 侧**：Linux 驱动的 `struct file_operations` 就是"函数指针表"的终极形态；
