@@ -68,7 +68,7 @@ book-notes/
 | 01 | Hello World | 3–15 | 1.1–1.8 | ✅ [目录](01-hello-world/README.md) |
 | 02 | 集成开发环境介绍 | 16–26 | 2.1–2.6 | ✅ [目录](02-ide/README.md) |
 | 03 | 嵌入式系统编程 | 27–43 | 3.1–3.10 | ✅ [目录](03-embedded-system-programming/README.md) |
-| 04 | 数字和变量 | 44–64 | 4.1–4.7 | 🚧 [ch04-numbers-and-bitops.md](ch04-numbers-and-bitops.md) |
+| 04 | 数字和变量 | 44–64 | 4.1–4.12 | ✅ [目录](04-numbers-and-bitops/README.md) |
 | 05 | 决策和控制语句 | 65–77 | 5.1–5.8 | 🚧 [ch05-control-flow-button.md](ch05-control-flow-button.md) |
 | 06 | 数组、指针和字符串 | 78–88 | 6.1–6.4 | 🚧 [ch06-arrays-pointers-strings.md](ch06-arrays-pointers-strings.md) |
 | 07 | 局部变量和函数 | 89–97 | 7.1–7.8 | 🚧 [ch07-stack-frame-functions.md](ch07-stack-frame-functions.md) |
@@ -165,7 +165,7 @@ book-notes/
 | 批次 | 范围 | 篇数 | 状态 |
 |---|---|---|---|
 | 第 1 批 | 00 地基篇 3 篇 + 01（8 篇）+ 02（6 篇） | **17 篇 + 3 个章导航** | ✅ 2026-09-27 |
-| 第 2 批 | 03（10）+ 04（7）+ 05（8） | 25 篇 | 🚧 03 已完成（10 篇 + 章导航）｜04/05 待做 |
+| 第 2 批 | 03（10）+ 04（12）+ 05（8） | 30 篇 | 🚧 03 ✅（10 篇 + 章导航）｜04 ✅（12 篇 + 章导航）｜05 待做 |
 | 第 3 批 | 06–12（4+8+9+5+7+9+8） | 50 篇 | ⬜ |
 | 第 4 批 | 13–18 + 附录 + 补充篇（6+8+5+7+7+5+1+3） | 42 篇 | ⬜ |
 
