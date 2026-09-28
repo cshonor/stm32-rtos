@@ -65,6 +65,6 @@ ch07.c:7:deep          0   static           ch07.c:7:deep         16   static
 
 - 前置：[第 4 章 数字和变量](../04-numbers-and-bitops/README.md)（变量的段归属）、
   [第 6 章 数组、指针和字符串](../06-arrays-pointers-strings/README.md)（数组与栈）
-- 后续：[第 8 章 复杂数据类型](../ch08-complex-types.md)（结构体传参/返回的栈代价）
+- 后续：[第 8 章 复杂数据类型](../08-complex-types/README.md)（结构体传参/返回的栈代价，见 [8.8](../08-complex-types/8.8-结构体指针.md)）
 - 横向：[ch10 中断](../ch10-interrupts.md)（中断帧 32 B 叠加在最深调用链上）、
   [ch11 链接器](../ch11-linker.md)（`_estack` 与栈溢出哨兵）

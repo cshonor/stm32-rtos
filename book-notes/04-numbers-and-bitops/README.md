@@ -66,6 +66,6 @@
   [第 3 章 嵌入式系统编程](../03-embedded-system-programming/README.md)（启动文件 / 链接布局）
 - 后续：[第 5 章 决策与控制语句](../05-control-flow-button/README.md)——
   把 `if (reg & BIT(5))` 放进循环里读按键
-- 横向：[ch08 复杂数据类型](../ch08-complex-types.md)（寄存器块 → struct）、
+- 横向：[第 8 章 复杂数据类型](../08-complex-types/README.md)（寄存器块 → struct，见 [8.12](../08-complex-types/8.12-结构体与嵌入式编程.md)）、
   [ch10 中断](../ch10-interrupts.md)（读-改-写的并发风险真正致命的地方）、
   [ch11 链接器](../ch11-linker.md)（`.data`/`.bss` 的地址来源）
