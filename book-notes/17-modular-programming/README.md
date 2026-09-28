@@ -158,7 +158,7 @@ macOS ld64：           ❌ Undefined symbols for architecture arm64: _opt_hook
   [第 10 章 中断](../10-interrupts/README.md)（ISR 命名与可重入）、
   [第 11 章 链接器](../11-linker/README.md)（`--gc-sections`、`KEEP()`、map 文件）、
   [第 12 章 预处理器](../12-preprocessor/README.md)（include guard 撞名的实测）
-- 后续：[第 18 章 后记](../ch18-next-steps.md)
+- 后续：[第 18 章 后记](../18-next-steps/README.md)
 - **LDD- / RTOS 侧**：
   - 内核的 `EXPORT_SYMBOL` / `EXPORT_SYMBOL_GPL` 就是"显式导出"版的命名空间管理；
   - 内核的 `__weak` 修饰符、以及"驱动 core 提供框架 + 具体驱动实现回调"
