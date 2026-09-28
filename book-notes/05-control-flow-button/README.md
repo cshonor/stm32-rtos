@@ -65,5 +65,5 @@
   `IDR & BIT(0)` 的位操作、unsigned 循环的性质
 - 后续：[第 6 章 数组、指针和字符串](../06-arrays-pointers-strings/README.md)——
   去抖要的历史采样怎么存（环形缓冲）
-- 横向：[ch10 中断](../ch10-interrupts.md)（按键的终极方案 EXTI）、
+- 横向：[第 10 章 中断](../10-interrupts/README.md)（按键的终极方案 EXTI）、
   [ch19 SysTick](../ch19-systick-and-timer.md)（去抖与延时的时基）

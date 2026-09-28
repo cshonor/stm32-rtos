@@ -54,4 +54,4 @@
 - 后续：[第 7 章 局部变量与函数](../07-stack-frame-functions/README.md)（数组传参在栈帧里怎么传）
 - 横向：[第 8 章 复杂数据类型](../08-complex-types/README.md)（结构体映射替代裸下标，见 [8.12](../08-complex-types/8.12-结构体与嵌入式编程.md)）、
   [第 9 章 串口输出](../09-uart-serial/README.md)（字符串终于有去处）、
-  [ch10 中断](../ch10-interrupts.md)（环形缓冲 = 数组 + 指针算术 + unsigned 回绕）
+  [10.4 用缓冲区提速](../10-interrupts/10.4-用缓冲区提速.md)（环形缓冲 = 数组 + 指针算术 + unsigned 回绕）
