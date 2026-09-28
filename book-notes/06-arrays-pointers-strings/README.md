@@ -51,7 +51,7 @@
 
 - 前置：[第 4 章 数字和变量](../04-numbers-and-bitops/README.md)（`uint32_t`、`unsigned` 回绕）、
   [第 5 章 决策和控制语句](../05-control-flow-button/README.md)（循环与下标）
-- 后续：[第 7 章 局部变量与函数](../ch07-stack-frame-functions.md)（数组传参在栈帧里怎么传）
+- 后续：[第 7 章 局部变量与函数](../07-stack-frame-functions/README.md)（数组传参在栈帧里怎么传）
 - 横向：[ch08 复杂数据类型](../ch08-complex-types.md)（结构体映射替代裸下标）、
   [ch09 串口](../ch09-uart-serial.md)（字符串终于有去处）、
   [ch10 中断](../ch10-interrupts.md)（环形缓冲 = 数组 + 指针算术 + unsigned 回绕）
