@@ -152,7 +152,7 @@ libopencm3：已编译 libopencm3_stm32f1.a（3.0 MB / 53 成员 / 677 符号）
 ## 前置 / 后续
 
 - 前置：**全书 ch00–ch17**（本章是对它们的元总结）
-- 后续：**补充篇 ch19 SysTick/通用定时器**（书里没写但必须会）
+- 后续：**补充篇 [ch19 SysTick/通用定时器](../19-systick-and-timer/README.md)**（书里没写但必须会，✅ 2026-09-28 已拆 19.1–19.7）
 - **LDD- / TLPI 侧**：本章的"工具箱"在内核侧对应
   `sparse`（内核静态分析）、`coccinelle`（语义补丁）、
   `KASAN` / `UBSAN`（内核版 sanitizer）、`kmemleak`、`ftrace` / `perf`——

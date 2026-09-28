@@ -110,7 +110,7 @@ llvm-nm -u：空（零外部依赖）
   [第 7 章 栈帧](../07-stack-frame-functions/README.md)（ISR 额外压 32 字节）、
   [第 9 章 串口](../09-uart-serial/README.md)（轮询发送的完整实测）
 - 后续：[11.5 映射文件](../11-linker/11.5-映射文件.md)（`.bss` 布局、栈预算、链接期 `ASSERT`）、
-  [ch19 SysTick](../ch19-systick-and-timer.md)（最简单的中断，比 EXTI 少两步骤）、
+  [ch19 SysTick](../19-systick-and-timer/19.2-配置成1ms心跳.md)（最简单的中断，比 EXTI 少两步骤）、
   [ch20 FreeRTOS](../README.md)（`xQueueSendFromISR` 把环形缓冲换成 RTOS 队列）
 - **LDD- 侧**：Linux 的"上半部/下半部"在裸机上就是本章的
   **"ISR 入队 + 主循环处理"**；`spin_lock_irqsave` 对应 `__disable_irq()` +

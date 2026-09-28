@@ -78,7 +78,7 @@
   + [00 地基篇](../00-mental-model/README.md)（没有 OS 的 C 语言、操作硬件的三个手段）
 - **后续**：[第 4 章 数字和变量](../README.md)——本章那些 `1u << 2`、`0xFu << 20`
   的系统解释（整数表示、溢出、补码、位操作）
-- **补充篇**：[ch19 SysTick / 定时器](../../book-notes/README.md)——把本章那个
+- **补充篇**：[ch19 SysTick / 定时器](../19-systick-and-timer/README.md)——把本章那个
   "不可靠的 `delay()`"换成硬件时基（你迟早需要）
 
 ## 本章技术债（诚实记录）

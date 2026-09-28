@@ -113,7 +113,7 @@ which screen → /usr/bin/screen（系统自带）；minicom 未装；pyserial �
   [第 8 章 复杂数据类型](../08-complex-types/README.md)（把裸地址宏换成寄存器结构体）
 - 后续：[ch10 中断](../10-interrupts/10.4-用缓冲区提速.md)（**接收必须走中断 + 环形缓冲**）、
   [11.1 内存模型](../11-linker/11.1-编译和链接的内存模型.md)（`.rodata` 里的日志字符串）、
-  [ch19 SysTick](../ch19-systick-and-timer.md)（给日志加毫秒时间戳）
+  [ch19 SysTick](../19-systick-and-timer/19.3-g_ms与回绕安全的时间比较.md)（给日志加毫秒时间戳）
 - 横向：[12.4 条件编译](../12-preprocessor/12.4-条件编译.md)（`__FILE__`/`__LINE__` 的 Flash 代价）
 - **LDD- 侧**：Linux 的 `printk` → 串口驱动 → `uart_driver`，
   层次和本章完全对应，只是中间几层是内核写的。
