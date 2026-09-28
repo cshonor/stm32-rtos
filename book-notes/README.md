@@ -70,7 +70,7 @@ book-notes/
 | 03 | 嵌入式系统编程 | 27–43 | 3.1–3.10 | ✅ [目录](03-embedded-system-programming/README.md) |
 | 04 | 数字和变量 | 44–64 | 4.1–4.12 | ✅ [目录](04-numbers-and-bitops/README.md) |
 | 05 | 决策和控制语句 | 65–77 | 5.1–5.14 | ✅ [目录](05-control-flow-button/README.md) |
-| 06 | 数组、指针和字符串 | 78–88 | 6.1–6.4 | 🚧 [ch06-arrays-pointers-strings.md](ch06-arrays-pointers-strings.md) |
+| 06 | 数组、指针和字符串 | 78–88 | 6.1–6.5 | ✅ [目录](06-arrays-pointers-strings/README.md) |
 | 07 | 局部变量和函数 | 89–97 | 7.1–7.8 | 🚧 [ch07-stack-frame-functions.md](ch07-stack-frame-functions.md) |
 | 08 | 复杂数据类型 | 98–118 | 8.1–8.9 | 🚧 [ch08-complex-types.md](ch08-complex-types.md) |
 | 09 | STM 上的串口输出 | 119–134 | 9.1–9.5 | 🚧 [ch09-uart-serial.md](ch09-uart-serial.md) |
