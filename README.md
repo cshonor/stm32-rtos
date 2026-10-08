@@ -26,12 +26,12 @@ _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-exa
 | 0 | 工具链（**不用 GCC**：clang + ld.lld + llvm 二进制工具） | stm32/00-toolchain-clang | ✅ 主机侧实测 |
 | 1 | 开发环境（烧录链路 + OpenOCD/ST-Link） | stm32/01-bare-metal | ✅ **真机实测（09-26 烧录 + 回读 + gdb 源码级停住）** |
 | 2 | 启动文件、向量表、上电到 main | stm32/01-bare-metal | ✅ **真机实测（09-26 向量表/RAM 回读与 ELF 逐字节一致）** |
-| 3 | 链接脚本（Flash/RAM 布局） | stm32/02-linker | ⬜ |
-| 4 | 寄存器与 CMSIS 头（GPIO 点灯） | stm32/03-gpio-blink | ⬜ |
-| 5 | 时钟树与 UART | stm32/04-uart-printf | ⬜ |
-| 6 | 中断与 EXTI | stm32/05-exti-button | ⬜ |
-| 7 | SysTick / 定时器 | stm32/06-timer | ⬜ |
-| 8 | FreeRTOS：任务/调度/队列/信号量 | freertos/01-hello-task | ⬜ |
+| 3 | 链接脚本（Flash/RAM 布局） | stm32/01-bare-metal（linker.ld 逐段 + nokeep 反面教材） | ✅ 真机实测（笔记：[book-notes/11-linker](book-notes/11-linker/README.md)） |
+| 4 | 寄存器与 CMSIS 头（GPIO 点灯） | stm32/03-gpio-blink | ✅ 真机实测（烧录 Verified OK、gdb 单步、portprobe 探针） |
+| 5 | 时钟树与 UART | stm32/04-uart-printf | ⬜ 骨架已建（笔记：书 ch09 + 补充 ch21） |
+| 6 | 中断与 EXTI | stm32/05-exti-button | ⬜ 骨架已建（笔记：书 ch10 + ch05） |
+| 7 | SysTick / 定时器 | stm32/06-timer | ⬜ 骨架已建（笔记：补充 ch19） |
+| 8 | FreeRTOS：任务/调度/队列/信号量 | freertos/01–04 | ⬜ 骨架已建（笔记：补充 ch20） |
 | 轨道二 | 库路线：libopencm3（≠ HAL） | stm32/02-libopencm3 | ✅ 真机首烧通过（09-24） |
 | 轨道三 | ST 官方 HAL | stm32/03-hal | ⬜ 骨架已建，库未引入 |
 

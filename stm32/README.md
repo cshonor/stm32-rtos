@@ -24,8 +24,13 @@
   - 反面教材 `linker-nokeep.ld`：只去掉 `KEEP(*(.isr_vector))`，链接不报错、
     但镜像第 0 个字变成代码指令 —— 上电即崩且无任何编译期提示
   - 自检目标：`make vectors` / `compare` / `check-nokeep` / `check-isr` / `check-gpr` / `check-stack` / `check-lds`
-- 规划中（沿书章节）：02-linker（链接脚本，书 ch3）→ 03-gpio-blink（书 ch4）→
-  04-uart-printf（书 ch5）→ 05-exti-button（书 ch6）→ 06-timer（书 ch7）
+- `03-gpio-blink`：✅ **真机实测**（烧录 Verified OK、gdb 单步、portprobe 探针）——
+  寄存器点灯 + `.noinit` 面包屑 + `-fstack-usage` 栈账（书 ch3/ch4）
+- 规划中（骨架已建）：[04-uart-printf](04-uart-printf/README.md)（书 ch9 + ch21）→
+  [05-exti-button](05-exti-button/README.md)（书 ch10 + ch05）→
+  [06-timer](06-timer/README.md)（补充 ch19）
+- 「02-linker」不单列目录：链接脚本（书 ch3 主题）已在 `01-bare-metal/linker.ld` 逐段落地
+  + 反面教材 `linker-nokeep.ld`，笔记侧见 [book-notes/11-linker](../book-notes/11-linker/README.md)
 
 ## 轨道二：libopencm3（`02-libopencm3/`）
 
