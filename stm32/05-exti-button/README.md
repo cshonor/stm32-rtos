@@ -1,8 +1,8 @@
 # 05-exti-button —— 按键中断（EXTI + NVIC）
 
 > 状态：⬜ 未开始（骨架）。轨道一（裸机 C）第 5 个实验。
-> 对应笔记：[第 10 章 中断](../../book-notes/10-interrupts/README.md)（全章）
-> + [第 5 章 决策和控制语句](../../book-notes/05-control-flow-button/README.md)（按钮硬件、上拉/下拉、去抖）
+> 对应笔记：[第 10 章 中断](../book-notes/10-interrupts/README.md)（全章）
+> + [第 5 章 决策和控制语句](../book-notes/05-control-flow-button/README.md)（按钮硬件、上拉/下拉、去抖）
 > 前置：[03-gpio-blink](../03-gpio-blink/README.md)（✅ 真机实测）、
 > 建议先有 [04-uart-printf](../04-uart-printf/README.md)（用串口观察中断行为）
 

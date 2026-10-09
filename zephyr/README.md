@@ -3,6 +3,9 @@
 定位：**第二遍走的工程化路线**。stm32/（裸机寄存器）和 freertos/（调度原理）
 全部真机跑通后才进这里——Zephyr 抽象层厚，没有裸机底子会被包死在框架里。
 
+> 配套教材：《Zephyr RTOS Embedded C Programming》（Andrew Eliasz, Apress 2024）——
+> Zephyr 唯一成体系的专门书，笔记在 [book-notes/](book-notes/README.md)（⬜ 骨架）。
+
 ## 为什么值得走第二遍
 
 - Zephyr ≈ MCU 上的「小 Linux」：devicetree / Kconfig / west / menuconfig，

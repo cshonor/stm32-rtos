@@ -135,7 +135,7 @@ llvm-readelf -h app.elf | grep -i entry  # 必须 ≠ 0
 - **上一篇**：[A.1 项目创建清单](A.1-项目创建清单.md)。
 - **下一篇**：[A.3 做错会怎样](A.3-做错会怎样.md)——本篇每步"漏了"的实测后果。
 - **链接器展开**：[11 链接器](../11-linker/README.md)。
-- **真机版**：[`stm32/01-bare-metal`](../../stm32/01-bare-metal/README.md)（烧录 Verified OK）。
+- **真机版**：[`stm32/01-bare-metal`](../../01-bare-metal/README.md)（烧录 Verified OK）。
 
 ## 代码自测
 

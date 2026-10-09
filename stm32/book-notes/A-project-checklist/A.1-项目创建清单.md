@@ -111,7 +111,7 @@ void Reset_Handler(void){
 
 - **下一篇**：[A.2 清单每步的实测数据](A.2-清单每步的实测数据.md)。
 - **失败手册**：[A.3 做错会怎样](A.3-做错会怎样.md)。
-- **实操**：[`stm32/01-bare-metal`](../../stm32/01-bare-metal/README.md) 是这份清单的完整版落地。
+- **实操**：[`stm32/01-bare-metal`](../../01-bare-metal/README.md) 是这份清单的完整版落地。
 - **链接器**：[11 链接器](../11-linker/README.md) 把 `linker.ld` 逐行展开。
 
 ## 代码自测

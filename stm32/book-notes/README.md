@@ -182,7 +182,7 @@ book-notes/
 
 | 实验目录 | 对应书 | 状态 |
 |---|---|---|
-| [`stm32/00-toolchain-clang`](../stm32/00-toolchain-clang/README.md) | 1.1 | ✅ 主机侧 |
-| [`stm32/01-bare-metal`](../stm32/01-bare-metal/README.md) | 3.1–3.3 的启动部分 | ✅ 真机实测 |
-| [`stm32/02-libopencm3`](../stm32/02-libopencm3/README.md) | 2.x 的库路线 | ✅ |
-| [`stm32/03-gpio-blink`](../stm32/03-gpio-blink/README.md) | **3.3–3.7（本章核心）** | ✅ 真机实测（烧录 Verified OK、gdb 单步、探针） |
+| [`stm32/00-toolchain-clang`](../00-toolchain-clang/README.md) | 1.1 | ✅ 主机侧 |
+| [`stm32/01-bare-metal`](../01-bare-metal/README.md) | 3.1–3.3 的启动部分 | ✅ 真机实测 |
+| [`stm32/02-libopencm3`](../02-libopencm3/README.md) | 2.x 的库路线 | ✅ |
+| [`stm32/03-gpio-blink`](../03-gpio-blink/README.md) | **3.3–3.7（本章核心）** | ✅ 真机实测（烧录 Verified OK、gdb 单步、探针） |

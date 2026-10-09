@@ -1,7 +1,7 @@
 # 补充篇 ch21 · 时钟树（RCC/PLL）—— 章节导航
 
 > 补充篇（书里没有）· 对应实验：——（机制讲解篇，无独立实验；
-> 落点在 [`stm32/02-libopencm3`](../../stm32/02-libopencm3/README.md) 与后续 UART/定时器实验）
+> 落点在 [`stm32/02-libopencm3`](../../02-libopencm3/README.md) 与后续 UART/定时器实验）
 >
 > **⚠ 本篇为先行讲解**：时钟树尚未在真机上配过 PLL
 > （02-libopencm3 明确"故意不碰，留给 UART 那一节"），

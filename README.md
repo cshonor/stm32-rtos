@@ -1,20 +1,28 @@
 # STM32- · STM32 + FreeRTOS 学习仓库
 
 > 定位：MCU 裸机 → RTOS 的学习轨，与 `LDD-`（Linux 驱动轨）互补不混线。
-> 主线教材：**《裸机C编程：嵌入式系统C程序设计》**（[美] Stephen Oualline 著，黄俊彬 译，
-> 机械工业出版社 2025，ISBN 9787111792017；原书 *Bare Metal C*, No Starch Press 2022，全 18 章）。
-> `book-notes/` 的篇号 **chNN 与书的章号一一对齐**（ch01–ch18 + 补充篇），
-> 本篇下面的"学习路线"表按**实验**编号，两者的映射见 `book-notes/README.md`。
+> **三条轨道各配一本书，笔记就放在各轨道目录下的 `book-notes/` 里**：
+>
+> | 轨道 | 配套教材 | 笔记位置 |
+> |---|---|---|
+> | `stm32/`（裸机 → 库 → HAL） | **《裸机C编程：嵌入式系统C程序设计》**（[美] Stephen Oualline 著，黄俊彬 译，机械工业出版社 2025，ISBN 9787111792017；原书 *Bare Metal C*, No Starch 2022，全 18 章） | [stm32/book-notes/](stm32/book-notes/README.md)（✅ 已写完） |
+> | `freertos/`（RTOS 第一遍） | **《Mastering the FreeRTOS Real Time Kernel》**（Richard Barry，FreeRTOS 官方书，官网免费 PDF，有社区中译本；纸质备选：野火刘火良《FreeRTOS 内核实现与应用开发实战指南——基于STM32》） | [freertos/book-notes/](freertos/book-notes/README.md)（⬜ 待启动） |
+> | `zephyr/`（工程化第二遍） | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页——Zephyr 唯一成体系的专门书；辅以官方文档） | [zephyr/book-notes/](zephyr/book-notes/README.md)（⬜ 待启动） |
+>
+> `stm32/book-notes/` 的篇号 **chNN 与书的章号一一对齐**（ch01–ch18 + 补充篇），
+> 本篇下面的"学习路线"表按**实验**编号，两者的映射见 `stm32/book-notes/README.md`。
 > 预习衔接：`LDD-/09` 学过中断下半部、`10` 章（规划中）Pi 5 裸机
 > 会先走一遍"上电 → 启动 → main → 寄存器"，到这里换地址表就是 STM32 本体。
 
 ## 目录结构
 
 ```
-book-notes/   书的逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
 stm32/        三条轨道：01-bare-metal（裸机C，主线）→ 02-libopencm3（库）→ 03-hal（ST官方）
+  book-notes/ 《裸机C编程》逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
 freertos/     FreeRTOS 移植与任务实验（等裸机三件套通了再进）
+  book-notes/ 《Mastering the FreeRTOS Real Time Kernel》配套笔记（骨架）
 zephyr/       Zephyr 实验区（第二遍的工程化路线，最后走）
+  book-notes/ 《Zephyr RTOS Embedded C Programming》(Eliasz) 配套笔记（骨架）
 third_party/  git 子模块：libopencm3（stm32/02-libopencm3 用；clone 后先 git submodule update --init）
 _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-examples）
 ```
@@ -26,7 +34,7 @@ _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-exa
 | 0 | 工具链（**不用 GCC**：clang + ld.lld + llvm 二进制工具） | stm32/00-toolchain-clang | ✅ 主机侧实测 |
 | 1 | 开发环境（烧录链路 + OpenOCD/ST-Link） | stm32/01-bare-metal | ✅ **真机实测（09-26 烧录 + 回读 + gdb 源码级停住）** |
 | 2 | 启动文件、向量表、上电到 main | stm32/01-bare-metal | ✅ **真机实测（09-26 向量表/RAM 回读与 ELF 逐字节一致）** |
-| 3 | 链接脚本（Flash/RAM 布局） | stm32/01-bare-metal（linker.ld 逐段 + nokeep 反面教材） | ✅ 真机实测（笔记：[book-notes/11-linker](book-notes/11-linker/README.md)） |
+| 3 | 链接脚本（Flash/RAM 布局） | stm32/01-bare-metal（linker.ld 逐段 + nokeep 反面教材） | ✅ 真机实测（笔记：[book-notes/11-linker](stm32/book-notes/11-linker/README.md)） |
 | 4 | 寄存器与 CMSIS 头（GPIO 点灯） | stm32/03-gpio-blink | ✅ 真机实测（烧录 Verified OK、gdb 单步、portprobe 探针） |
 | 5 | 时钟树与 UART | stm32/04-uart-printf | ⬜ 骨架已建（笔记：书 ch09 + 补充 ch21） |
 | 6 | 中断与 EXTI | stm32/05-exti-button | ⬜ 骨架已建（笔记：书 ch10 + ch05） |
@@ -35,7 +43,7 @@ _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-exa
 | 轨道二 | 库路线：libopencm3（≠ HAL） | stm32/02-libopencm3 | ✅ 真机首烧通过（09-24） |
 | 轨道三 | ST 官方 HAL | stm32/03-hal | ⬜ 骨架已建，库未引入 |
 
-**书的逐章笔记**：`book-notes/` 已全部按「一小节一笔记」写完 —— **ch01–ch18 + 附录
+**书的逐章笔记**：`stm32/book-notes/` 已全部按「一小节一笔记」写完 —— **ch01–ch18 + 附录
 + 补充篇 ch19（SysTick/定时器）/ ch20（走向 FreeRTOS）/ ch21（时钟树）**，
 每篇带"原书怎么说 / 实测是什么"坑点表与折叠 Q&A。想按书推进就看那个索引，
 想按实验推进就看上面这张表。

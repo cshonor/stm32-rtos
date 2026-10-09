@@ -30,7 +30,7 @@
   [05-exti-button](05-exti-button/README.md)（书 ch10 + ch05）→
   [06-timer](06-timer/README.md)（补充 ch19）
 - 「02-linker」不单列目录：链接脚本（书 ch3 主题）已在 `01-bare-metal/linker.ld` 逐段落地
-  + 反面教材 `linker-nokeep.ld`，笔记侧见 [book-notes/11-linker](../book-notes/11-linker/README.md)
+  + 反面教材 `linker-nokeep.ld`，笔记侧见 [book-notes/11-linker](book-notes/11-linker/README.md)
 
 ## 轨道二：libopencm3（`02-libopencm3/`）
 

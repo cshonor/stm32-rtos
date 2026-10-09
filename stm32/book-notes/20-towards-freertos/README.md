@@ -1,6 +1,6 @@
 # 补充篇 ch20 · 从裸机到 FreeRTOS —— 章节导航
 
-> 补充篇（书里没有）· 对应实验：[`freertos/01-hello-task`](../../freertos/README.md)
+> 补充篇（书里没有）· 对应实验：[`freertos/01-hello-task`](../../../freertos/README.md)
 >
 > **⚠ 对应实验 ⬜ 未做。本篇为先行讲解，实测数据待实验落地后补。**
 > 本篇所有内容只讲机制原理与代码落点，**不含任何实测输出**。
@@ -63,7 +63,7 @@ RTOS 就是跨这堵墙的工具，而书停在了墙的这一边。
 - **前置**：[ch19 SysTick 与定时器](../19-systick-and-timer/README.md)
   （SysTick 就是 RTOS 的心跳；超级循环的局限是 RTOS 的动机）
   + ch10（中断：队列/信号量是"ISR → 主循环"通信的正式化）
-- **后续**：实验 [`freertos/01-hello-task`](../../freertos/README.md)（两个任务 LED 交替，
+- **后续**：实验 [`freertos/01-hello-task`](../../../freertos/README.md)（两个任务 LED 交替，
   调度器第一课）→ `02-queue` → `03-semaphore` → `04-mutex-priority`
 - **工程化第二遍**：`zephyr/`（devicetree/Kconfig 与 Linux 同源，实验与本区一一对照）
 

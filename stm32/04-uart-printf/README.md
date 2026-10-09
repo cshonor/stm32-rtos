@@ -1,8 +1,8 @@
 # 04-uart-printf —— 串口输出与 printf retarget
 
 > 状态：⬜ 未开始（骨架）。轨道一（裸机 C）第 4 个实验。
-> 对应笔记：[第 9 章 STM 上的串口输出](../../book-notes/09-uart-serial/README.md)（9.1–9.5 全章）
-> + [补充 ch21 时钟树](../../book-notes/21-clock-tree/README.md)（波特率从哪个时钟来）
+> 对应笔记：[第 9 章 STM 上的串口输出](../book-notes/09-uart-serial/README.md)（9.1–9.5 全章）
+> + [补充 ch21 时钟树](../book-notes/21-clock-tree/README.md)（波特率从哪个时钟来）
 > 前置：[03-gpio-blink](../03-gpio-blink/README.md)（✅ 真机实测）
 
 ## 目标
@@ -15,7 +15,7 @@
 - NUCLEO-F103RB：**USART2 = PA2(TX) / PA3(RX)**，接板载 ST-Link 的虚拟串口（VCP），
   连 USB 就能在主机看到——不需要外接 USB 转串口
 - 书（F030R8）用的是 USART1；**别照抄书里的寄存器地址**，差异见
-  [09 章导航「与书的差异」](../../book-notes/09-uart-serial/README.md)
+  [09 章导航「与书的差异」](../book-notes/09-uart-serial/README.md)
 - 波特率：默认 HSI 8 MHz，`BRR = 8MHz / 115200 ≈ 69.44` 有 0.64% 误差（9.2 有实测账），
   想准就配 PLL（ch21，可先不做）
 

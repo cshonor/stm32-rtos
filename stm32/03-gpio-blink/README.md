@@ -2,7 +2,7 @@
 
 > 对应书：《裸机C编程》第 3 章「嵌入式系统编程」
 > （3.3.1 初始化硬件 / 3.3.2 GPIO 引脚编程 / 3.3.3 切换 LED / 3.4 探索构建过程）
-> 笔记见 [`book-notes/03-embedded-system-programming/`](../../book-notes/03-embedded-system-programming/README.md)
+> 笔记见 [`book-notes/03-embedded-system-programming/`](../book-notes/03-embedded-system-programming/README.md)
 >
 > 状态：**✅ 真机实测**（烧录 Verified OK、闪烁被调试器读回证据链完整）
 

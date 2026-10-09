@@ -1,7 +1,7 @@
 # 06-timer —— SysTick 与通用定时器
 
 > 状态：⬜ 未开始（骨架）。轨道一（裸机 C）第 6 个实验。
-> 对应笔记：[补充 ch19 SysTick / 定时器](../../book-notes/19-systick-and-timer/README.md)（19.1–19.7 全篇）
+> 对应笔记：[补充 ch19 SysTick / 定时器](../book-notes/19-systick-and-timer/README.md)（19.1–19.7 全篇）
 > 前置：[04-uart-printf](../04-uart-printf/README.md)（串口观察）、
 > [05-exti-button](../05-exti-button/README.md)（中断链路已通）
 
