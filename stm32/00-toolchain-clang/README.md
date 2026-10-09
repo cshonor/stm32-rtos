@@ -156,6 +156,27 @@ ld.lld: error: undefined symbol: __aeabi_ldivmod
 `__aeabi_memcpy` 没报缺 —— 因为 `startup.c` 里自己实现了。
 浮点/64 位除没实现，属于 compiler-rt（libgcc 的等价物），要另接。
 
+## freestanding 下到底能 include 什么？
+
+全程 `-nostdlib` 不代表「什么头文件都没有」——编译器自带一批。标准规定的 freestanding
+清单是 **C99=7 / C11=C17=9 / C23=10** 个（依据与标准出处见
+[book-notes/00.3](../book-notes/00-mental-model/00.3-没有GCC行不行.md)）。
+
+本机 clang 23.1.0 逐个 include 实测
+（`clang --target=armv7m-none-eabi -mcpu=cortex-m3 -mthumb -ffreestanding -std=c23 -fsyntax-only`）：
+
+| 结果 | 头文件 |
+|---|---|
+| ✅ 可用（在标准清单里） | `float.h` `iso646.h` `limits.h` `stdalign.h` `stdarg.h` `stdbool.h` `stddef.h` `stdint.h` `stdnoreturn.h` |
+| ❌ **缺** | `stdbit.h` ← 标准要求给，clang 23.1.0 资源目录里**没有** |
+| ⚠️ 多给（**超出**标准清单） | `stdatomic.h` `stdckdint.h`（还有 `stdcountof.h` `stddefer.h` 等扩展） |
+| ❌ 没有（hosted 头，理应没有） | `assert.h` `stdio.h` `stdlib.h` `string.h` `math.h` |
+
+一句话：**「能 include」≠「标准保证」**。clang 既多给（`stdatomic.h`）也少给
+（`stdbit.h`），所以不能拿它当可移植性依据——可移植的裸机代码只依赖标准清单里的头文件。
+本目录的 `main.c` 干脆**一个头文件都不 include**：`u32`/`u8` 自己 `typedef`，
+这是「完全不依赖工具链给什么」的最保守写法（也顺带避开了 stdint 类型宽度随实现的浮动）。
+
 ## 坑点清单（真机踩过，按命中顺序）
 
 | # | 现象 | 原因 / 解法 |

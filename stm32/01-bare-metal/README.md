@@ -11,6 +11,28 @@
 - 上一站：`stm32/00-toolchain-clang`（同一套 clang + ld.lld 工具链，全程 `-nostdlib`）
 - 全部命令在 macOS 26.6.2 (arm64) + micromamba `cdev`（clang 23.1.0 / lld 23.1.0）实测
 
+## 全景：从 .c 到 Flash 的四步
+
+裸机与「在电脑上跑程序」最根本的区别：**没有 OS 接收你的文件**。板子没有文件系统，
+不存在「把程序传过去运行」——实际是一条四步链路：
+
+| 步 | 做什么 | 工具 | 落在本仓哪 |
+|---|---|---|---|
+| 1 | 写代码：`main.c` + 启动文件（向量表 + `Reset_Handler`）+ 链接脚本 | 编辑器 | 本目录 `startup.S` / `linker.ld` |
+| 2 | **交叉编译**：目标 Cortex-M3、`-ffreestanding -nostdlib`，出 ELF | `clang --target=armv7m-none-eabi` | [../00-toolchain-clang](../00-toolchain-clang/README.md) |
+| 3 | 格式转换：ELF → 纯二进制 | `llvm-objcopy -O binary` | 同上（在 `make` 里） |
+| 4 | **烧录**：写进 Flash 的**固定地址**（F103 = `0x08000000`） | `openocd` + ST-Link（SWD） | 本目录（文末「还没做的」一节有命令） |
+
+**第 2 步为什么不能用 Mac 上的本机 clang/gcc**：本机编译器出的是 arm64/x86 + Mach-O，
+F103 是 **Cortex-M3（Thumb-2）**——两种完全不同的东西，放上去就是一堆废数据。
+必须指定目标三元组让编译器出 ARM 目标码（本仓走
+`clang --target=armv7m-none-eabi`，见 [00](../00-toolchain-clang/README.md)）。
+
+**第 4 步之后发生什么**：复位/上电 → 硬件从 Flash 首地址读两个字
+（第 0 字进 MSP、第 1 字进 PC）→ PC 落到 `Reset_Handler` → 搬 `.data` / 清 `.bss`
+→ 进 `main`。**这就是「入口」不是 `main` 而是 `Reset_Handler` 的原因**，
+也是下面「实测 1 / 实测 2」要逐字节验证的东西。
+
 ## 三个问题，本目录逐个给实测答案
 
 | 问题 | 答案落在哪 |
