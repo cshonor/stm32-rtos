@@ -10,7 +10,7 @@
 
 ## 三个问题，本目录逐个给实测答案
 
-1. **`make TARGETS=01-stm32/f1` 里的 `TARGETS` 到底是什么？** —— 它选的是「编哪些**家族**的库」，
+1. **`make TARGETS=stm32/f1` 里的 `TARGETS` 到底是什么？** —— 它选的是「编哪些**家族**的库」，
    和「我的程序给哪颗**芯片**编」（`DEVICE`）是两件事。实测见 [§3](#实测-3targets-与-device-是两件事)。
 2. **网上那些 libopencm3 教程的 Makefile 还能用吗？** —— 不能，两处指向不存在的文件、一处路径写错。
    实测见 [§2](#实测-2三处教程已经过时的地方)。
@@ -42,7 +42,7 @@ make            # 库没编会自动先编库，再编应用，一条命令到�
 
 | 目标 | 作用 |
 |---|---|
-| `make lib` | 只编库（`make TARGETS=01-stm32/f1`） |
+| `make lib` | 只编库（`make TARGETS=stm32/f1`） |
 | `make size` | 体积账单（text/data/bss） |
 | `make vectors` | 向量表断言：上电时硬件会读到什么 |
 | `make dump` | `main` 的反汇编（源码交错） |
@@ -112,9 +112,9 @@ xPack Open On-Chip Debugger 0.12.0+dev-02228-ge5888bda3-dirty (2025-10-04-22:45)
 
 | 教程里写的 | 实际情况 |
 |---|---|
-| `LDSCRIPT = $(OPENCM3_DIR)/lib/01-stm32/f1/stm32f103rb.ld` | `lib/01-stm32/f1/` 下**没有任何 .ld**（只有 adc.c / gpio.c / rcc.c…）。链接脚本由 `scripts/genlink.py` 读 `ld/devices.data` **现场生成** |
+| `LDSCRIPT = $(OPENCM3_DIR)/lib/stm32/f1/stm32f103rb.ld` | `lib/stm32/f1/` 下**没有任何 .ld**（只有 adc.c / gpio.c / rcc.c…）。链接脚本由 `scripts/genlink.py` 读 `ld/devices.data` **现场生成** |
 | `include $(OPENCM3_DIR)/lib/libopencm3.rules.mk` | `lib/` 下没有这个文件。构建支持已迁到 `mk/`：`gcc-config.mk` / `gcc-rules.mk` / `genlink-config.mk` / `genlink-rules.mk` |
-| 库产物在 `lib/01-stm32/f1/libopencm3_stm32f1.a` | 实际在 **`lib/libopencm3_stm32f1.a`**（构建时 `AR libopencm3_stm32f1.a` 落在 `lib/` 下，不按家族分子目录） |
+| 库产物在 `lib/stm32/f1/libopencm3_stm32f1.a` | 实际在 **`lib/libopencm3_stm32f1.a`**（构建时 `AR libopencm3_stm32f1.a` 落在 `lib/` 下，不按家族分子目录） |
 
 官方的正确用法写在 `third_party/libopencm3/mk/README` 里（原文）：
 
@@ -156,35 +156,35 @@ stm32f103?b* stm32f1 ROM=128K RAM=20K
 这是最容易混的一点，实测把它钉死：
 
 ```bash
-make TARGETS=01-stm32/f1        # 在库目录里：编哪些「家族」的库
+make TARGETS=stm32/f1        # 在库目录里：编哪些「家族」的库
 make DEVICE=stm32f103rb      # 在应用目录里：这颗芯片的 ld 脚本 + 宏定义
 ```
 
 | 变量 | 在哪用 | 取值 | 作用 | 产物 |
 |---|---|---|---|---|
-| `TARGETS` | 库（libopencm3/Makefile） | **路径形式**：`01-stm32/f1`（可空格分隔多个，缺省是全家桶 f0 f1 f2 f3 f4 f7 …） | 决定编哪些家族、生成哪些 `lib/libopencm3_<家族>.a` 和 IRQ 表 | `lib/libopencm3_stm32f1.a` |
+| `TARGETS` | 库（libopencm3/Makefile） | **路径形式**：`stm32/f1`（可空格分隔多个，缺省是全家桶 f0 f1 f2 f3 f4 f7 …） | 决定编哪些家族、生成哪些 `lib/libopencm3_<家族>.a` 和 IRQ 表 | `lib/libopencm3_stm32f1.a` |
 | `DEVICE` | 应用（genlink） | **芯片型号**：`stm32f103rb` | 查 `devices.data` → 推导 `ARCH_FLAGS`、`CPPFLAGS`、`LIBNAME`，并生成 `generated.<DEVICE>.ld` | `generated.stm32f103rb.ld` |
 
-`make TARGETS=01-stm32/f1` 的实测结果：
+`make TARGETS=stm32/f1` 的实测结果：
 
 ```
 lib/libopencm3_stm32f1.a        3.05 MB
   目标文件数                     55
   定义符号数                     677
-include/libopencm3/01-stm32/f1/nvic.h   4298 字节（由 irq.json 生成，原本不在 git 里）
-lib/01-stm32/f1/*.ld                ✗ 不存在（所以教程里那行 LDSCRIPT= 必然失败）
+include/libopencm3/stm32/f1/nvic.h   4298 字节（由 irq.json 生成，原本不在 git 里）
+lib/stm32/f1/*.ld                ✗ 不存在（所以教程里那行 LDSCRIPT= 必然失败）
 ```
 
 **要点**：`TARGETS` 影响的是"库有几本"，`DEVICE` 影响的是"我的程序按哪颗芯片编"。
-F103RB 属 `01-stm32/f1` 家族，所以 `-lopencm3_stm32f1`；换 F407 就是再编一次
-`make TARGETS=01-stm32/f4`，应用侧改 `DEVICE=stm32f407vg` 即可。
+F103RB 属 `stm32/f1` 家族，所以 `-lopencm3_stm32f1`；换 F407 就是再编一次
+`make TARGETS=stm32/f4`，应用侧改 `DEVICE=stm32f407vg` 即可。
 
 ## 实测 4：一条命令从零构建（自举）
 
 把库产物删掉，模拟新克隆的仓库，然后一条 `make`：
 
 ```
-[1/2] 库还没编 → 先构建 01-stm32/f1（只在第一次需要）
+[1/2] 库还没编 → 先构建 stm32/f1（只在第一次需要）
   AR      libopencm3_stm32f1.a
 [2/2] 库就绪，继续构建应用
   CC      main.c
@@ -239,7 +239,7 @@ $ make vectors
 
 | 数字 | 来历 |
 |---|---|
-| **84 项** | 16 个系统异常 + **68 个 IRQ**（`include/libopencm3/01-stm32/f1/irq.json` 里 `irqs` 数组长度实测 68） |
+| **84 项** | 16 个系统异常 + **68 个 IRQ**（`include/libopencm3/stm32/f1/irq.json` 里 `irqs` 数组长度实测 68） |
 | **0x20005000** | genlink 生成的 `PROVIDE(_stack = ORIGIN(ram) + LENGTH(ram))` = 0x20000000 + 20K。**和 01-stm32/01 手写启动文件里那个 `_estack` 一模一样** —— 两条完全不同的路线推出了同一个数 |
 | **0x08000365** | `reset_handler` 在 0x08000364（`nm` 报的是偶数地址），向量表存的是 `|1` 的 Thumb 地址 |
 

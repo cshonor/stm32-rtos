@@ -7,10 +7,10 @@
 #   <module>-rules.mk   放在「定义规则」的位置（文件下半部分）
 #
 # ⚠ 网上流传的模板（含很多 2020 年前的博客）里这两行现在是错的：
-#     LDSCRIPT = $(OPENCM3_DIR)/lib/01-stm32/f1/stm32f103rb.ld
+#     LDSCRIPT = $(OPENCM3_DIR)/lib/stm32/f1/stm32f103rb.ld
 #     include  $(OPENCM3_DIR)/lib/libopencm3.rules.mk
 #   实测（libopencm3 2da12dc9, 2026-07）：
-#     · lib/01-stm32/f1/ 下没有 .ld，链接脚本由 genlink.py 依据 ld/devices.data 现场生成
+#     · lib/stm32/f1/ 下没有 .ld，链接脚本由 genlink.py 依据 ld/devices.data 现场生成
 #     · lib/ 下没有 libopencm3.rules.mk，构建支持已迁到 mk/ 目录
 #   现在正确的做法是「只声明 DEVICE=stm32f103rb」，其余让 genlink 推导。
 # =============================================================================
@@ -35,8 +35,8 @@ OPENCM3_DIR = $(CURDIR)/../../third_party/libopencm3
 # 库本身要编哪个家族。注意这两个变量是两回事：
 #   OPENCM3_TARGET = 编「库」时选哪些家族（make TARGETS=...，路径形式）
 #   DEVICE         = 编「我的程序」时选哪颗芯片（genlink 据此生成 ld 与宏）
-# F103RB 属于 01-stm32/f1 → 库产物是 lib/libopencm3_stm32f1.a
-OPENCM3_TARGET = 01-stm32/f1
+# F103RB 属于 stm32/f1 → 库产物是 lib/libopencm3_stm32f1.a
+OPENCM3_TARGET = stm32/f1
 
 # -----------------------------------------------------------------------------
 # 工具链定位（三级回退，谁在前谁优先）

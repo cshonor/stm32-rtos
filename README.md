@@ -97,7 +97,7 @@ west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `0
   - 是 `01-stm32/02-libopencm3` 的默认配置（`DEVICE=stm32f103rb`，无需覆盖）
 - 板 2（正点原子 **F407 探索者**，STM32F407ZGT6）
   - 168MHz / Cortex-M4F（带 FPU）/ 1MB Flash / 192KB RAM；LED0 = **PF9**、LED1 = PF10（低电平点亮）
-  - 接入步骤：① 库要重编家族 `make -C third_party/libopencm3 TARGETS=01-stm32/f4`；
+  - 接入步骤：① 库要重编家族 `make -C third_party/libopencm3 TARGETS=stm32/f4`；
     ② 工程 `make DEVICE=stm32f407zg`（genlink 生成对应 ld，ROM 1M / RAM 128K+64K CCM）；
     ③ main.c 的 LED 从 PA5 改成 PF9；④ F407 上电默认 HSI 16MHz，点灯够用，
     要跑满 168MHz 需配 PLL（libopencm3 的 `rcc_clock_setup_pll`）

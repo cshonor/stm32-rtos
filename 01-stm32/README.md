@@ -40,7 +40,7 @@
   `RCC_GPIOA=0x302` 这种"寄存器+位"打包编码
 - 与教程的差异（实测）：`LDSCRIPT=…/stm32f103rb.ld` 与 `lib/libopencm3.rules.mk`
   **两个文件都已不存在**，正确契约是 `mk/{genlink,gcc}-{config,rules}.mk` + 只声明 `DEVICE`
-- `TARGETS`（编哪些家族，路径形式 `01-stm32/f1`）与 `DEVICE`（哪颗芯片，`stm32f103rb`）是两件事
+- `TARGETS`（编哪些家族，路径形式 `stm32/f1`）与 `DEVICE`（哪颗芯片，`stm32f103rb`）是两件事
 - 工具链换成 GNU：Arm GNU Toolchain 14.2.Rel1（darwin-arm64 官方包，装在 `~/.local`）；
   同机还装了 xpack OpenOCD 0.12.0（2.3 MB）
 - 烧录配置：`openocd/f103rb.cfg`（NUCLEO 板载 ST-Link）/ `openocd/generic-stlink-f103.cfg`（外接）
