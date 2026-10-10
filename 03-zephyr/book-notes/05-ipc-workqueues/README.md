@@ -10,17 +10,17 @@ k_pipe（字节流）、k_mbox（带优先级的邮箱）、k_fifo/k_lifo（链�
 以及 Linux 风格的 workqueue（延迟工作项）。**本章的核心问题是
 "什么场景选哪个"——工具多，选错比不会用更常见。
 
-对照 [02-freertos/book-notes ch04../../../02-freertos/book-notes/04-queue-management/README.md)：
+对照 [02-freertos/book-notes ch04](../../../02-freertos/book-notes/04-queue-management/README.md)：
 FreeRTOS 一个 queue 打天下；Zephyr 按语义细分出五六种对象。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 5.1 | k_msgq：与 FreeRTOS queue 的逐项对照 | ⬜ |
-| 5.2 | k_pipe 与 k_fifo/k_lifo：字节流 vs 指针传递 | ⬜ |
-| 5.3 | k_mbox 邮箱：带优先级排序的消息 | ⬜ |
-| 5.4 | workqueue：Zephyr 的"下半部"，k_work / k_work_delayable | ⬜ |
+| [5.1 k_msgq 与 FreeRTOS 队列对照](5.1-k_msgq与FreeRTOS队列对照.md) | 静态定义、k_timeout_t、ISR 免换 API | ✅ |
+| [5.2 k_pipe 与 k_fifo/k_lifo](5.2-k_pipe与k_fifo_k_lifo.md) | 字节流 vs 指针传递、sys_snode_t 侵入式链表 | ✅ |
+| [5.3 k_mbox 邮箱](5.3-k_mbox邮箱.md) | 优先级消息、异步发送、legacy 定位 | ✅ |
+| [5.4 workqueue](5.4-workqueue.md) | k_work/k_work_delayable、与 Linux workqueue 同源 | ✅ |
 
 ## 读完本章你应该能回答
 
@@ -32,11 +32,11 @@ FreeRTOS 一个 queue 打天下；Zephyr 按语义细分出五六种对象。
 ## 前置 / 后续
 
 - **前置**：[ch04 多线程](../04-multithreading/README.md)
-  + [02-freertos/book-notes ch04 队列../../../02-freertos/book-notes/04-queue-management/README.md)
+  + [02-freertos/book-notes ch04 队列](../../../02-freertos/book-notes/04-queue-management/README.md)
 - **后续**：[ch09 DeviceTree](../09-devicetree/README.md)（驱动里到处是 workqueue）
 
 ## 本章技术债（诚实记录）
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写 | 实验 02 未做；届时与 02-freertos/02-queue 做对照实测 |
+| 小节无实测数据 | 实验 02 未做；届时与 02-freertos/02-queue 做对照实测 |
