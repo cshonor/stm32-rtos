@@ -7,17 +7,17 @@
 
 | 篇 | 标题 | 一句话 |
 |---|---|---|
-| [00.01](00.01-没有OS的C语言.md) | 没有操作系统的 C 语言 | C 标准里没有"硬件"这个词，freestanding 只保证 7 个头 |
-| [00.02](00.02-操作硬件的三个手段.md) | 操作硬件的三个手段 | 地址即寄存器（MMIO）、`volatile`、位运算 |
-| [00.03](00.03-没有GCC行不行.md) | 没有 GCC 行不行 | 编译器只是实现，不是标准；clang + ld.lld 实测可用 |
+| [00.1](00.1-没有OS的C语言.md) | 没有操作系统的 C 语言 | C 标准里没有"硬件"这个词，freestanding 只保证 7 个头 |
+| [00.2](00.2-操作硬件的三个手段.md) | 操作硬件的三个手段 | 地址即寄存器（MMIO）、`volatile`、位运算 |
+| [00.3](00.3-没有GCC行不行.md) | 没有 GCC 行不行 | 编译器只是实现，不是标准；clang + ld.lld 实测可用 |
 
 ## 为什么这三件事要先说
 
 | 如果不知道 | 后面会在哪里卡住 |
 |---|---|
-| freestanding 的边界 | [1.03](../01-hello-world/1.03-我们的第一个程序.md) 第一个程序就用 `printf`，链接期才发现没有；[1.04](../01-hello-world/1.04-改进程序和构建流程.md) 不知道为什么加 `-ffreestanding -nostdlib` |
+| freestanding 的边界 | [1.3](../01-hello-world/1.3-我们的第一个程序.md) 第一个程序就用 `printf`，链接期才发现没有；[1.4](../01-hello-world/1.4-改进程序和构建流程.md) 不知道为什么加 `-ffreestanding -nostdlib` |
 | MMIO / `volatile` / 位运算 | [第 3 章](../03-embedded-system-programming/README.md) 点灯代码看不懂为什么必须 `volatile`；[第 4 章](../04-numbers-and-bitops/README.md) 位操作整章失去落点 |
-| 编译器只是实现 | [1.01](../01-hello-world/1.01-安装GCC.md) 会以为"必须先装 GCC"，在无 root 的 Mac 上平白卡住 |
+| 编译器只是实现 | [1.1](../01-hello-world/1.1-安装GCC.md) 会以为"必须先装 GCC"，在无 root 的 Mac 上平白卡住 |
 
 ## 一句话版（先记住这三句）
 

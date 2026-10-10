@@ -17,11 +17,11 @@ Zephyr 版多了 `DT_` 宏族和 `DEVICE_DT_GET` 设备模型。
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 9.01 | dts 语法复习与 Zephyr 特有部分：aliases / chosen / status="okay" | ⬜ |
-| 9.02 | 从 dts 到 C：DT_ 宏族、DEVICE_DT_GET、struct device | ⬜ |
-| 9.03 | app.overlay 实战：给 nucleo_f103rb 加一个 LED/按钮节点 | ⬜ |
-| 9.04 | SPI/I2C 驱动实例解剖：compatible 匹配链 | ⬜ |
-| 9.05 | 与 Linux 设备树的对照表（LDD-/09 学两遍） | ⬜ |
+| 9.1 | dts 语法复习与 Zephyr 特有部分：aliases / chosen / status="okay" | ⬜ |
+| 9.2 | 从 dts 到 C：DT_ 宏族、DEVICE_DT_GET、struct device | ⬜ |
+| 9.3 | app.overlay 实战：给 nucleo_f103rb 加一个 LED/按钮节点 | ⬜ |
+| 9.4 | SPI/I2C 驱动实例解剖：compatible 匹配链 | ⬜ |
+| 9.5 | 与 Linux 设备树的对照表（LDD-/09 学两遍） | ⬜ |
 
 ## 读完本章你应该能回答
 

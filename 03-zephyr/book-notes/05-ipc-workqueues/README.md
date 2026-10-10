@@ -17,10 +17,10 @@ FreeRTOS 一个 queue 打天下；Zephyr 按语义细分出五六种对象。
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 5.01 | k_msgq：与 FreeRTOS queue 的逐项对照 | ⬜ |
-| 5.02 | k_pipe 与 k_fifo/k_lifo：字节流 vs 指针传递 | ⬜ |
-| 5.03 | k_mbox 邮箱：带优先级排序的消息 | ⬜ |
-| 5.04 | workqueue：Zephyr 的"下半部"，k_work / k_work_delayable | ⬜ |
+| 5.1 | k_msgq：与 FreeRTOS queue 的逐项对照 | ⬜ |
+| 5.2 | k_pipe 与 k_fifo/k_lifo：字节流 vs 指针传递 | ⬜ |
+| 5.3 | k_mbox 邮箱：带优先级排序的消息 | ⬜ |
+| 5.4 | workqueue：Zephyr 的"下半部"，k_work / k_work_delayable | ⬜ |
 
 ## 读完本章你应该能回答
 

@@ -15,9 +15,9 @@
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 11.01 | 通道与三种订阅者：thread / listener / message subscriber | ⬜ |
-| 11.02 | VDED 分发模型：谁在什么时候把消息推给谁 | ⬜ |
-| 11.03 | ZBus vs 事件组 vs 队列：选型边界 | ⬜ |
+| 11.1 | 通道与三种订阅者：thread / listener / message subscriber | ⬜ |
+| 11.2 | VDED 分发模型：谁在什么时候把消息推给谁 | ⬜ |
+| 11.3 | ZBus vs 事件组 vs 队列：选型边界 | ⬜ |
 
 ## 读完本章你应该能回答
 

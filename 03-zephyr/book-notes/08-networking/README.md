@@ -14,9 +14,9 @@ socket API 与 POSIX 对齐——从 Linux 网络编程（`04-cpp/M2` 那条线�
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 8.01 | 网络栈架构：iface → L2 → IP → socket 层 | ⬜ |
-| 8.02 | socket API 与 POSIX 的对应与缺口 | ⬜ |
-| 8.03 | F103 怎么上网：SPI 网卡（ENC28J60/W5500）与 QEMU 仿真路径 | ⬜ |
+| 8.1 | 网络栈架构：iface → L2 → IP → socket 层 | ⬜ |
+| 8.2 | socket API 与 POSIX 的对应与缺口 | ⬜ |
+| 8.3 | F103 怎么上网：SPI 网卡（ENC28J60/W5500）与 QEMU 仿真路径 | ⬜ |
 
 ## 读完本章你应该能回答
 

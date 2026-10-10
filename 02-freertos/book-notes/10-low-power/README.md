@@ -13,9 +13,9 @@
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 10.01 | 空闲钩子睡法（简单版）vs tickless idle（正式版） | ⬜ |
-| 10.02 | tickless 的三步：算睡眠时间 → 停 tick 睡觉 → 醒来补 tick | ⬜ |
-| 10.03 | F103 的睡眠档位（Sleep/Stop/Standby）与唤醒源配对 | ⬜ |
+| 10.1 | 空闲钩子睡法（简单版）vs tickless idle（正式版） | ⬜ |
+| 10.2 | tickless 的三步：算睡眠时间 → 停 tick 睡觉 → 醒来补 tick | ⬜ |
+| 10.3 | F103 的睡眠档位（Sleep/Stop/Standby）与唤醒源配对 | ⬜ |
 
 ## 读完本章你应该能回答
 
@@ -26,7 +26,7 @@
 
 ## 前置 / 后续
 
-- **前置**：[ch03.5 空闲任务](../03-task-management/3.05-空闲任务与钩子.md)
+- **前置**：[ch03.5 空闲任务](../03-task-management/3.5-空闲任务与钩子.md)
   + [01-stm32/book-notes ch19 SysTick](../../../01-stm32/book-notes/19-systick-and-timer/README.md)
 - **后续**：电池场景才需要；HFT/学习主线优先级低，最后补
 

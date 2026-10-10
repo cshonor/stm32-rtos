@@ -1,16 +1,16 @@
 # 06-timer —— SysTick 与通用定时器
 
 > 状态：⬜ 未开始（骨架）。轨道一（裸机 C）第 6 个实验。
-> 对应笔记：[补充 ch19 SysTick / 定时器](../book-notes/19-systick-and-timer/README.md)（19.01–19.07 全篇）
+> 对应笔记：[补充 ch19 SysTick / 定时器](../book-notes/19-systick-and-timer/README.md)（19.1–19.7 全篇）
 > 前置：[04-uart-printf](../04-uart-printf/README.md)（串口观察）、
 > [05-exti-button](../05-exti-button/README.md)（中断链路已通）
 
 ## 目标
 
-- SysTick 配成 1 ms 心跳，维护 `g_ms` 毫秒计数（19.01–19.03 的路线）
+- SysTick 配成 1 ms 心跳，维护 `g_ms` 毫秒计数（19.1–19.3 的路线）
 - 用 `g_ms` 换掉 03 里那个空循环 `delay()`：精确 500 ms 闪灯
-- 回绕安全的时间比较（19.03：`while ((now - t0) < 500)` 为什么对）
-- 进阶（可拆第二次做）：TIM2 基础定时器 1 Hz 中断，与 SysTick 对账（19.05）
+- 回绕安全的时间比较（19.3：`while ((now - t0) < 500)` 为什么对）
+- 进阶（可拆第二次做）：TIM2 基础定时器 1 Hz 中断，与 SysTick 对账（19.5）
 
 ## 板上事实
 
