@@ -8,7 +8,8 @@
 #
 # 本目录所有实测输出见 README.md
 #
-# 前置：export PATH=/Users/a0000/micromamba/envs/cdev/bin:$PATH
+# 前置：让工具在 PATH 上。工具台的入口脚本会把探测到的目录写好：
+#     source tools/env.sh --export
 
 CC      := clang
 LD      := ld.lld
@@ -20,8 +21,10 @@ NM      := llvm-nm
 PYTHON  ?= python3
 
 # 缺工具就别猜了，直接说清楚怎么修（比 "clang: command not found" 友好）
-ifeq ($(shell command -v $(LD) 2>/dev/null),)
-$(error 找不到 $(LD)。先执行: export PATH=/Users/a0000/micromamba/envs/cdev/bin:$$PATH)
+# 用 `$(LD) --version` 而不是 `command -v`：后者依赖 shell 内建，在 Windows 的
+# 原生 make（SHELL=cmd）上永远返回空，会误报"找不到工具"。
+ifeq ($(strip $(shell $(LD) --version 2>&1)),)
+$(error 找不到 $(LD)。先跑 `source tools/env.sh --export`，或按 tools/env.sh 的提示装 LLVM)
 endif
 
 TARGET_ASM := blink_asm

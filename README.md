@@ -17,6 +17,10 @@
 ## 目录结构
 
 ```
+tools/        工具台：环境自检 / 烧录 / 调试 / 生成新实验（说明见 tools/README.md）
+mk/           构建层：一份共享的 CFLAGS/LDFLAGS/规则，各 lab 的 Makefile 缩到 4 行
+boards/       板级层：CPU / 内存布局 / OpenOCD 配置 / LED 引脚，换板子只动这里
+labs/         工具台的参考实验（01-hello：Makefile 只有 4 行的最小可跑工程）
 01-stm32/        三条轨道：01-bare-metal（裸机C，主线）→ 02-libopencm3（库）→ 03-hal（ST官方）
   book-notes/ 《裸机C编程》逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
 02-freertos/     FreeRTOS 移植与任务实验（等裸机三件套通了再进）
@@ -26,6 +30,31 @@
 third_party/  git 子模块：libopencm3（01-stm32/02-libopencm3 用；clone 后先 git submodule update --init）
 _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-examples）
 ```
+
+## 工具台（toolbench）
+
+书 1.2 让装 **System Workbench for STM32** —— 它解决的问题是"新手要同时搞定编译器、
+构建系统、烧录器、调试器四件事，任何一环配错都表现为点灯不亮"。这个仓库不要那个
+Eclipse 壳，把同一件事拆成三层，每层可单独替换、每步看得见：
+
+```bash
+bash tools/env.sh                 # 这台机器现在能不能做嵌入式（8 层逐层真跑一遍）
+source tools/env.sh --export      # 工具不在 PATH 上时先做这一步
+cd labs/01-hello && make          # 编译一个最小工程
+make flash                        # 插上板子再烧
+../../tools/dbg.sh hello.elf      # 一条命令起 openocd + gdb，退出时自动收摊
+tools/newlab.sh labs/02-uart      # 生成下一个实验的骨架（板级参数自动填好）
+```
+
+| 层 | 目录 | 职责 | 变动频率 |
+|---|---|---|---|
+| 脚本 | `tools/` | 环境自检（`env.sh`，把 1.2 的分层确认表变成可执行脚本）、烧录、调试、生成新实验 | 加工具时 |
+| 构建 | `mk/` | 共享的 CFLAGS/LDFLAGS/规则/烧录调试命令 | 改编译选项时 |
+| 板级 | `boards/` | CPU、内存布局、OpenOCD 配置、LED 引脚 | 换板子时 |
+
+各 lab 的 Makefile 从此只有四行（声明"我是谁、用什么板子"），
+完整说明见 [`tools/README.md`](tools/README.md)，板级字段与新增板子的步骤见
+[`boards/README.md`](boards/README.md)。
 
 ## 学习路线（书章节 → 实验）
 
@@ -89,6 +118,9 @@ west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `0
     - 本机没有 WSL / apt / docker，conda-forge 也没有 arm-none-eabi →
       只能"官方 tar 包 + 家目录"，不碰 `/opt`、`/usr/local`
     - `/usr/bin/python3` 会弹 Xcode 许可协议，genlink.py 需要 PATH 里有能用的 python3
+  - **工具在哪不写死**：`bash tools/env.sh` 会翻 micromamba / Homebrew / `~/.local` /
+    Windows 的 `Program Files` 等位置并报告结果（Windows 实测走 `C:\Program Files\LLVM`，
+    clang 22.1.8）。Makefile 侧不做路径搜索，契约是"PATH 里有什么就用什么"
 
 ## 纪律（沿用 LDD- 惯例）
 

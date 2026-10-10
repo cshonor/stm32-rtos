@@ -39,12 +39,13 @@ OPENCM3_DIR = $(CURDIR)/../../third_party/libopencm3
 OPENCM3_TARGET = 01-stm32/f1
 
 # -----------------------------------------------------------------------------
-# 工具链定位
-#   macOS（本机）：官方 GNU ARM 工具链装在 ~/.local 下，没有 apt 可用
-#   Linux / WSL  ：sudo apt install gcc-arm-none-eabi 之后，工具就在 PATH 上
-# 两种情形都能跑：找到完整路径就用完整路径，否则退回 PATH 上的 arm-none-eabi-
+# 工具链定位（三级回退，谁在前谁优先）
+#   1. GCC_ARM_BIN —— tools/env.sh --export 设的环境变量，或命令行给
+#   2. ~/.local/arm-gnu-toolchain-*/bin —— 官方 tar 包解压到家目录（本机历史默认）
+#   3. PATH 上的 arm-none-eabi-（apt/cbrew 装的）
+# 不要在 /opt、/usr/local 里找：那两台机器上都没有写权限，装不进去。
 # -----------------------------------------------------------------------------
-TOOLCHAIN ?= $(HOME)/.local/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin
+TOOLCHAIN ?= $(if $(GCC_ARM_BIN),$(GCC_ARM_BIN),$(firstword $(wildcard $(HOME)/.local/arm-gnu-toolchain-*/bin)))
 ifeq ($(wildcard $(TOOLCHAIN)/arm-none-eabi-gcc),)
   PREFIX ?= arm-none-eabi
 else
@@ -57,9 +58,25 @@ CPPFLAGS += -MD
 LDFLAGS  += -static -nostartfiles -Wl,-Map=$(BINARY).map
 LDLIBS   += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 
-# openocd（烧录/调试）。xpack 的 darwin-arm64 构建装在 ~/.local 下。
-OPENOCD     ?= $(HOME)/.local/xpack-openocd-0.12.0-7/bin/openocd
-OCD_SCRIPTS ?= $(HOME)/.local/xpack-openocd-0.12.0-7/openocd/scripts
+# openocd（烧录/调试）。三级回退：
+#   1. 环境变量 OPENOCD / OPENOCD_SCRIPTS —— tools/env.sh --export 会设好
+#   2. ~/.local 下的 xpack 解压包（本机历史默认）
+#   3. PATH 上的 openocd（brew/apt 装的，自带脚本搜索路径，不需要 -s）
+# 显式判空而不是直接 ?=，否则"变量为空"会让命令变成 `-s -f xxx.cfg`——
+# openocd 会把 -f 当成 -s 的参数，报出一句跟真正原因毫不相干的错。
+ifeq ($(strip $(OPENOCD)),)
+  OPENOCD := $(firstword $(wildcard $(HOME)/.local/xpack-openocd-*/bin/openocd))
+  ifeq ($(strip $(OPENOCD)),)
+    OPENOCD := openocd
+  endif
+endif
+
+ifeq ($(strip $(OPENOCD_SCRIPTS)),)
+  OPENOCD_SCRIPTS := $(firstword $(wildcard $(HOME)/.local/xpack-openocd-*/openocd/scripts))
+endif
+
+# 路径可能带空格（Windows），拼命令时带引号
+OCD_S_FLAG := $(if $(strip $(OPENOCD_SCRIPTS)),-s "$(strip $(OPENOCD_SCRIPTS))")
 
 # =============================================================================
 # 变量区结束 → 引入库的 config 模块（它们会追加 CPPFLAGS/ARCH_FLAGS/LDFLAGS/LDLIBS）
@@ -126,11 +143,11 @@ dump: $(BINARY).elf
 #   gdb    ：连上后在 reset_handler 处停下（比在 main 停下更有用：能看到启动序列）
 # -----------------------------------------------------------------------------
 flash: $(BINARY).elf
-	$(OPENOCD) -s $(OCD_SCRIPTS) -f openocd/f103rb.cfg \
+	"$(OPENOCD)" $(OCD_S_FLAG) -f ../../boards/openocd/f103rb.cfg \
 		-c "program $(BINARY).elf verify reset exit"
 
 openocd:
-	$(OPENOCD) -s $(OCD_SCRIPTS) -f openocd/f103rb.cfg
+	"$(OPENOCD)" $(OCD_S_FLAG) -f ../../boards/openocd/f103rb.cfg
 
 gdb: $(BINARY).elf
 	$(PREFIX)-gdb $(BINARY).elf \
