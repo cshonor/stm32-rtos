@@ -12,15 +12,15 @@
 裸机篇 [ch10.5 环形缓冲](../../../01-stm32/book-notes/10-interrupts/README.md) 手写过一个
 ISR→主循环的 ring buffer；FreeRTOS 队列就是那个思路的**带阻塞语义的正式版**。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 4.1 | 队列是什么：FIFO 环形缓冲 + 值拷贝语义 | ⬜ |
-| 4.2 | xQueueSend / xQueueReceive 的阻塞语义与超时 | ⬜ |
-| 4.3 | FromISR 家族：为什么 ISR 里必须用另一套 API | ⬜ |
-| 4.4 | 传大结构体：传指针的代价与规矩（所有权问题） | ⬜ |
-| 4.5 | 队列集 Queue Set：一个任务等多个队列 | ⬜ |
+| [4.1 队列是什么](4.1-队列是什么.md) | FIFO 环形缓冲 + 值拷贝语义 | ✅ |
+| [4.2 阻塞语义与超时](4.2-阻塞语义与超时.md) | xTicksToWait 三态、唤醒顺序 | ✅ |
+| [4.3 FromISR 家族](4.3-FromISR家族.md) | ISR 专用 API 与 pxHigherPriorityTaskWoken | ✅ |
+| [4.4 传指针的代价与规矩](4.4-传指针的代价与规矩.md) | 大结构体、所有权、xQueueOverwrite | ✅ |
+| [4.5 队列集](4.5-队列集.md) | xQueueSelectFromSet 并集阻塞（实验 03 对位） | ✅ |
 
 ## 读完本章你应该能回答
 
@@ -41,4 +41,4 @@ ISR→主循环的 ring buffer；FreeRTOS 队列就是那个思路的**带阻塞
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写 | 实验 02 未做；届时对照"手写 ring buffer vs xQueue"补实测对比 |
+| 小节无实测数据 | 实验 02/03 未做；届时对照"手写 ring buffer vs xQueue"补实测对比 |
