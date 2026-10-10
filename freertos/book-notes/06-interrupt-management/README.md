@@ -17,10 +17,10 @@
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 6.1 | 二值信号量做中断同步：延迟中断处理的标准范式 | ⬜ |
-| 6.2 | FromISR 规则与 pxHigherPriorityTaskWoken 机制 | ⬜ |
-| 6.3 | 中断优先级红线：configMAX_SYSCALL_INTERRUPT_PRIORITY 与 PRIMASK/BASEPRI | ⬜ |
-| 6.4 | 计数信号量：资源计数与事件计数（丢事件问题） | ⬜ |
+| 6.01 | 二值信号量做中断同步：延迟中断处理的标准范式 | ⬜ |
+| 6.02 | FromISR 规则与 pxHigherPriorityTaskWoken 机制 | ⬜ |
+| 6.03 | 中断优先级红线：configMAX_SYSCALL_INTERRUPT_PRIORITY 与 PRIMASK/BASEPRI | ⬜ |
+| 6.04 | 计数信号量：资源计数与事件计数（丢事件问题） | ⬜ |
 
 ## 读完本章你应该能回答
 

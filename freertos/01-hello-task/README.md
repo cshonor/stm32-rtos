@@ -2,7 +2,7 @@
 
 > 状态：⬜ 未开始（骨架）。
 > 对应笔记：[补充 ch20 走向 FreeRTOS](../../stm32/book-notes/20-towards-freertos/README.md)
-> （20.1 任务与调度的硬件落点：SysTick + PendSV + 双栈）
+> （20.01 任务与调度的硬件落点：SysTick + PendSV + 双栈）
 > 前置：stm32/01–06 全部真机跑通（点灯、串口、中断、定时器）
 > 对照：zephyr/01-hello（第二遍用 Zephyr 再做一次）
 

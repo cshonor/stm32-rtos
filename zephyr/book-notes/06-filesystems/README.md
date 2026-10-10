@@ -14,9 +14,9 @@ F103 只有 128K 片内 Flash、无文件系统需求，本章按"选读"处理�
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 6.1 | FS 子系统架构：VFS 层 → LittleFS/FAT 后端 → flash 驱动 | ⬜ |
-| 6.2 | devicetree 分区表：boot 槽 / 应用 / 存储区怎么划 | ⬜ |
-| 6.3 | 磨损均衡与掉电安全：LittleFS 为什么是小 Flash 的标配 | ⬜ |
+| 6.01 | FS 子系统架构：VFS 层 → LittleFS/FAT 后端 → flash 驱动 | ⬜ |
+| 6.02 | devicetree 分区表：boot 槽 / 应用 / 存储区怎么划 | ⬜ |
+| 6.03 | 磨损均衡与掉电安全：LittleFS 为什么是小 Flash 的标配 | ⬜ |
 
 ## 读完本章你应该能回答
 

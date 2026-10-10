@@ -1,7 +1,7 @@
 # 04-mutex-priority —— 优先级反转与互斥量
 
 > 状态：⬜ 未开始（骨架）。
-> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.3 什么时候该上 RTOS）
+> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.03 什么时候该上 RTOS）
 > 前置：01-hello-task（多任务 + 不同优先级）
 > 对照：zephyr/04-mutex-priority（k_mutex + CONFIG_ 配置项对比）
 

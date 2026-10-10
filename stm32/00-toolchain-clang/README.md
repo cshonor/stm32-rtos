@@ -160,7 +160,7 @@ ld.lld: error: undefined symbol: __aeabi_ldivmod
 
 全程 `-nostdlib` 不代表「什么头文件都没有」——编译器自带一批。标准规定的 freestanding
 清单是 **C99=7 / C11=C17=9 / C23=10** 个（依据与标准出处见
-[book-notes/00.3](../book-notes/00-mental-model/00.3-没有GCC行不行.md)）。
+[book-notes/00.03](../book-notes/00-mental-model/00.03-没有GCC行不行.md)）。
 
 本机 clang 23.1.0 逐个 include 实测
 （`clang --target=armv7m-none-eabi -mcpu=cortex-m3 -mthumb -ffreestanding -std=c23 -fsyntax-only`）：

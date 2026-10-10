@@ -17,10 +17,10 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 3.1 | west：manifest、init/update、build/flash/debug 一条链 | ⬜ |
-| 3.2 | 一个 Zephyr 应用的最小骨架：CMakeLists.txt + prj.conf + app.overlay | ⬜ |
-| 3.3 | Kconfig 怎么工作：prj.conf → autoconf.h；menuconfig 看什么 | ⬜ |
-| 3.4 | 构建产物解剖：zephyr.elf / merged.hex / build 目录里都有啥 | ⬜ |
+| 3.01 | west：manifest、init/update、build/flash/debug 一条链 | ⬜ |
+| 3.02 | 一个 Zephyr 应用的最小骨架：CMakeLists.txt + prj.conf + app.overlay | ⬜ |
+| 3.03 | Kconfig 怎么工作：prj.conf → autoconf.h；menuconfig 看什么 | ⬜ |
+| 3.04 | 构建产物解剖：zephyr.elf / merged.hex / build 目录里都有啥 | ⬜ |
 
 ## 读完本章你应该能回答
 

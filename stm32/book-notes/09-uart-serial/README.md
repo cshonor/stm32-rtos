@@ -25,13 +25,13 @@ printf → (libc) → write(2) → 系统调用 → 内核 tty 驱动 → 串口
 
 | 小节 | 标题 | 笔记 |
 |---|---|---|
-| 9.1 | 一次写一个字符的字符串 | [9.1-一次写一个字符的字符串](9.1-一次写一个字符的字符串.md) |
-| 9.2 | 定义我们的 putchar | [9.2-定义我们的putchar](9.2-定义我们的putchar.md) |
-| 9.3 | 串行输出 | [9.3-串行输出](9.3-串行输出.md) |
-| 9.4 | 串行通信简史 | [9.4-串行通信简史](9.4-串行通信简史.md) |
-| **9.5** | **串口 Hello World** | **[9.5-串口HelloWorld](9.5-串口HelloWorld.md)（本章核心）** |
-| 9.6 | Windows 与设备通信 | [9.6-Windows与设备通信](9.6-Windows与设备通信.md) |
-| 9.7 | Linux 和 macOS 与设备通信 | [9.7-Linux和macOS与设备通信](9.7-Linux和macOS与设备通信.md) |
+| 9.01 | 一次写一个字符的字符串 | [9.01-一次写一个字符的字符串](9.01-一次写一个字符的字符串.md) |
+| 9.02 | 定义我们的 putchar | [9.02-定义我们的putchar](9.02-定义我们的putchar.md) |
+| 9.03 | 串行输出 | [9.03-串行输出](9.03-串行输出.md) |
+| 9.04 | 串行通信简史 | [9.04-串行通信简史](9.04-串行通信简史.md) |
+| **9.5** | **串口 Hello World** | **[9.05-串口HelloWorld](9.05-串口HelloWorld.md)（本章核心）** |
+| 9.06 | Windows 与设备通信 | [9.06-Windows与设备通信](9.06-Windows与设备通信.md) |
+| 9.07 | Linux 和 macOS 与设备通信 | [9.07-Linux和macOS与设备通信](9.07-Linux和macOS与设备通信.md) |
 
 > 说明：本章小节**页码未从目录页逐条核对**（只知整章 p119–134），故不列单节页码。
 > 9.6（Windows）**未在本机实测**（本机 macOS），已在篇首标注；9.7 的 macOS 部分是实测的。
@@ -111,9 +111,9 @@ which screen → /usr/bin/screen（系统自带）；minicom 未装；pyserial �
   [第 5 章 决策和控制语句](../05-control-flow-button/README.md)（`volatile` 等待循环）、
   [第 6 章 数组、指针和字符串](../06-arrays-pointers-strings/README.md)（`'\0'` 与字符串）、
   [第 8 章 复杂数据类型](../08-complex-types/README.md)（把裸地址宏换成寄存器结构体）
-- 后续：[ch10 中断](../10-interrupts/10.4-用缓冲区提速.md)（**接收必须走中断 + 环形缓冲**）、
-  [11.1 内存模型](../11-linker/11.1-编译和链接的内存模型.md)（`.rodata` 里的日志字符串）、
-  [ch19 SysTick](../19-systick-and-timer/19.3-g_ms与回绕安全的时间比较.md)（给日志加毫秒时间戳）
-- 横向：[12.4 条件编译](../12-preprocessor/12.4-条件编译.md)（`__FILE__`/`__LINE__` 的 Flash 代价）
+- 后续：[ch10 中断](../10-interrupts/10.04-用缓冲区提速.md)（**接收必须走中断 + 环形缓冲**）、
+  [11.01 内存模型](../11-linker/11.01-编译和链接的内存模型.md)（`.rodata` 里的日志字符串）、
+  [ch19 SysTick](../19-systick-and-timer/19.03-g_ms与回绕安全的时间比较.md)（给日志加毫秒时间戳）
+- 横向：[12.04 条件编译](../12-preprocessor/12.04-条件编译.md)（`__FILE__`/`__LINE__` 的 Flash 代价）
 - **LDD- 侧**：Linux 的 `printk` → 串口驱动 → `uart_driver`，
   层次和本章完全对应，只是中间几层是内核写的。

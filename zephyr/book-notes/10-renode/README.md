@@ -14,9 +14,9 @@ Zephyr 官方对 Renode 有一等支持（`west build -t run`）。
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 10.1 | Renode 与 QEMU 的定位差异：全系统仿真 vs 指令集仿真 | ⬜ |
-| 10.2 | .repl 平台描述：把 nucleo_f103rb 用文本"画"出来 | ⬜ |
-| 10.3 | 交互与自动化：Monitor 命令、Robot Framework 测试 | ⬜ |
+| 10.01 | Renode 与 QEMU 的定位差异：全系统仿真 vs 指令集仿真 | ⬜ |
+| 10.02 | .repl 平台描述：把 nucleo_f103rb 用文本"画"出来 | ⬜ |
+| 10.03 | 交互与自动化：Monitor 命令、Robot Framework 测试 | ⬜ |
 
 ## 读完本章你应该能回答
 

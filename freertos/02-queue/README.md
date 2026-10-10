@@ -1,8 +1,8 @@
 # 02-queue —— 中断 → 队列 → 任务（下半部思想的 RTOS 版）
 
 > 状态：⬜ 未开始（骨架）。
-> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.2 队列与信号量：
-> ISR ↔ 任务之间怎么传数据）+ [第 10 章中断](../../stm32/book-notes/10-interrupts/README.md)（10.5 环形缓冲）
+> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.02 队列与信号量：
+> ISR ↔ 任务之间怎么传数据）+ [第 10 章中断](../../stm32/book-notes/10-interrupts/README.md)（10.05 环形缓冲）
 > 前置：01-hello-task、stm32/04-uart-printf（串口中断收）
 > 对照：LDD-/09 中断下半部；zephyr/02-threads-msgq（k_msgq 版）
 

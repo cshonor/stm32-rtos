@@ -15,9 +15,9 @@
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 2.1 | 词汇对照表：task→thread、queue→msgq、semaphore→k_sem…… | ⬜ |
-| 2.2 | 优先级体系的世界观差异：FreeRTOS 正数向上 vs Zephyr 负数协作 | ⬜ |
-| 2.3 | 确定性、 deadlines 与"实时"到底承诺什么 | ⬜ |
+| 2.01 | 词汇对照表：task→thread、queue→msgq、semaphore→k_sem…… | ⬜ |
+| 2.02 | 优先级体系的世界观差异：FreeRTOS 正数向上 vs Zephyr 负数协作 | ⬜ |
+| 2.03 | 确定性、 deadlines 与"实时"到底承诺什么 | ⬜ |
 
 ## 读完本章你应该能回答
 

@@ -9,18 +9,18 @@
 本章回答：队列内部长什么样（环形缓冲 + 两个阻塞名单）、收发时的阻塞语义、
 以及为什么传大结构体要传指针而不是传值。
 
-裸机篇 [ch10.5 环形缓冲](../../../stm32/book-notes/10-interrupts/README.md) 手写过一个
+裸机篇 [ch10.05 环形缓冲](../../../stm32/book-notes/10-interrupts/README.md) 手写过一个
 ISR→主循环的 ring buffer；FreeRTOS 队列就是那个思路的**带阻塞语义的正式版**。
 
 ## 小节清单（规划，⬜ 待写）
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 4.1 | 队列是什么：FIFO 环形缓冲 + 值拷贝语义 | ⬜ |
-| 4.2 | xQueueSend / xQueueReceive 的阻塞语义与超时 | ⬜ |
-| 4.3 | FromISR 家族：为什么 ISR 里必须用另一套 API | ⬜ |
-| 4.4 | 传大结构体：传指针的代价与规矩（所有权问题） | ⬜ |
-| 4.5 | 队列集 Queue Set：一个任务等多个队列 | ⬜ |
+| 4.01 | 队列是什么：FIFO 环形缓冲 + 值拷贝语义 | ⬜ |
+| 4.02 | xQueueSend / xQueueReceive 的阻塞语义与超时 | ⬜ |
+| 4.03 | FromISR 家族：为什么 ISR 里必须用另一套 API | ⬜ |
+| 4.04 | 传大结构体：传指针的代价与规矩（所有权问题） | ⬜ |
+| 4.05 | 队列集 Queue Set：一个任务等多个队列 | ⬜ |
 
 ## 读完本章你应该能回答
 
@@ -33,7 +33,7 @@ ISR→主循环的 ring buffer；FreeRTOS 队列就是那个思路的**带阻塞
 ## 前置 / 后续
 
 - **前置**：[ch03 任务管理](../03-task-management/README.md)（Blocked 态就是队列语义的燃料）
-  + [ch20.2 队列与信号量](../../../stm32/book-notes/20-towards-freertos/20.2-队列与信号量.md)
+  + [ch20.02 队列与信号量](../../../stm32/book-notes/20-towards-freertos/20.02-队列与信号量.md)
 - **后续**：[ch06 中断管理](../06-interrupt-management/README.md)（ISR 下半部的正规做法）
   → 实验 [`freertos/02-queue`](../../02-queue/README.md)
 

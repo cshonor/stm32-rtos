@@ -1,7 +1,7 @@
 # 03-semaphore —— 二值信号量做按键去抖
 
 > 状态：⬜ 未开始（骨架）。
-> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.2）
+> 对应笔记：[补充 ch20](../../stm32/book-notes/20-towards-freertos/README.md)（20.02）
 > + [第 5 章](../../stm32/book-notes/05-control-flow-button/README.md)（机械抖动、去抖三做法）
 > 前置：01-hello-task、stm32/05-exti-button（EXTI 中断链路）
 > 对照：zephyr/03-semaphore（k_sem 版）

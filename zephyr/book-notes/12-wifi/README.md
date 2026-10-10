@@ -14,9 +14,9 @@ F103 平台没有 Wi-Fi；ESP32/带 Wi-Fi 的板子进入硬件清单后再启�
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 12.1 | Wi-Fi 管理 API：scan / connect / status 回调 | ⬜ |
-| 12.2 | 外挂方案对比：ESP-AT modem vs 原生 SoC vs 换板 | ⬜ |
-| 12.3 | Wi-Fi + socket：跑通一个 TCP client 的最小配置 | ⬜ |
+| 12.01 | Wi-Fi 管理 API：scan / connect / status 回调 | ⬜ |
+| 12.02 | 外挂方案对比：ESP-AT modem vs 原生 SoC vs 换板 | ⬜ |
+| 12.03 | Wi-Fi + socket：跑通一个 TCP client 的最小配置 | ⬜ |
 
 ## 读完本章你应该能回答
 

@@ -25,14 +25,14 @@
 
 | 小节 | 标题 | 笔记 |
 |---|---|---|
-| 13.1 | 基本堆分配和释放 | [13.1-基本堆分配和释放](13.1-基本堆分配和释放.md) |
-| 13.2 | 链表 | [13.2-链表](13.2-链表.md) |
-| 13.3 | Valgrind | [13.3-Valgrind](13.3-Valgrind.md) ⚠ **本机未安装，未实测** |
-| 13.4 | GCC AddressSanitizer | [13.4-GCC-AddressSanitizer](13.4-GCC-AddressSanitizer.md) ✅ 全部实测 |
+| 13.01 | 基本堆分配和释放 | [13.01-基本堆分配和释放](13.01-基本堆分配和释放.md) |
+| 13.02 | 链表 | [13.02-链表](13.02-链表.md) |
+| 13.03 | Valgrind | [13.03-Valgrind](13.03-Valgrind.md) ⚠ **本机未安装，未实测** |
+| 13.04 | GCC AddressSanitizer | [13.04-GCC-AddressSanitizer](13.04-GCC-AddressSanitizer.md) ✅ 全部实测 |
 
 > 说明：本章小节**页码未从目录页逐条核对**（只知整章 p189–201），故不列单节页码。
-> 小节清单来自旧章笔记头部的编号（13.1–13.4）；
-> 顶层索引原先写的 `13.1–13.6` 是错的，已订正为 **13.1–13.4**。
+> 小节清单来自旧章笔记头部的编号（13.01–13.04）；
+> 顶层索引原先写的 `13.01–13.6` 是错的，已订正为 **13.01–13.04**。
 
 ## ⚠ 关于 13.3 的诚实声明
 
@@ -43,8 +43,8 @@ $ which valgrind
 valgrind not found
 ```
 
-所以 [13.3](13.3-Valgrind.md) 的内容是"机制说明 + 与 ASan 的对比 + 命令参考"，
-**不是实测**。所有标记"实测"的数据都在 [13.4](13.4-GCC-AddressSanitizer.md)。
+所以 [13.03](13.03-Valgrind.md) 的内容是"机制说明 + 与 ASan 的对比 + 命令参考"，
+**不是实测**。所有标记"实测"的数据都在 [13.04](13.04-GCC-AddressSanitizer.md)。
 
 **但有一个实测发现让 Valgrind 变得必要**：
 本机 macOS arm64 上，**ASan 的 LeakSanitizer 不报泄漏**
@@ -167,7 +167,7 @@ $ otool -L dbla | grep asan
   就是**内存池思想的内核版**：
   - slab 的"对象缓存" = 本章的固定块大小池；
   - `kmem_cache_create(name, size, align, ...)` 里的 **align 参数**
-    正是 [13.1](13.1-基本堆分配和释放.md) 实测的对齐坑；
+    正是 [13.01](13.01-基本堆分配和释放.md) 实测的对齐坑；
   - `GFP_ATOMIC`（不可睡眠）对应裸机"ISR 里不能分配"；
   - 内核的 `KASAN` 就是 ASan 的内核版（同样有 shadow memory 开销）。
 
@@ -201,4 +201,4 @@ clang -O2 -o sz sz.c && ./sz
 ```
 
 ⚠ **本机环境限制**：Valgrind 未安装且无 root 权限装不了，
-[13.3](13.3-Valgrind.md) 全部内容未实测。
+[13.03](13.03-Valgrind.md) 全部内容未实测。
