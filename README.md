@@ -21,8 +21,10 @@ tools/        工具台：环境自检 / 烧录 / 调试 / 生成新实验（说
 mk/           构建层：一份共享的 CFLAGS/LDFLAGS/规则，各 lab 的 Makefile 缩到 4 行
 boards/       板级层：CPU / 内存布局 / OpenOCD 配置 / LED 引脚，换板子只动这里
 labs/         工具台的参考实验（01-hello：Makefile 只有 4 行的最小可跑工程）
-01-stm32/        三条轨道：01-bare-metal（裸机C，主线）→ 02-libopencm3（库）→ 03-hal（ST官方）
+01-stm32/        实验线：00-toolchain-clang（clang 工具链）→ 01-bare-metal（裸机C，主线）→
+                 02-libopencm3（库）→ 03-gpio-blink / 03-hal → 04-uart-printf → 05-exti-button → 06-timer
   book-notes/ 《裸机C编程》逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
+              00-mental-model/ 是读书前的三篇前提笔记（freestanding / MMIO·volatile / 没有GCC行不行）
 02-freertos/     FreeRTOS 移植与任务实验（等裸机三件套通了再进）
   book-notes/ 《Mastering the FreeRTOS Real Time Kernel》配套笔记（骨架）
 03-zephyr/       Zephyr 实验区（第二遍的工程化路线，最后走）
@@ -125,6 +127,9 @@ west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `0
 ## 纪律（沿用 LDD- 惯例）
 
 - 每个实验必须真机跑通再写笔记，实测输出贴进对应 README
+- **笔记进 `book-notes/`，lab README 只写实验指南**（文件/构建/实测输出/坑点）+
+  笔记落点索引；概念性内容不堆在 lab README 里（2026-10-11 起，
+  00-toolchain-clang 已按此瘦身）
 - 坑点记录进各 lab README，"原书怎么说 / 实际是什么"分开写
 - 工具链/库这类"环境事实"写进本文件，避免每个 lab 重复踩
 - GPL 只在内核语境存在；MCU 裸机无许可证负担（FreeRTOS 是 MIT，libopencm3 是 LGPL-3.0
