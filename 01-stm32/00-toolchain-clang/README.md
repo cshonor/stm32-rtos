@@ -75,107 +75,19 @@ section                   size        addr
 `.bin` 296 字节 = .text 292 + .data 4。**Flash 里没有 .bss 的位置**——
 它靠启动代码清零，不是靠初值。
 
-## 三个实测发现（原书怎么说 / 实际是什么）
+## 笔记落点（原"三个实测发现"和 include 清单已并入 book-notes）
 
-### 1. 丢掉 volatile 的轮询会被搬出循环
+本 lab 的三个实测发现已按主题并入 `book-notes/00-mental-model/`，此处只留索引：
 
-`main.o` 反汇编对比（同一段逻辑，只差一个 `volatile`）：
-
-```
-; wait_press_bad：u32 *idr = (u32 *)0x40011008;  ← 没有 volatile
-movw r0, #0x1009
-movt r0, #0x4001
-ldrb r0, [r0]        ← 只读了一次！
-lsls r0, r0, #0x1a
-itt  mi
-movmi r0, #0x1
-bxmi lr
-b    .               ← 死循环，再也不会读 IDR
-
-; wait_press_good：volatile u32 *idr = ...;      ← 有 volatile
-movw r0, #0x1008
-movt r0, #0x4001
-ldr  r1, [r0]        ← 循环体内
-lsls r1, r1, #0x12
-bpl  0x8             ← 回到 ldr
-```
-
-编译器完全有权这么做：普通指针读的是内存，它认为"这块内存没人改过"。
-但寄存器是**硬件在改**，不在 C 语言的可见语义里。
-`volatile` 是 C 标准里唯一能表达"这个地址的内容会自己变"的手段。
-
-### 2. 没人搬 .data，全局变量的初值就是 RAM 里的垃圾
-
-`Reset_Handler` 反汇编（crt0 的活，自己写）：
-
-```
-08000040 <Reset_Handler>:
- 8000054: movw r1, #0x124      ; _sidata = 0x08000124（Flash 侧）
- 8000058: movw r2, #0x0
- 800005c: movt r1, #0x800
- 8000060: movt r2, #0x2000     ; _sdata  = 0x20000000（RAM 侧）
- 8000064: ldr  r3, [r1], #4    ; ← 拷 .data
- 8000068: str  r3, [r2], #4
- 800006c: cmp  r2, r0
- 800006e: blo  0x8000064
- 8000070: movw r0, #0x8        ; _ebss
- 8000074: movw r1, #0x4        ; _sbss
- 8000078: movt r0, #0x2000
- 800007c: movt r1, #0x2000
- 8000084: movs r2, #0x0        ; ← 清 .bss
- 8000088: str  r2, [r1], #4
- 800008e: blo  0x8000088
- 8000090: bl   0x800009c <main>
- 8000094: b    0x8000094       ; main 不该返回，返回就停住
-```
-
-Linux 上这两步是内核 loader + 动态链接器做的；裸机上没人做，
-漏掉就会出现"偶发性的、跟局部变量/优化级别相关的玄学 Bug"。
-
-### 3. 编译器比你更懂 C —— 它会在背后调 `__aeabi_*`
-
-`make check-libc`（`llvm-nm -u` 列未定义符号）：
-
-```
---- 未定义符号（谁被偷偷调用了）---
-U __aeabi_dadd        ← a * b + 1.0（M3 无 FPU，软件浮点）
-U __aeabi_dmul
-U __aeabi_ldivmod     ← long long 除法
-U __aeabi_memcpy      ← struct big 整体赋值！加了 -fno-builtin 也还在
-```
-
-`make check-eabi`（把探针函数强拉进链接）：
-
-```
---- 链接结果（期望：只有浮点/64位除报缺，没有 __aeabi_memcpy）---
-ld.lld: error: undefined symbol: __aeabi_dmul
-ld.lld: error: undefined symbol: __aeabi_dadd
-ld.lld: error: undefined symbol: __aeabi_ldivmod
-```
-
-`__aeabi_memcpy` 没报缺 —— 因为 `startup.c` 里自己实现了。
-浮点/64 位除没实现，属于 compiler-rt（libgcc 的等价物），要另接。
-
-## freestanding 下到底能 include 什么？
-
-全程 `-nostdlib` 不代表「什么头文件都没有」——编译器自带一批。标准规定的 freestanding
-清单是 **C99=7 / C11=C17=9 / C23=10** 个（依据与标准出处见
-[book-notes/00.3](../book-notes/00-mental-model/00.3-没有GCC行不行.md)）。
-
-本机 clang 23.1.0 逐个 include 实测
-（`clang --target=armv7m-none-eabi -mcpu=cortex-m3 -mthumb -ffreestanding -std=c23 -fsyntax-only`）：
-
-| 结果 | 头文件 |
+| 实测发现 | 笔记落点 |
 |---|---|
-| ✅ 可用（在标准清单里） | `float.h` `iso646.h` `limits.h` `stdalign.h` `stdarg.h` `stdbool.h` `stddef.h` `stdint.h` `stdnoreturn.h` |
-| ❌ **缺** | `stdbit.h` ← 标准要求给，clang 23.1.0 资源目录里**没有** |
-| ⚠️ 多给（**超出**标准清单） | `stdatomic.h` `stdckdint.h`（还有 `stdcountof.h` `stddefer.h` 等扩展） |
-| ❌ 没有（hosted 头，理应没有） | `assert.h` `stdio.h` `stdlib.h` `string.h` `math.h` |
+| 丢掉 volatile 的轮询会被搬出循环（`wait_press_bad/good` 反汇编对比） | [00.2 手段 2](../book-notes/00-mental-model/00.2-操作硬件的三个手段.md) |
+| 没人搬 .data，初值就是 RAM 垃圾（`Reset_Handler` 16 条指令） | [00.1 三、四](../book-notes/00-mental-model/00.1-没有OS的C语言.md) |
+| 编译器在背后调 `__aeabi_*`（`make check-libc` / `check-eabi`） | [00.1 二](../book-notes/00-mental-model/00.1-没有OS的C语言.md) |
+| freestanding 下能 include 什么（clang 23.1.0 逐个实测） | [00.3 二·补](../book-notes/00-mental-model/00.3-没有GCC行不行.md) |
 
-一句话：**「能 include」≠「标准保证」**。clang 既多给（`stdatomic.h`）也少给
-（`stdbit.h`），所以不能拿它当可移植性依据——可移植的裸机代码只依赖标准清单里的头文件。
-本目录的 `main.c` 干脆**一个头文件都不 include**：`u32`/`u8` 自己 `typedef`，
-这是「完全不依赖工具链给什么」的最保守写法（也顺带避开了 stdint 类型宽度随实现的浮动）。
+补充一句 lab 侧的做法：本目录的 `main.c` **一个头文件都不 include**，
+`u32`/`u8` 自己 `typedef`——这是「完全不依赖工具链给什么」的最保守写法。
 
 ## 坑点清单（真机踩过，按命中顺序）
 
