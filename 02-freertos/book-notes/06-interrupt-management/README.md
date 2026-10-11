@@ -13,14 +13,14 @@
 裸机篇 [ch10](../../../01-stm32/book-notes/10-interrupts/README.md) 的"上半部/下半部"
 概念在这里正式落地：ISR = 上半部，被信号量唤醒的任务 = 下半部。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
 | 小节 | 标题 | 状态 |
 |---|---|---|
-| 6.1 | 二值信号量做中断同步：延迟中断处理的标准范式 | ⬜ |
-| 6.2 | FromISR 规则与 pxHigherPriorityTaskWoken 机制 | ⬜ |
-| 6.3 | 中断优先级红线：configMAX_SYSCALL_INTERRUPT_PRIORITY 与 PRIMASK/BASEPRI | ⬜ |
-| 6.4 | 计数信号量：资源计数与事件计数（丢事件问题） | ⬜ |
+| [6.1 二值信号量中断同步](6.1-二值信号量中断同步.md) | 延迟中断处理的标准范式 | ✅ |
+| [6.2 FromISR 规则与 yield](6.2-FromISR规则与yield.md) | pxHigherPriorityTaskWoken 机制 | ✅ |
+| [6.3 中断优先级红线](6.3-中断优先级红线.md) | configMAX_SYSCALL_INTERRUPT_PRIORITY 与 PRIMASK/BASEPRI | ✅ |
+| [6.4 计数信号量](6.4-计数信号量.md) | 资源计数与事件计数（丢事件问题） | ✅ |
 
 ## 读完本章你应该能回答
 
@@ -41,4 +41,4 @@
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写 | 实验 03 未做；届时用按键 EXTI + 二值信号量补实测（含去抖对照书 ch05） |
+| 无实测数据 | 实验 03 未做；届时用按键 EXTI + 二值信号量补实测（含去抖对照书 ch05） |

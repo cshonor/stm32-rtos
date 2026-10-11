@@ -13,14 +13,14 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 与 LDD- 侧的关联直接拉满：Kconfig 和 devicetree 就是 Linux 内核的同一套机制
 （`LDD-/09` 设备树章），语法零迁移成本。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
-| 小节 | 标题 | 状态 |
+| 小节 | 标题 | 笔记 |
 |---|---|---|
-| 3.1 | west：manifest、init/update、build/flash/debug 一条链 | ⬜ |
-| 3.2 | 一个 Zephyr 应用的最小骨架：CMakeLists.txt + prj.conf + app.overlay | ⬜ |
-| 3.3 | Kconfig 怎么工作：prj.conf → autoconf.h；menuconfig 看什么 | ⬜ |
-| 3.4 | 构建产物解剖：zephyr.elf / merged.hex / build 目录里都有啥 | ⬜ |
+| 3.1 | west：manifest、init/update、build/flash/debug 一条链 | [3.1-west是什么](3.1-west是什么.md) ✅ |
+| 3.2 | 一个 Zephyr 应用的最小骨架：CMakeLists.txt + prj.conf + app.overlay | [3.2-应用最小骨架](3.2-应用最小骨架.md) ✅ |
+| 3.3 | Kconfig 怎么工作：prj.conf → autoconf.h；menuconfig 看什么 | [3.3-Kconfig怎么工作](3.3-Kconfig怎么工作.md) ✅ |
+| 3.4 | 构建产物解剖：zephyr.elf / merged.hex / build 目录里都有啥 | [3.4-构建产物解剖](3.4-构建产物解剖.md) ✅ |
 
 ## 读完本章你应该能回答
 
@@ -31,7 +31,7 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 
 ## 前置 / 后续
 
-- **前置**：[01-stm32/book-notes ch11 链接器../../../01-stm32/book-notes/11-linker/README.md)
+- **前置**：[01-stm32/book-notes ch11 链接器](../../../01-stm32/book-notes/11-linker/README.md)
   （构建的终点还是链接脚本和段布局，底子在裸机篇）
 - **后续**：[ch04 多线程](../04-multithreading/README.md)（实验 01 的理论）→
   [ch09 DeviceTree](../09-devicetree/README.md)（三件套里最深的那个）
@@ -40,5 +40,5 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写 | 等 01-hello 实验落地时写——届时有真实构建日志可解剖 |
-| 书基于 2024 工具链 | west/Zephyr SDK 版本差异以官方文档为准 |
+| 无实测构建日志 | 01-hello 未做；3.4 的产物地图按官方文档描述，真实日志待实验落地后解剖补图 |
+| 书基于 2024 工具链 | west/Zephyr SDK 版本差异以官方文档为准；已在 3.1/3.3 用"原书怎么说/实际是什么"表标注 |

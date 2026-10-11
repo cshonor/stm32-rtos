@@ -1,23 +1,23 @@
 # ch02 · RTOS 基础复习 —— 章节导航
 
-> 书第 2 章 · 对应实验：与 [`02-freertos/01–04`../../../02-freertos/README.md) 概念对照
+> 书第 2 章 · 对应实验：与 [`02-freertos/01–04`](../../../02-freertos/README.md) 概念对照
 > 章导航：本篇
 
 ## 本章讲什么
 
 **把 RTOS 通用概念（任务、调度、抢占、优先级反转、IPC）用 Zephyr 的词汇
 重新讲一遍。**对本仓库的读者这章是"复习 + 换词表"：
-机制在 [01-stm32/book-notes ch20../../../01-stm32/book-notes/20-towards-freertos/README.md)
-和 [02-freertos/book-notes ch03../../../02-freertos/book-notes/03-task-management/README.md)
+机制在 [01-stm32/book-notes ch20](../../../01-stm32/book-notes/20-towards-freertos/README.md)
+和 [02-freertos/book-notes ch03](../../../02-freertos/book-notes/03-task-management/README.md)
 已经学过，这里重点是**同一件事在 Zephyr 里叫什么名字**。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
-| 小节 | 标题 | 状态 |
+| 小节 | 标题 | 笔记 |
 |---|---|---|
-| 2.1 | 词汇对照表：task→thread、queue→msgq、semaphore→k_sem…… | ⬜ |
-| 2.2 | 优先级体系的世界观差异：FreeRTOS 正数向上 vs Zephyr 负数协作 | ⬜ |
-| 2.3 | 确定性、 deadlines 与"实时"到底承诺什么 | ⬜ |
+| 2.1 | 词汇对照表：task→thread、queue→msgq、semaphore→k_sem…… | [2.1-词汇对照表](2.1-词汇对照表.md) ✅ |
+| 2.2 | 优先级体系的世界观差异：FreeRTOS 正数向上 vs Zephyr 负数协作 | [2.2-优先级两个世界](2.2-优先级两个世界.md) ✅ |
+| 2.3 | 确定性、 deadlines 与"实时"到底承诺什么 | [2.3-确定性与实时](2.3-确定性与实时.md) ✅ |
 
 ## 读完本章你应该能回答
 
@@ -27,11 +27,12 @@
 
 ## 前置 / 后续
 
-- **前置**：[02-freertos/book-notes ch03 任务管理../../../02-freertos/book-notes/03-task-management/README.md)
+- **前置**：[02-freertos/book-notes ch03 任务管理](../../../02-freertos/book-notes/03-task-management/README.md)
 - **后续**：[ch03 开发环境与构建原理](../03-dev-environment-build/README.md)
 
 ## 本章技术债（诚实记录）
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写 | 2.1 词汇对照表随 ch04–ch05 笔记自然形成后回填更准 |
+| 无实测输出 | 概念对照章，不依赖实验；延时/tick 行为差异待 01-hello 落地后补验证 |
+| 对照表只覆盖主线 IPC | mailbox、spinlock、SMP 相关对象未列；F103 单核用不上，需要时补 |

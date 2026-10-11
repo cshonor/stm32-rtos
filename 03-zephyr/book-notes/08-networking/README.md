@@ -10,13 +10,13 @@
 socket API 与 POSIX 对齐——从 Linux 网络编程（`04-cpp/M2` 那条线）过来
 几乎是零成本。
 
-## 小节清单（规划，⬜ 待写）
+## 小节清单
 
-| 小节 | 标题 | 状态 |
+| 小节 | 标题 | 笔记 |
 |---|---|---|
-| 8.1 | 网络栈架构：iface → L2 → IP → socket 层 | ⬜ |
-| 8.2 | socket API 与 POSIX 的对应与缺口 | ⬜ |
-| 8.3 | F103 怎么上网：SPI 网卡（ENC28J60/W5500）与 QEMU 仿真路径 | ⬜ |
+| 8.1 | 网络栈架构：iface → L2 → IP → socket 层 | [8.1-网络栈架构](8.1-网络栈架构.md) |
+| 8.2 | socket API 与 POSIX 的对应与缺口 | [8.2-socket-API与POSIX](8.2-socket-API与POSIX.md) |
+| 8.3 | F103 怎么上网：SPI 网卡 / Wi-Fi 模组 / 4G 模组 / QEMU | [8.3-F103上网路径](8.3-F103上网路径.md) |
 
 ## 读完本章你应该能回答
 
@@ -33,4 +33,5 @@ socket API 与 POSIX 对齐——从 Linux 网络编程（`04-cpp/M2` 那条线�
 
 | 债 | 为什么现在不还 |
 |---|---|
-| 小节未写、无实验 | F103 无板载网络；SPI 网卡或 QEMU 路径待定后再写 |
+| 笔记已写但无实验 | F103 无板载网络；QEMU 路径或 W5500/ESP-AT 硬件到位后补实测 |
+| 书 API 与新版有差 | 已按官方文档校正（net_context 已移除，一律 zsock_*；ESP-AT 驱动体系化） |
