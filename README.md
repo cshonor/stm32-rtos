@@ -20,6 +20,7 @@
 tools/        工具台：环境自检 / 烧录 / 调试 / 生成新实验（说明见 tools/README.md）
 mk/           构建层：一份共享的 CFLAGS/LDFLAGS/规则，各 lab 的 Makefile 缩到 4 行
 boards/       板级层：CPU / 内存布局 / OpenOCD 配置 / LED 引脚，换板子只动这里
+hardware/     硬件采购：两块板板载资源盘点 + 外设必买/按需买清单（说明见 hardware/README.md）
 labs/         工具台的参考实验（01-hello：Makefile 只有 4 行的最小可跑工程）
 01-stm32/        实验线：00-toolchain-clang（clang 工具链）→ 01-bare-metal（裸机C，主线）→
                  02-libopencm3（库）→ 03-gpio-blink / 03-hal → 04-uart-printf → 05-exti-button → 06-timer
@@ -93,6 +94,9 @@ west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `0
 
 ## 硬件
 
+- 外设该买什么、别买什么：见 [`hardware/README.md`](hardware/README.md)
+  （必买只有四件：杜邦线 / 面包板 / 克隆版 ST-Link V2 / 8 通道逻辑分析仪，合计 ≈¥55–100；
+  F407 探索者板载已覆盖 I2C / SPI / ADC / CAN / RS485 / 以太网 / USB / 音频 / RTC）
 - 板 1（已到手）：**NUCLEO-F103RB**（ST 官方 Nucleo-64）
   - 板载 ST-Link/V2-1（macOS 免驱可直接用 openocd），用户 LED = **PA5**（LD2），
     128K Flash / 20K RAM，`_stack` = 0x20005000
