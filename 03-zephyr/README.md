@@ -4,7 +4,8 @@
 全部真机跑通后才进这里——Zephyr 抽象层厚，没有裸机底子会被包死在框架里。
 
 > 配套教材：《Zephyr RTOS Embedded C Programming》（Andrew Eliasz, Apress 2024）——
-> Zephyr 唯一成体系的专门书，笔记在 [book-notes/](book-notes/README.md)（⬜ 骨架）。
+> Zephyr 唯一成体系的专门书，笔记在 [book-notes/](book-notes/README.md)
+> （✅ 12 章 43 篇已写满，先行讲解——书的 API 有年代差，以官方文档为准绳）。
 
 ## 为什么值得走第二遍
 
@@ -19,7 +20,11 @@
 - 板：NUCLEO-F103RB（官方 target `nucleo_f103rb`）或 Blue Pill（`stm32_min_dev_blue`）
 - 无板也能起步：`qemu_cortex_m3` target 可在 QEMU 里跑通前两个实验
 
-## 环境（Windows）
+## 环境（写于 Windows 时期）
+
+> ⚠ 本节的命令记录自主机还是 Windows 的时期；macOS 侧**尚未实测**。
+> 命令本身跨平台（west 是 Python 包），但 macOS 上应走 venv / 用户级 pip，
+> 不碰系统 Python——实测后再把本行删掉。
 
 ```bash
 pip install west

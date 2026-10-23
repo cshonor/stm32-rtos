@@ -6,8 +6,8 @@
 > | 轨道 | 配套教材 | 笔记位置 |
 > |---|---|---|
 > | `01-stm32/`（裸机 → 库 → HAL） | **《裸机C编程：嵌入式系统C程序设计》**（[美] Stephen Oualline 著，黄俊彬 译，机械工业出版社 2025，ISBN 9787111792017；原书 *Bare Metal C*, No Starch 2022，全 18 章） | [01-stm32/book-notes/](01-stm32/book-notes/README.md)（✅ 已写完） |
-> | `02-freertos/`（RTOS 第一遍） | **《Mastering the FreeRTOS Real Time Kernel》**（Richard Barry，FreeRTOS 官方书，官网免费 PDF，有社区中译本；纸质备选：野火刘火良《FreeRTOS 内核实现与应用开发实战指南——基于STM32》） | [02-freertos/book-notes/](02-freertos/book-notes/README.md)（⬜ 待启动） |
-> | `03-zephyr/`（工程化第二遍） | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页——Zephyr 唯一成体系的专门书；辅以官方文档） | [03-zephyr/book-notes/](03-zephyr/book-notes/README.md)（⬜ 待启动） |
+> | `02-freertos/`（RTOS 第一遍） | **《Mastering the FreeRTOS Real Time Kernel》**（Richard Barry，FreeRTOS 官方书，官网免费 PDF，有社区中译本；纸质备选：野火刘火良《FreeRTOS 内核实现与应用开发实战指南——基于STM32》） | [02-freertos/book-notes/](02-freertos/book-notes/README.md)（✅ 已写满：12 章 44 篇，先行讲解——实验未做、实测数据待补） |
+> | `03-zephyr/`（工程化第二遍） | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页——Zephyr 唯一成体系的专门书；辅以官方文档） | [03-zephyr/book-notes/](03-zephyr/book-notes/README.md)（✅ 已写满：12 章 43 篇，先行讲解——API 以官方文档为准绳） |
 >
 > `01-stm32/book-notes/` 的篇号 **chNN 与书的章号一一对齐**（ch01–ch18 + 补充篇），
 > 本篇下面的"学习路线"表按**实验**编号，两者的映射见 `01-stm32/book-notes/README.md`。
@@ -27,9 +27,9 @@ labs/         工具台的参考实验（01-hello：Makefile 只有 4 行的最�
   book-notes/ 《裸机C编程》逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
               00-mental-model/ 是读书前的三篇前提笔记（freestanding / MMIO·volatile / 没有GCC行不行）
 02-freertos/     FreeRTOS 移植与任务实验（等裸机三件套通了再进）
-  book-notes/ 《Mastering the FreeRTOS Real Time Kernel》配套笔记（骨架）
+  book-notes/ 《Mastering the FreeRTOS Real Time Kernel》配套笔记（✅ 已写满 44 篇，先行讲解篇）
 03-zephyr/       Zephyr 实验区（第二遍的工程化路线，最后走）
-  book-notes/ 《Zephyr RTOS Embedded C Programming》(Eliasz) 配套笔记（骨架）
+  book-notes/ 《Zephyr RTOS Embedded C Programming》(Eliasz) 配套笔记（✅ 已写满 43 篇，先行讲解篇）
 third_party/  git 子模块：libopencm3（01-stm32/02-libopencm3 用；clone 后先 git submodule update --init）
 _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-examples）
 ```

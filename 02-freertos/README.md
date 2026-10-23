@@ -3,7 +3,7 @@
 > 定位：MCU 轨的**第一遍 RTOS**——不搞框架，只把「任务/调度/队列/信号量/互斥量」
 > 这五件事在真机上看明白。第二遍（工程化）在 [03-zephyr/](../03-zephyr/README.md) 用 Zephyr 重做。
 > 对应笔记：配套教材《Mastering the FreeRTOS Real Time Kernel》（官方免费书）的笔记在
-> [book-notes/](book-notes/README.md)（⬜ 骨架，启动后逐章写）；
+> [book-notes/](book-notes/README.md)（✅ 12 章 44 篇已写满，先行讲解——本目录实验落地后补实测数据）；
 > 先行讲解见 [补充 ch20 走向 FreeRTOS](../01-stm32/book-notes/20-towards-freertos/README.md)（
 > 机制原理都在那里，本目录负责出实测数据）
 
