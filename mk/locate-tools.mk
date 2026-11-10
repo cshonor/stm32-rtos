@@ -17,25 +17,59 @@
 # =============================================================================
 
 # --- LLVM 工具链（clang / ld.lld / llvm-objcopy …）---------------------------
+# ⚠ 这些变量不能用 `?=`：GNU make 对 CC/LD 有内建默认值（CC=cc、LD=ld，
+#   origin=default），而 `?=` 把"内建默认"也算"已定义"、静默不生效——
+#   实测 LD 会落回 macOS 的 /usr/bin/ld（Mach-O 链接器），报
+#   "unknown option: -T"（2026-11-10 复现于 labs/01-hello 与 03-gpio-blink）。
+#   所以这里按 origin 兜底：只在【未定义 / 内建默认】时才赋我们的默认值；
+#   命令行、环境变量、lab Makefile 在 include 前的赋值照常优先。
 # LLVM_BIN 指向包含 clang 的 bin 目录；留空则直接用 PATH 上的裸命令名。
 LLVM_BIN ?=
 
 ifneq ($(LLVM_BIN),)
-  CC      ?= $(LLVM_BIN)/clang
-  LD      ?= $(LLVM_BIN)/ld.lld
-  OBJCOPY ?= $(LLVM_BIN)/llvm-objcopy
-  OBJDUMP ?= $(LLVM_BIN)/llvm-objdump
-  READELF ?= $(LLVM_BIN)/llvm-readelf
-  SIZE    ?= $(LLVM_BIN)/llvm-size
-  NM      ?= $(LLVM_BIN)/llvm-nm
+  ifneq ($(filter undefined default,$(origin CC)),)
+    CC      := $(LLVM_BIN)/clang
+  endif
+  ifneq ($(filter undefined default,$(origin LD)),)
+    LD      := $(LLVM_BIN)/ld.lld
+  endif
+  ifneq ($(filter undefined default,$(origin OBJCOPY)),)
+    OBJCOPY := $(LLVM_BIN)/llvm-objcopy
+  endif
+  ifneq ($(filter undefined default,$(origin OBJDUMP)),)
+    OBJDUMP := $(LLVM_BIN)/llvm-objdump
+  endif
+  ifneq ($(filter undefined default,$(origin READELF)),)
+    READELF := $(LLVM_BIN)/llvm-readelf
+  endif
+  ifneq ($(filter undefined default,$(origin SIZE)),)
+    SIZE    := $(LLVM_BIN)/llvm-size
+  endif
+  ifneq ($(filter undefined default,$(origin NM)),)
+    NM      := $(LLVM_BIN)/llvm-nm
+  endif
 else
-  CC      ?= clang
-  LD      ?= ld.lld
-  OBJCOPY ?= llvm-objcopy
-  OBJDUMP ?= llvm-objdump
-  READELF ?= llvm-readelf
-  SIZE    ?= llvm-size
-  NM      ?= llvm-nm
+  ifneq ($(filter undefined default,$(origin CC)),)
+    CC      := clang
+  endif
+  ifneq ($(filter undefined default,$(origin LD)),)
+    LD      := ld.lld
+  endif
+  ifneq ($(filter undefined default,$(origin OBJCOPY)),)
+    OBJCOPY := llvm-objcopy
+  endif
+  ifneq ($(filter undefined default,$(origin OBJDUMP)),)
+    OBJDUMP := llvm-objdump
+  endif
+  ifneq ($(filter undefined default,$(origin READELF)),)
+    READELF := llvm-readelf
+  endif
+  ifneq ($(filter undefined default,$(origin SIZE)),)
+    SIZE    := llvm-size
+  endif
+  ifneq ($(filter undefined default,$(origin NM)),)
+    NM      := llvm-nm
+  endif
 endif
 
 # --- GNU Arm 工具链（只有调试才需要；libopencm3 那条轨另算）-------------------
