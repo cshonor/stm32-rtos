@@ -64,7 +64,10 @@ _load_dirs() {
   local d
   while IFS= read -r d; do
     [ -n "$d" ] || continue
-    [ -d "$d" ] && _DIRS[${#_DIRS[@]}]="$d"
+    # += 追加：bash 3.1+ / zsh 都支持。不要写 _DIRS[${#_DIRS[@]}]=——
+    # 那是 bash 的 0 基下标，zsh 数组从 1 开始，直接报
+    # "assignment to invalid subscript range"。
+    [ -d "$d" ] && _DIRS+=("$d")
   done < <("$1" 2>/dev/null | awk '!seen[$0]++')
 }
 
@@ -75,6 +78,9 @@ _load_dirs() {
 
 cand_llvm() {
   local h="${HOME:-}"
+  # zsh：不匹配的 glob 会让整个 for 报错中断（bash 是原样保留、再由 _load_dirs 过滤），
+  # 局部打开 NULL_GLOB 对齐行为。local_options 保证不泄漏到调用方 shell。
+  [ -n "${ZSH_VERSION:-}" ] && setopt local_options null_glob
   # 显式环境变量最优先
   [ -n "${LLVM_BIN:-}" ] && printf '%s\n' "$LLVM_BIN"
   # conda / micromamba（macOS 上 cdev 环境走这条）
@@ -99,6 +105,7 @@ cand_llvm() {
 
 cand_openocd() {
   local h="${HOME:-}"
+  [ -n "${ZSH_VERSION:-}" ] && setopt local_options null_glob
   [ -n "${OPENOCD:-}" ] && printf '%s\n' "$(dirname "$OPENOCD")"
   printf '%s\n' /opt/homebrew/bin /usr/local/bin /usr/bin
   local d
@@ -115,6 +122,7 @@ cand_openocd() {
 
 cand_gnu_arm() {
   local h="${HOME:-}"
+  [ -n "${ZSH_VERSION:-}" ] && setopt local_options null_glob
   [ -n "${GCC_ARM_BIN:-}" ] && printf '%s\n' "$GCC_ARM_BIN"
   printf '%s\n' /opt/homebrew/bin /usr/local/bin /usr/bin
   local d
@@ -128,6 +136,7 @@ cand_gnu_arm() {
 
 cand_python() {
   local h="${HOME:-}"
+  [ -n "${ZSH_VERSION:-}" ] && setopt local_options null_glob
   [ -n "${PYTHON:-}" ] && { have "$PYTHON" && printf '%s\n' "$(dirname "$(command -v "$PYTHON")")"; }
   printf '%s\n' /opt/homebrew/bin /usr/local/bin /usr/bin
   local d
@@ -137,6 +146,7 @@ cand_python() {
 
 cand_make() {
   local h="${HOME:-}"
+  [ -n "${ZSH_VERSION:-}" ] && setopt local_options null_glob
   printf '%s\n' /opt/homebrew/bin /usr/local/bin /usr/bin /bin
   local d
   for d in "$h"/.local/make*/bin "$h"/.local/ezwinports*/bin; do printf '%s\n' "$d"; done

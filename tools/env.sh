@@ -27,15 +27,25 @@
 # =============================================================================
 
 set -u
+# 记住调用方是否开着 -u：source 模式退场时还原，别把 set -u 泄漏进交互 shell
+_HAD_U=1
+case $- in *u*) _HAD_U=0 ;; esac
 
-HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# BASH_SOURCE 在 zsh 下不存在（source 时拿不到它），回退用 $0：
+#   bash 直接执行 / zsh 无论 source 还是执行，$0 都是脚本路径；
+#   bash source 时 BASH_SOURCE 才是对的（$0 是外层 shell 名）。
+_SELF=${BASH_SOURCE:-$0}
+HERE=$(cd "$(dirname "$_SELF")" && pwd)
 REPO_ROOT=$(cd "$HERE/.." && pwd)
 
 # shellcheck source=lib.sh
 . "$HERE/lib.sh"
 
+# 是否被 source：不依赖 BASH_SOURCE（zsh 没有），用可移植事实——
+# 「return 只在 source / 函数里合法」。子 shell 里试一次 return，
+# 成功即被 source，失败即被直接执行。
 _IS_SOURCED=0
-if [ -n "${BASH_SOURCE[0]:-}" ] && [ "${BASH_SOURCE[0]}" != "${0:-}" ]; then
+if (return 0 2>/dev/null); then
   _IS_SOURCED=1
 fi
 
@@ -51,7 +61,7 @@ while [ $# -gt 0 ]; do
     -h|--help)
       sed -n '2,30p' "$0" | sed 's/^#\{1,\} \{0,1\}//'
       ${_IS_SOURCED:+return} 0 2>/dev/null || exit 0 ;;
-    *) printf '未知参数: %s（--help 看用法）\n' "$1" >&2; exit 2 ;;
+    *) printf '未知参数: %s（--help 看用法）\n' "$1" >&2; ${_IS_SOURCED:+return} 2 2>/dev/null || exit 2 ;;
   esac
   shift
 done
@@ -60,6 +70,7 @@ done
 BOARD_MK="$REPO_ROOT/boards/$BOARD.mk"
 if [ ! -f "$BOARD_MK" ]; then
   printf '找不到 boards/%s.mk\n可选板子：%s\n' "$BOARD" "$(boards_list)" >&2
+  [ "$_IS_SOURCED" -eq 1 ] && return 2 2>/dev/null
   exit 2
 fi
 
@@ -81,7 +92,7 @@ printf '板子   %s（%s / %s）\n' "$BOARD" "$B_NAME" "$B_CPU"
 printf '主机   %s\n' "$(uname -s 2>/dev/null || echo unknown)"
 printf '时间   %s\n' "$(date '+%Y-%m-%d %H:%M:%S')"
 
-TMP=$(mktemp -d "${TMPDIR:-/tmp}/stm32-env-XXXXXX") || { printf '无法创建临时目录\n' >&2; exit 2; }
+TMP=$(mktemp -d "${TMPDIR:-/tmp}/stm32-env-XXXXXX") || { printf '无法创建临时目录\n' >&2; [ "$_IS_SOURCED" -eq 1 ] && return 2 2>/dev/null; exit 2; }
 trap 'rm -rf "$TMP"' EXIT
 
 # ---------------------------------------------------------------- [0] 工具台自足
@@ -268,7 +279,13 @@ if [ "$DO_EXPORT" -eq 1 ]; then
     [ -n "$TOOL_OPENOCD" ]  && OPENOCD="$TOOL_OPENOCD"
     [ -n "$TOOL_OPENOCD_SCRIPTS" ] && OPENOCD_SCRIPTS="$TOOL_OPENOCD_SCRIPTS"
     [ -n "$TOOL_GNU_BIN" ]  && GCC_ARM_BIN="$TOOL_GNU_BIN"
-    export PATH LLVM_BIN OPENOCD OPENOCD_SCRIPTS GCC_ARM_BIN
+    # 只导出有值的：zsh 里 export 一个未定义变量，后续 $VAR 引用会报
+    # "parameter not set"（set -u 还在生效时）。
+    export PATH
+    [ -n "${LLVM_BIN:-}" ]        && export LLVM_BIN
+    [ -n "${OPENOCD:-}" ]         && export OPENOCD
+    [ -n "${OPENOCD_SCRIPTS:-}" ] && export OPENOCD_SCRIPTS
+    [ -n "${GCC_ARM_BIN:-}" ]     && export GCC_ARM_BIN
     hdr "已写入当前 shell"
     note "PATH 前置：${ADD:-（无需追加，工具都已在 PATH 上）}"
     note "导出：LLVM_BIN=${LLVM_BIN:-} OPENOCD=${OPENOCD:-} OPENOCD_SCRIPTS=${OPENOCD_SCRIPTS:-} GCC_ARM_BIN=${GCC_ARM_BIN:-}"
@@ -297,4 +314,14 @@ else
 fi
 printf '\n'
 
+# 被 source 时绝不能走到 exit——那会把调用方的交互 shell 一起关掉
+# （本文件自己推荐的 `source tools/env.sh --export` 以前就会让终端直接退出）。
+# 收摊：清掉 mktemp 目录、撤掉 EXIT trap（别把 trap 留给交互 shell），再 return。
+if [ "$_IS_SOURCED" -eq 1 ]; then
+  rm -rf "$TMP"
+  trap - EXIT
+  # 还原调用方原本没有的 set -u（lib.sh 和本文件都设了它）
+  [ "$_HAD_U" -eq 1 ] && set +u
+  return "$FAIL" 2>/dev/null || exit "$FAIL"
+fi
 exit "$FAIL"
