@@ -28,6 +28,7 @@
 ## 读完这一部分你应该能回答
 
 - `-ffreestanding` 和 `-nostdlib` 分别管什么？为什么两个都要加？
+- 为什么叫 freestanding？它和 hosted、bare-metal 分别是什么关系？
 - `.data` 为什么"初值在 Flash、变量在 RAM"？
 - `volatile` 保证什么？**不**保证什么？
 - 为什么栈指针 SP 不用你设？
