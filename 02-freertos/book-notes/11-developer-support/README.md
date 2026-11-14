@@ -27,6 +27,22 @@
 - 运行时统计的时基和 tick 同速（1ms），任务切换耗时全测成 0（11.3）。
 - trace 钩子里放 printf 拖垮调度；在高频路径里调 vTaskList（它会挂起调度器遍历所有 TCB）（11.4/11.3）。
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `configASSERT(x)` | 内核参数/状态校验总开关 | 默认空宏，不配 = 内核从不体检 |
+| `taskDISABLE_INTERRUPTS()` | 断言/钩子里的停车动作 | 关中断后 printf 可能出不来，现场靠调试器看 |
+| `vApplicationMallocFailedHook` | heap 耗尽强制停车 | 需 `configUSE_MALLOC_FAILED_HOOK` 置 1 |
+| `configCHECK_FOR_STACK_OVERFLOW` | 栈溢出检测档位 | 调试期一律 2（查 0xA5 痕迹），1 只看切换瞬间 SP |
+| `vApplicationStackOverflowHook` | 溢出钩子，参数带任务名 | 钩子里只许停车，禁 printf/内核 API |
+| `uxTaskGetStackHighWaterMark(NULL)` | 本任务历史最小剩余栈（单位：字） | "水位"是**剩多少**不是用多少，越小越危险 |
+| `vTaskList(buf)` | 全部任务状态+栈水位文本表 | 挂起调度器遍历 TCB，别放高频路径；buf 按任务数给够 |
+| `vTaskGetRunTimeStats(buf)` | 各任务 CPU 占用表 | 时基必须 ≥10× tick（F103 用 TIM 自由跑读 CNT） |
+| `xPortGetFreeHeapSize()` | 此刻 heap 剩余 | 只含 `pvPortMalloc`，不含 C 库 malloc 和 MSP 栈 |
+| `xPortGetMinimumEverFreeHeapSize()` | heap 历史最小剩余 | 定 `configTOTAL_HEAP_SIZE` 看它并留 30–50% 余量 |
+| `traceTASK_SWITCHED_IN()` | 任务切入埋点 | 每次切换都跑，里面禁阻塞禁 printf |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
