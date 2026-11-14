@@ -32,6 +32,19 @@
 - 临界区/调度器锁忘了配对释放，系统假死（7.1）。
 - 想在 ISR 里用互斥量——它是全家族唯一没有 FromISR 版本的对象（7.4）。
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `taskENTER_CRITICAL` / `taskEXIT_CRITICAL` | 关中断进出临界区，保护极短代码段 | 必须配对，忘 EXIT 系统假死；只关到 configMAX_SYSCALL 以下 |
+| `taskENTER_CRITICAL_FROM_ISR` / `EXIT_FROM_ISR` | ISR 版临界区 | 参数带中断状态保存/恢复，和任务版别混用 |
+| `vTaskSuspendAll` / `xTaskResumeAll` | 只停任务切换，中断照常 | 期间禁止任何可能阻塞的 API |
+| `xSemaphoreCreateMutex` | 创建互斥量，自带所有权 + 优先级继承 | 创建即"可用"（不像二值信号量创建为空） |
+| `xSemaphoreTake` / `xSemaphoreGive` | 拿锁 / 还锁 | 谁拿谁还，跨任务 Give 是语义级 bug |
+| `xSemaphoreCreateRecursiveMutex` | 创建递归互斥量 | 需 `configUSE_RECURSIVE_MUTEXES` 置 1 |
+| `xSemaphoreTakeRecursive` / `GiveRecursive` | 递归拿/还，内部计数 | 拿几次还几次，配不上对极难排查 |
+| `xQueueSend` + 守门人任务 | 资源私有化，队列串行化 | 操作变异步：发消息 ≠ 已执行 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
