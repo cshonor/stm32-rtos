@@ -11,6 +11,26 @@
 内核自己也要分配内存（任务 TCB、任务栈、队列、信号量），
 这些分配走的就是你选的那个 heap_x.c。选型错误 = 跑着跑着 `xTaskCreate` 静默返回失败。
 
+## 只看这一页（速览）
+
+**主线一句话**：内核分配不走 C 库 malloc 而走自带的 heap_x——2.1 先立 malloc 的
+四宗罪和 `pvPortMalloc` 的拆解，2.2 把 heap_1~5 摆成一张选型表，2.3 钉死本仓选
+heap_4 并用"先估算、再量水位、后收紧"的方法定 `configTOTAL_HEAP_SIZE`。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 2.1 为什么嵌入式里 malloc 是危险品 | malloc 耗时不定、会碎、重入靠锁、失败难察；内核全走 `pvPortMalloc` + 定长 `ucHeap`，堆撞栈在结构上消失 |
+| 2.2 heap 五个分配器选型 | 五个 heap 是五种权衡不是版本递进：建完不删用 heap_1、动态创建删除用 heap_4、多段 RAM 用 heap_5 |
+| 2.3 本仓选型 heap_4 | 选 heap_4；堆大小先按清单估算取 8K 起步，再用水位 API 收紧，并配 malloc failed hook 当场抓失败 |
+
+**本章最容易踩的坑**
+
+- heap_1~5 一起编进工程 = 同名函数链接冲突，只能五选一，换要改 Makefile 重编（2.1）
+- heap_4 的相邻合并消灭不了碎片；创建/删除的对象大小不归一化，照样"总量够、单块不够"（2.2）
+- `configTOTAL_HEAP_SIZE` 先紧后爆最难受，标准流程是先宽后紧、用水位读数收紧（2.3）
+- MSP 中断栈不走 heap，预算里漏留会悄悄踩 .bss/ucHeap，而不是立刻 HardFault（2.3）
+- 不配 `vApplicationMallocFailedHook`，`xTaskCreate` 失败就静默带病运行（2.3）
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
