@@ -32,6 +32,23 @@ FreeRTOS 一个 queue 打天下；Zephyr 按语义细分出五六种对象。
 - 在 system workqueue 的 handler 里干重活/长阻塞，拖住全系统的轻活（5.4）
 - 把 k_timer 回调当线程用：它跑在 ISR 上下文不能干活，要干活用 k_work_delayable（5.4 Q2）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `K_MSGQ_DEFINE(name, size, depth, align)` | 编译期静态定义消息队列 | 第 2 参是**单项大小**不是总字节数；align 影响 RAM padding |
+| `k_msgq_put` / `k_msgq_get` | 阻塞收发一条消息 | ISR 里传 `K_NO_WAIT`，别找 FromISR 变体 |
+| `k_msgq_peek` / `k_msgq_purge` | 读队首不删 / 清空队列 | peek 无超时参数，空队列直接 `-ENOMSG` |
+| `K_PIPE_DEFINE` + `k_pipe_put` / `k_pipe_get` | 字节流管道，支持部分读写 | 返回后看 `written/read_bytes`；`min_xfer` 是"最少传输量"不是上限 |
+| `K_FIFO_DEFINE` + `k_fifo_put` / `k_fifo_get` | 传指针（链表节点），零拷贝 | 节点必须 `sys_snode_t` 打头且长寿命；`k_fifo_put` ISR 安全 |
+| `CONTAINER_OF` | 由节点指针反查宿主结构体 | 成员名/类型写错编译过、运行时读歪 |
+| `K_MEM_SLAB_DEFINE` + `k_mem_slab_alloc/free` | fifo 节点的 O(1) 内存池 | 取走的节点谁用谁还，漏 free 池子耗尽 |
+| `k_mbox_put` / `k_mbox_async_put` / `k_mbox_get` | 带优先级/异步/过滤的邮箱 | 官方 legacy；`priority` 是消息排序权重，与线程优先级无关 |
+| `K_WORK_DEFINE` + `k_work_submit` | 一次性工作项，ISR 交活标配 | 同一 work 在队里不重复排队，只执行一次 |
+| `K_WORK_DELAYABLE_DEFINE` + `k_work_schedule` | 可延迟/周期工作项 | 周期靠 handler 里手动重排，无自动重载 |
+| `k_work_cancel_delayable` | 取消未执行的延迟工作项 | 已进队执行的取消不掉 |
+| `k_work_queue_start` + `k_work_submit_to_queue` | 自定义 workqueue 隔离重活 | system workqueue 里堵了拖全系统 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
