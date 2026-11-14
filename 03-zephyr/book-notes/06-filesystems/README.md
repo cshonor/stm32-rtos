@@ -28,6 +28,22 @@ F103 只有 128K 片内 Flash、无文件系统需求，本章按"选读"处理�
 - 改分区表后忘记重新 west build：链接地址由 devicetree 决定，不重编不生效（6.2 Q2）
 - 每秒 fs_write 小数据：每次都触发 commit 和块管理，写放大严重；攒批或改用 FCB/NVS/settings（6.3 Q2）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `FS_LITTLEFS_DECLARE_DEFAULT_CONFIG(name)` | 生成绑定 storage_partition 的默认配置 | 依赖 dts 里存在 `storage_partition` 节点 |
+| `fs_mount` | 把后端 + 分区挂到挂载点 | 失败第一嫌疑是没格式化；但别无脑 mkfs |
+| `fs_mkfs` | 把分区格式化成空文件系统 | 会清盘，只对确认无数据的分区用 |
+| `fs_open` / `fs_read` / `fs_write` / `fs_close` | POSIX 风格文件读写 | 路径前缀必须匹配挂载点；FAT 卷名带冒号（`/SD:`） |
+| `CONFIG_LOG_BACKEND_FS` | LOG 子系统落盘后端（黑匣子） | 高频日志注意写放大（见 6.3） |
+| `settings_save` / `settings_load` | 键值对参数持久化 | 存参数到这就够，别手写 fs API |
+| `partitions`（dts 节点） | flash 划地声明：偏移 + 长度 | 长度按擦除扇区对齐；改后必须重新 west build |
+| `FIXED_PARTITION_ID(name)` | 分区节点 → 编译期数字 ID | label 字符串查询已废弃 |
+| `flash_area_open` / `flash_area_read/write/erase` | 不挂文件系统裸读写分区 | `fa_off` 相对 flash 基址；erase 按扇区对齐 |
+| NVS / FCB | 比 FS 更轻的掉电安全存储 | 键值对选 NVS，只进不出的流水选 FCB |
+| `CONFIG_FS_LITTLEFS_FC_HEAP_SIZE` | LittleFS 元数据缓存大小 | 影响 RAM 占用与性能；分区要留空闲块余量 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
