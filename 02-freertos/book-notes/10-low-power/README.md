@@ -26,6 +26,18 @@
 - Stop 档醒来后没重建 HSE/PLL 回 72MHz 就补 tick、跑业务（10.3）。
 - 调试时没置 DBGMCU 的 DBG_* 位，芯片一睡 SWD 就断连（10.3）。
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `__WFI()` | CPU 睡到下一个中断 | 放空闲钩子里改动最小，但被 tick 切成碎觉 |
+| `configUSE_IDLE_HOOK` | 开启空闲钩子 | 置 1 后必须自己实现 `vApplicationIdleHook`，且钩子不能阻塞 |
+| `configUSE_TICKLESS_IDLE` | tickless 总开关 | 开了之后睡眠决策权交给 port 层宏 |
+| `portSUPPRESS_TICKS_AND_SLEEP(x)` | 算睡→停 tick→睡→补 tick 全流程 | 官方弱符号实现可覆写；预计睡眠太短内部直接放弃 |
+| `eTaskConfirmSleepModeStatus()` | 睡前确认真能睡 | 有就绪任务或调度器挂起时不放行 |
+| `vTaskStepTick(T)` | 醒后一次性补 T 个 tick | 提前唤醒按**实际**时长补；漏补全系统时间变慢 |
+| `DBGMCU->CR` 的 `DBG_SLEEP/STOP/STANDBY` | 睡眠中保持调试连接 | 省电打折，量产固件必须关 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
