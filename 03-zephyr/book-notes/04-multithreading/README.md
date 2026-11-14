@@ -31,6 +31,25 @@
 - 协作式线程里 k_busy_wait = 两个世界一起停摆；毫秒级等待一律 k_sleep（4.4 Q2）
 - abort 线程后指望资源自动回收：它持有的信号量/互斥量/内存没人替你收（4.6）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `K_THREAD_STACK_DEFINE(name, size)`（4.1） | 静态定义线程栈 | 别用裸字节数组当栈：MPU 保护要求 2 的幂，宏会自动取整 |
+| `k_thread_create(...)`（4.2） | 运行中创建线程 | TCB/栈存储调用者出，"动态"只是运行中办手续，无堆失败路径 |
+| `K_THREAD_DEFINE(...)`（4.2） | 编译期静态定义线程（主推） | main 之前就可能开跑；末参是毫秒延迟不是 K_MSEC |
+| `K_ESSENTIAL` / `K_FP_REGS`（4.2） | 选项位：关键线程 / 用 FPU | FPU 线程不加 K_FP_REGS，浮点现场不保存 |
+| `K_PRIO_COOP(n)` / `K_PRIO_PREEMPT(n)`（4.3） | 优先级便捷宏 | 小 = 高；负数协作、非负抢占，方向与 FreeRTOS 相反 |
+| `CONFIG_TIMESLICING`（4.3） | 时间片开关 | **默认关**：同级公平轮转要显式开并给 TIMESLICE_SIZE |
+| `k_sleep(K_MSEC(n))`（4.4） | 相对睡眠 | ±1 tick 误差；可被 k_wakeup 提前叫醒 |
+| `k_yield()`（4.4） | 主动让出 | 只让同级，没同级等于白让 |
+| `k_busy_wait(us)`（4.4） | 占着 CPU 空转 | 仅限微秒级硬件时序；协作式里用 = 全家停摆 |
+| `k_uptime_get()` + `K_TIMEOUT_ABS_MS(t)`（4.4） | 绝对时刻锚定，周期不漂 | 传成相对值会睡到"远古时刻" |
+| `CONFIG_MAIN_THREAD_PRIORITY`（4.5） | main 线程优先级（默认最高抢占式） | 配负数 main 变协作式，初始化原子完成 |
+| `k_thread_join(tid, K_FOREVER)`（4.6） | 阻塞等线程结束 | 不能 join 自己；死线程可 join（立即返回） |
+| `k_thread_abort(tid)`（4.6） | 强制终止 | 不回收它持有的资源，只当逃生门 |
+| `k_thread_stack_space_get(tid, &unused)`（4.6） | 读栈水位 | 需开 CONFIG_THREAD_STACK_INFO；水位 ×1.5 调栈大小 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
