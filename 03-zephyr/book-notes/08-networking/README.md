@@ -10,6 +10,24 @@
 socket API 与 POSIX 对齐——从 Linux 网络编程（`04-cpp/M2` 那条线）过来
 几乎是零成本。
 
+## 只看这一页（速览）
+
+**主线一句话**：这章解决"MCU 怎么连上网"——先立 Zephyr 自带网络栈的分层架构与线程模型（8.1），再看应用层唯一要碰的 socket API 与 POSIX 差多少（8.2），最后解决 F103 没网卡的物理链路选型（8.3），三篇是"架构 → API → 路径"的递进线。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 8.1 网络栈架构 | Zephyr 自带 native TCP/IP 栈：驱动 → net_if → L2 → IP → socket 分层，RX/TX 各是内核线程，net_buf 配额是 RAM 与稳定性的对价 |
+| 8.2 socket API 与 POSIX | zsock_* 与 BSD socket 逐项对齐，差异不在 API 在 RAM 资源观；TLS 用 SOL_TLS setsockopt，F103 上交给模组 |
+| 8.3 F103 上网路径 | 四条路径按"TCP/IP 栈长在哪"分类：纯转发（ENC28J60）、硬件 offload（W5500）、AT offload（ESP-AT/4G）、仿真（QEMU）；F103 现实选型 W5500 或 ESP-AT |
+
+**本章最容易踩的坑**：
+
+- net_buf 缓冲配额耗尽，症状是丢包、TCP 卡死、大 MTU 流量直接断流（8.1）
+- RX 线程优先级和 socket 所在线程优先级直接决定收包路径的抖动分布（8.1）
+- 照搬 PC 思维开几十个 socket：默认连接数只有个位数到十几个（8.2）
+- 把 zsock_recv 返回 0 当错误——那是对端正常关闭，不是故障（8.2）
+- AT offload 路径的 fd 不是本机真 socket，错误码/并发/DNS 受模组固件约束，移植代码要在真模组上回归（8.3）
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
