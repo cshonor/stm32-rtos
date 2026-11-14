@@ -35,6 +35,23 @@ ISR→主循环的 ring buffer；FreeRTOS 队列就是那个思路的**带阻塞
 - 队列集容量必须 ≥ 成员长度之和，且注册时成员必须为空，否则 `pdFAIL`（4.5）
 - select 拿到句柄不等于数据已取出，还要对句柄再 receive/take 一次（4.5）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `xQueueCreate(len, size)` | 建队列：长度 + 单项大小 | 两参数创建时锁死，写反了容量直接不对 |
+| `xQueueSend(q, &x, wait)` | 尾部发送（值拷贝进队列） | 是 `xQueueSendToBack` 宏别名；插队要用 `xQueueSendToFront` |
+| `xQueueReceive(q, &buf, wait)` | 头部取出（拷出后该格作废） | 返回值只有 `pdPASS`/`pdFAIL`，失败原因要靠自己分支处理 |
+| `uxQueueMessagesWaiting(q)` | 查当前队列里几条数据 | 只供调试，别拿来轮询代替阻塞 |
+| `pdMS_TO_TICKS(ms)` | ms 转 tick 的超时写法 | 有 ±1 tick 量化误差 |
+| `portMAX_DELAY` | 死等到操作成功 | 依赖 `INCLUDE_vTaskSuspend=1`，否则退化成约 49 天 |
+| `xQueueSendFromISR(q, &x, &woken)` | ISR 里发队列 | 无超时参数，满立刻 `errQUEUE_FULL` 丢数据 |
+| `portYIELD_FROM_ISR(woken)` | ISR 尾部请求切到被唤醒的高优先级任务 | woken 必须自己初始化 `pdFALSE`；不调最多白等一个 tick |
+| `configMAX_SYSCALL_INTERRUPT_PRIORITY` | 中断优先级红线 | 数值 ≥ 它才能调 FromISR；方向与任务优先级相反 |
+| `xQueueOverwrite(q, &x)` | 长度 1 队列覆盖写，永远成功 | 静默丢旧值，逐条必达的数据别用它 |
+| `xQueuePeek(q, &buf, wait)` | 读一份但不从队列移除 | 和 Receive 混用会打乱"谁取走数据"的语义 |
+| `xQueueCreateSet(n)` / `xQueueAddToSet` / `xQueueSelectFromSet` | 队列集：阻塞在多个来源的并集上 | 容量 ≥ 成员长度之和；注册时成员必须为空；select 后还要再 receive 一次 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
