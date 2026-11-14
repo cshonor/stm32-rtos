@@ -29,6 +29,23 @@
 - 用相对延时叠加做周期任务必然漂移，严格周期用 k_timer 或绝对时刻（2.1 坑 1 / 2.3）
 - 以为 tickless 是精度特性——它是省电特性（2.3）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `k_sleep` / `k_msleep`（2.1） | 相对延时睡眠 | 至少睡满 n（向上对齐 tick）；严格周期别用它 |
+| `k_yield`（2.1） | 主动让出 CPU | 只让给同级，没有同级等于白让 |
+| `k_msgq`（2.1） | 消息队列：值拷贝 + 环形缓冲 | FreeRTOS queue 的对应物是它，不是 k_queue |
+| `k_queue`（2.1） | 指针链表队列 | 只搬指针，内存所有权归应用自己管 |
+| `k_sem`（2.1） | 计数信号量 | 无所有权、无继承，别当互斥锁用 |
+| `k_mutex`（2.1/2.3） | 互斥锁：可重入 + 所有权 + 优先级继承 | 解锁次数要与加锁配对；优先级反转的唯一解药 |
+| `k_timer`（2.1/2.3） | 软定时器 | 周期不漂移的正规手段（对应 vTaskDelayUntil 的用途） |
+| `K_NO_WAIT` / `K_FOREVER` / `K_MSEC(n)`（2.1） | 统一超时类型 `k_timeout_t` | 全内核一套，所有带超时的 API 都吃它 |
+| `CONFIG_NUM_COOP_PRIORITIES` / `CONFIG_NUM_PREEMPT_PRIORITIES`（2.2） | 协作式 / 抢占式优先级范围 | 负数协作、非负抢占；数字小 = 优先 |
+| `CONFIG_NUM_METAIRQ_PRIORITIES`（2.2） | Meta-IRQ 优先级层数 | 占用协作式区间最低端，可抢占普通协作式 |
+| `CONFIG_TICKLESS_KERNEL`（2.3） | 无周期 tick，睡到下个事件才醒 | 省电特性，不是精度特性 |
+| `CONFIG_SYS_CLOCK_TICKS_PER_SEC`（2.3） | tick 频率 | k_sleep 等超时以 tick 为粒度向上对齐 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
