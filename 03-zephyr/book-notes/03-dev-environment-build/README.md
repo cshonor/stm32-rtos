@@ -32,6 +32,23 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 - CMakeLists.txt 里 `project()` 写在 `find_package(Zephyr)` 之前——顺序是硬要求（3.2）
 - 设备不工作、引脚不对时到处加打印，而不先查 zephyr.dts 这份"硬件真相"（3.4 Q2）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `west init -m <仓库> <目录>`（3.1） | 建工作区，克隆 manifest 仓库 | 只拉了清单仓库，模块还要 `west update` |
+| `west update`（3.1） | 按 west.yml 把所有模块摆到位 | 模块仓库当只读依赖，里面有未提交改动会冲突 |
+| `west build -b <板> <app>`（3.1） | 构建（转交 CMake + Ninja） | 板名以官方板卡页为准 |
+| `west flash` / `west debug`（3.1） | 烧录 / 调试（转交板级 runner） | 换调试器用 `-r <runner>`，命令本身不变 |
+| `west build -t menuconfig`（3.1/3.3） | 图形化改配置，`/` 搜符号 | 退出保存只影响本次 build 目录，持久要落回 prj.conf |
+| `find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})`（3.2） | 把内核构建系统拉进工程 | `project()` 必须排在它**之后**，硬要求 |
+| `target_sources(app PRIVATE ...)`（3.2） | 源文件挂到 app 目标 | 多文件一行列全或分多次调用 |
+| `app.overlay` / `boards/<板>.overlay`（3.2） | 应用层 dts 补丁 | 板名匹配的只对某板生效 |
+| `boards/<板>.conf`（3.2） | 只对某板生效的 Kconfig 片段 | 与 prj.conf 冲突时**它赢**（更具体的赢） |
+| `IS_ENABLED(CONFIG_X)`（3.3） | 判断符号是否开启 | 未开启的符号在 autoconf.h 里不生成，别指望 `#ifdef` 总有定义 |
+| `west build -t clean` / `-t pristine`（3.4） | 清中间产物 / 全清从零配置 | 配置灵异现象先 pristine |
+| `west build -t rom_report` / `ram_report`（3.4） | 按模块聚合的体积报告 | 裁剪先看 report 找大户，再回 zephyr.map 查符号 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
