@@ -28,6 +28,23 @@ F103 平台没有 Wi-Fi；ESP32/带 Wi-Fi 的板子进入硬件清单后再启�
 - 事件回调从不触发：漏 CONFIG_NET_MGMT_EVENT=y 或忘了 add_event_callback（12.3）
 - 把 ESP-AT 当完整网络栈用：socket offload 是功能子集，netstat/抓包这类本地栈能力缺（12.2）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `net_if_get_default()` | 拿默认网络接口（Wi-Fi/以太网一视同仁） | 连接成功后拿到的就是普通 net_if |
+| `net_mgmt(NET_REQUEST_WIFI_SCAN, ...)` | 发扫描请求（异步） | 结果不返回在调用处，走事件回调 |
+| `net_mgmt(NET_REQUEST_WIFI_CONNECT, ...)` | 发连接请求（异步） | 同步等待要用 k_sem 包装（12.3） |
+| `struct wifi_connect_req_params` | 连接参数：ssid/psk/security/channel | `ssid_length` 不含结尾 `'\0'` |
+| `WIFI_SECURITY_TYPE_PSK` / `WIFI_CHANNEL_ANY` | 安全类型 / 任意信道 | PSK vs SAE 不匹配是连接失败常见原因 |
+| `net_mgmt_init_event_callback` + `net_mgmt_add_event_callback` | 注册 net_mgmt 事件回调 | 两个都要调；回调跑在系统 workqueue，别干长活 |
+| `NET_EVENT_WIFI_SCAN_RESULT / SCAN_DONE` | 扫到一个 AP / 扫描结束 | AP 逐个来，不是一次一张列表 |
+| `NET_EVENT_WIFI_CONNECT_RESULT / DISCONNECT_RESULT` | 连接成/败 / 断开 | 断开不只主动触发，AP 踢人也来；重连自己管 |
+| `NET_EVENT_IPV4_ADDR_ADD` | "IP 地址到手"事件 | 开 socket 前推荐等它，避开无地址窗口 |
+| `CONFIG_WIFI` / `CONFIG_NET_MGMT_EVENT` / `CONFIG_NET_DHCPV4` | 管理面 / 事件框架 / 自动拿地址 | 漏 NET_MGMT_EVENT 回调永不触发 |
+| `zsock_socket / zsock_connect / zsock_send` | socket 数据面 | ESP-AT 路径是 offload 功能子集，netstat/抓包缺 |
+| esp_at modem 驱动 / W5500 驱动 | F103 的两条联网路 | Wi-Fi 学习优先 W5500：官方驱动、完整 LwIP 栈 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
