@@ -29,6 +29,23 @@ Zephyr 官方对 Renode 有一等支持（`west build -t run`）。
 - 把 Robot 的 timeout=5 当真实秒数——那是虚拟时间，度量不了真板时序（10.3）
 - 真芯片的 errata 不在外设模型里，模型按 datasheet 标准行为实现（10.3）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `west build -b qemu_cortex_m3 -t run` | QEMU 路径：验纯软件逻辑 | QEMU 没 SPI/I2C 外设模型，驱动验证别走这条 |
+| `west build -t run` | 部分板卡直接起 Renode 跑 | 不支持的板要手动 `renode xxx.resc` |
+| `mach create` | 建一台虚拟机 | .resc 第一步，漏了后面全报错 |
+| `machine LoadPlatformDescription @x.repl` | 装入平台描述（外设/地址/中断连线） | .repl 先抄 platforms/cpus/ 现成平台再改 |
+| `sysbus LoadELF @zephyr.elf` | 按段加载固件进仿真内存 | 路径写 build 产物，不是源码 elf 中间文件 |
+| `showAnalyzer sysbus.usart2` | 给 UART 开双向终端窗口 | 漏了它固件在跑也看不到输出 |
+| `sysbus WhatPeripheralAt 0xADDR` / `ReadDoubleWord` | 查某地址是谁 / 直接读外设寄存器 | 访问未建模地址只告警不崩 |
+| `gpioPortA GetPinState 5` | 查引脚电平（不用示波器的示波器） | 断言"灯亮"用它，别断言时序 |
+| `pause` / `cpu Step N` | 全局一致暂停 / 单步 N 条指令 | pause 连外设一起停，与真板 halt 不同 |
+| `sysbus LogPeripheralAccess usart2 true` | 记录每次外设寄存器访问 | 免费逻辑分析仪，量大记得关 |
+| `renode-test x.robot` | 跑 Robot Framework 断言测试 | timeout 是虚拟时间，不是墙钟秒数 |
+| `Wait For Line On Uart` / `Wait For Pin On GPIO` | UART 输出行断言 / 引脚电平断言 | 先 `Create Terminal Tester` 挂监听器再断言 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
