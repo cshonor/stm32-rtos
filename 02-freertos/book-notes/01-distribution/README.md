@@ -41,6 +41,23 @@ FreeRTOS/
 - `configTOTAL_HEAP_SIZE` 给小 → `xTaskCreate` 静默失败，任务没建起来但 main 看不出来（1.3）
 - 没有现成 port 就自写：切换错误 = 随机 HardFault，调试成本极高，F103+GCC 有现成 port 永远别自写（1.2）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `taskENTER_CRITICAL()` / `taskEXIT_CRITICAL()` | 进出临界区，操作 BASEPRI 屏蔽中断 | 区间内禁止调会阻塞的 API，必须短 |
+| `portYIELD()` | 任务主动让出 CPU | 与 `portYIELD_FROM_ISR` 别混用场景 |
+| `portYIELD_FROM_ISR( x )` | ISR 尾部请求切换 | 只在中断里用 |
+| `xPortStartScheduler()` | 配置 SysTick、启动第一个任务 | 由内核调用，应用不直接碰 |
+| `configCPU_CLOCK_HZ` | 告诉内核主频，port 算 SysTick 重装值 | 配错编译过但所有延时时间全错 |
+| `configTICK_RATE_HZ` | tick 频率，常用 1000（1ms） | 堆太高 tick 中断吃掉 CPU |
+| `configMAX_SYSCALL_INTERRUPT_PRIORITY` | 中断优先级红线 | 配错偶发跑飞，最难查 |
+| `configMAX_PRIORITIES` | 优先级级数，决定就绪名单数组长度 | 每级占 RAM，别贪大 |
+| `configTOTAL_HEAP_SIZE` | 内核堆大小 | 给小 → `xTaskCreate` 静默失败 |
+| `configUSE_MALLOC_FAILED_HOOK` | 分配失败回调钩子开关 | 必须开 1 并当场停车，否则失败静默 |
+| `INCLUDE_vTaskDelay` / `INCLUDE_vTaskDelete` | 控单个 API 是否编译进 | 关掉后调用处链接报错 |
+| `vPortSVCHandler` 等三行 Handler 映射 | 把向量表弱符号映射到 port.c 实现 | 漏了第一个任务永远启动不了 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
