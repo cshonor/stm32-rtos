@@ -13,6 +13,25 @@ FreeRTOS 是"把几个 .c 加进你的 Makefile"，Zephyr 是"把你的应用挂
 与 LDD- 侧的关联直接拉满：Kconfig 和 devicetree 就是 Linux 内核的同一套机制
 （`LDD-/09` 设备树章），语法零迁移成本。
 
+## 只看这一页（速览）
+
+**主线一句话**：本章解决"一个 Zephyr 应用怎么被编出来"——west 管源码拼装与命令转发，三个文件定应用输入，Kconfig 依赖树求解决定功能开关，build 目录里的产物则是日后调试排查的案发现场。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 3.1 | west 是 meta-tool，自己几乎不实现：构建转交 CMake/Ninja，烧录转交 runner，换调试器不改命令 |
+| 3.2 | 最小骨架三文件（CMakeLists.txt + prj.conf + main.c）；构建 = 应用/板卡/内核三方输入合成，别手写顶层 Makefile |
+| 3.3 | 链路：prj.conf → 依赖树求解 → .config → autoconf.h；写了不生效九成是依赖没满足 |
+| 3.4 | 三份真相文件（.config / zephyr.dts / zephyr.map）是排查起点；配置灵异现象先 pristine |
+
+本章最容易踩的坑：
+
+- 写了 CONFIG、编译通过、功能就是不出来：被 depends on 静默丢弃，menuconfig 里 `/` 搜符号看 Depends on（3.3）
+- 改了 prj.conf 行为没变：配置缓存和新输入打架，`west build -t pristine` 从零重来（3.4）
+- 在模块仓库里改了代码，west update 一切版本全冲突：模块当只读依赖用，改动走 fork + manifest 指向（3.1 Q2）
+- CMakeLists.txt 里 `project()` 写在 `find_package(Zephyr)` 之前——顺序是硬要求（3.2）
+- 设备不工作、引脚不对时到处加打印，而不先查 zephyr.dts 这份"硬件真相"（3.4 Q2）
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
