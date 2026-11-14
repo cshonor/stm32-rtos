@@ -30,6 +30,19 @@
 - 拿通知当互斥锁用——通知没有优先级继承机制（9.2/9.3）。
 - 用 eSetValueWithOverwrite 传"不能丢"的数据——上一条没取走就被直接盖掉（9.2）。
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `configUSE_TASK_NOTIFICATIONS` | 开关任务通知功能 | 默认 1，无需手动开 |
+| `xTaskNotifyGive` | 对方通知值 +1 并唤醒 | 计数语义，别和 eSetBits 混用污染同一个值 |
+| `ulTaskNotifyTake` | 取走通知值 | `pdTRUE` 清零（二值）/ `pdFALSE` 减一（计数），别用反 |
+| `xTaskNotify` | 按 `eNotifyAction` 改写对方通知值 | 五种动作语义不同，覆写类会丢旧值 |
+| `xTaskNotifyWait` | 等通知并读出值 | 两个清位参数（进入/退出）别配错，退出清 0 会重播历史位 |
+| `eSetValueWithoutOverwrite` | 对方没取走就发送失败 | 唯一返回 `pdFAIL` 的动作，要查返回值 |
+| `vTaskNotifyGiveFromISR` | ISR 里 Give 通知 | 返回 void；记得 `portYIELD_FROM_ISR` |
+| `xTaskNotifyFromISR` | ISR 里发数据语义通知 | 多一个 `pxHigherPriorityTaskWoken` 参数 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
