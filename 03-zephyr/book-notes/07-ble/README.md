@@ -28,6 +28,23 @@ NUCLEO-F103RB 没有 BLE 射频，Blue Pill 也没有；
 - 手机没写 CCC 描述符登记订阅，你 notify 一百次它也收不到（7.2）
 - 只加大 MTU 不调 DLE：车斗加大了车厢没加大，货照样装不下（7.3）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `CONFIG_BT` + `CONFIG_BT_PERIPHERAL` / `CONFIG_BT_CENTRAL` | host 总开关与角色选择 | 角色不开，永远等不到对应事件 |
+| `CONFIG_BT_RX_STACK_SIZE` | RX 线程栈大小 | 太小 → 莫名栈溢出 fatal |
+| `bt_enable` | 初始化 host + controller | 必须查返回值，失败则一切皆空 |
+| `BT_GATT_SERVICE_DEFINE` | 编译期声明服务树 | 产物是 const 属性表，无运行时注册 |
+| `BT_GATT_CHARACTERISTIC` | 声明特征 + 属性位 | CHRC（宣告）与 PERM（门禁）都要给对 |
+| `BT_GATT_CCC` | 订阅开关描述符 | 手机不写它，notify 一百次也收不到 |
+| `BT_UUID_128_ENCODE` / `BT_UUID_DECLARE_16` | 声明 128 位 / 16 位 UUID | 自定义必须用 128 位，16 位是 SIG 官方的 |
+| `bt_gatt_notify` | 主动推数据给已订阅连接 | attrs 下标对准值项；看返回值再发下一条 |
+| `bt_le_adv_start` | 开始广播 | 载荷 31 字节上限，多了进 scan response |
+| `BT_LE_ADV_CONN_NAME` / `BT_LE_ADV_PARAM` | 预置 / 自定义广播参数 | flags 需含 `BT_LE_AD_GENERAL` 才可被发现 |
+| `CONFIG_BT_L2CAP_TX_MTU` + `CONFIG_BT_BUF_ACL_RX_SIZE` | 加大 MTU 与收包缓冲 | MTU 与 DLE 是两层，都要调大 |
+| `bt_conn_le_param_update` + `CONFIG_BT_CTLR_PHY_2M` | 提议连接参数 / 开 2M PHY | 连接参数拍板权在 central；2M 需双方支持 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
