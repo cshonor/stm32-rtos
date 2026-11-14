@@ -35,6 +35,22 @@
 - "次数就是信息"的场景用二值信号量会丢事件，该用计数信号量（6.1/6.4）
 - 数资源时 give 返回 `pdFAIL` = 借还配平的代码有 bug，开发期建议断言当场抓（6.4）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `xSemaphoreCreateBinary()` | 建二值信号量（满/空两态） | 创建即空；任务先 take 直接 Blocked 是标准开机姿势 |
+| `xSemaphoreTake(sem, wait)` | 取信号，空则按三态等待 | 没有对应的 `xSemaphoreTakeFromISR`——ISR 永不 take |
+| `xSemaphoreGiveFromISR(sem, &woken)` | ISR 里发信号 | 红线上方（数值 < 红线）的 ISR 调它 = 未定义行为 |
+| `portYIELD_FROM_ISR(woken)` | ISR 尾部请求切换 | 必须手动放尾部；与 `taskYIELD` 不是一个东西 |
+| `xHigherPriorityTaskWoken` | 内核的"有更急的人醒了"建议 | 只置真不置假，每次用前初始化 `pdFALSE`，可多次 give 共用 |
+| `configMAX_SYSCALL_INTERRUPT_PRIORITY` | FromISR 调用资格红线 | 数值 ≥ 它才能调 API；方向与任务优先级相反 |
+| `taskENTER_CRITICAL()` | 任务临界区：BASEPRI 部分屏蔽 | 不是关全局中断（PRIMASK）；裸奔段 ISR 照常运行 |
+| `configASSERT` | 断言检查 | 开发期必开，ISR 优先级配错当场停车 |
+| `xSemaphoreCreateCounting(max, init)` | 建计数信号量 | 数资源 init=max、数事件 init=0，写反语义全错 |
+| `uxSemaphoreGetCount(sem)` | 读当前计数值 | 调试看积压水位用，别进正式逻辑 |
+| `configUSE_COUNTING_SEMAPHORES` | 计数信号量总开关 | 忘置 1 时创建函数不可用 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
