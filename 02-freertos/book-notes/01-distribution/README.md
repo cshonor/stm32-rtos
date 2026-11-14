@@ -21,6 +21,26 @@ FreeRTOS/
 另有一个必须由**自己写**的文件：`FreeRTOSConfig.h`——时钟频率、tick 速率、
 堆大小、钩子开关、裁剪开关全在里面，是 FreeRTOS 的"全部配置"。
 
+## 只看这一页（速览）
+
+**主线一句话**：官方分发包几百个文件里移植只需要 6 个——1.1 给出最小取材清单
+（Source 留下、Demo 别抄），1.2 解释 port 层为什么对 F103 零修改，1.3 把唯一要
+自己写的 FreeRTOSConfig.h 逐项过完并标出三颗"编译过但跑死"的雷。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 1.1 分发包结构与移植取材 | 最小集 = tasks/queue/list 三核心 + 一个 port + 一个 heap + 自写 Config，Demo 只看不抄 |
+| 1.2 portable 层是什么 | port 层封装上下文切换、tick/启动、临界区三件事；Cortex-M 内核标准化使同架构同编译器的 port 零修改 |
+| 1.3 FreeRTOSConfig 逐项过一遍 | 配置全是编译期 #define；三颗雷（CPU 时钟宏、中断红线宏、堆太小）全是"编译过但跑死"型 |
+
+**本章最容易踩的坑**
+
+- 把整个 Demo 复制进工程再改：Config 按别人的板子/晶振配的，tick 速率全错（1.1）
+- `configCPU_CLOCK_HZ` 配错 → SysTick 重装值算错，所有延时偏快/偏慢但能正常跑（1.3）
+- 漏掉三行 Handler 映射（SVC/PendSV/SysTick）→ 第一个任务永远启动不了（1.3）
+- `configTOTAL_HEAP_SIZE` 给小 → `xTaskCreate` 静默失败，任务没建起来但 main 看不出来（1.3）
+- 没有现成 port 就自写：切换错误 = 随机 HardFault，调试成本极高，F103+GCC 有现成 port 永远别自写（1.2）
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
