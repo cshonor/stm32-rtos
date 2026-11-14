@@ -24,6 +24,27 @@
 > **在 PC 上，"代码放哪"由内核决定（ELF loader + mmap）；
 > 在裸机上，由你写的链接脚本决定——而且没人替你检查。**
 
+## 只看这一页（速览）
+
+**主线一句话**：裸机没有 loader，链接脚本是地址的唯一权威——本章先立内存模型（VMA/LMA、`.data` 的双重身份、`.bss` 不占 Flash，11.1），再看链接器怎么干活（`--gc-sections` 会丢向量表、`KEEP` 保命、`ASSERT` 把检查前移，11.2），讲清 `_sdata`/`_sidata`/`_estack` 这些链接器定义符号（11.3）和重定位与 Thumb 位（11.4），学会读 map 文件这个唯一权威（11.5），最后用同一套"MEMORY 划区 + 自定义段"的套路做配置区、定制实例和 bootloader（11.6）。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 11.1 | 裸机地址是物理的、链接期定死；`.data` 初值存 Flash（LMA）、运行时在 RAM（VMA），启动代码负责搬；`.bss` 是 NOBITS 不占 Flash（实测 bin = 136 = 132 + 4） |
+| 11.2 | 链接 = 合并段 + 定地址 + 重定位；`--gc-sections` 会把没人引用的向量表丢掉，实测无 `KEEP` 时 `g_vectors` 消失；`ASSERT` 把"RAM 不够"变成链接失败 |
+| 11.3 | `_estack`/`_sdata`/`_sidata` 都在链接脚本里定义（nm 类型 A/D/B）；`_sidata` 必须用 `LOADADDR(.data)` 拿 LMA；C 里用它们要 `&_sidata` 或声明成数组 |
+| 11.4 | 重定位把 `.o` 里待定的地址填成真地址；函数指针带 Thumb 位（值为奇数），`llvm-nm` 显示时清掉它——和 map / 向量表差 1 不是 bug；`$t`/`$d` 标注指令与常量池 |
+| 11.5 | map 文件是布局的唯一权威：Size 是无 `0x` 前缀的十六进制；`--gc-sections` 必须配 `-ffunction-sections` 才有效（实测只开 gc 一个字节没少）；lld 的 map 不列被丢弃的段 |
+| 11.6 | 四个高级用法同一个套路（MEMORY 划区 + 自定义段 + `__attribute__((section))`）；放 Flash 必须 `const`，否则链接器不报错却生成写 Flash 的指令；配置区钉死最后一页会让 `.bin` 从 136 B 胀成 130060 B |
+
+**本章最容易踩的坑**：
+
+- 无 `KEEP` 时 `--gc-sections` 把向量表当垃圾丢掉：编译链接全正常，烧进去毫无反应（11.2）
+- `_sidata` 写成 `. = .` 拿到的是 VMA：全局变量初值全是垃圾，且和"忘了搬 `.data`"症状一模一样（11.3）
+- `llvm-nm` 显示时清掉 Thumb 位，和 map / 向量表字节差 1——不是链接错了，别去"修"（11.4）
+- 只开 `--gc-sections` 不开 `-ffunction-sections -fdata-sections`，死代码一个字节都不会少（11.5）
+- 非 `const` 变量放 Flash 段：链接静默成功，生成的 `str` 真往 Flash 地址写，真机上静默失败（11.6）
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
