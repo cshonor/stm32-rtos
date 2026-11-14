@@ -33,6 +33,23 @@ Zephyr 版多了 `DT_` 宏族和 `DEVICE_DT_GET` 设备模型。
 - 书里的 DT 宏编译不过，先去官方 Devicetree API 页查现行拼写（9.2）
 - 手改 devicetree_generated.h——每次构建重新生成会被覆盖，改硬件永远回 dts 源头（9.5）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `status = "okay" / "disabled"` | 节点开关：okay 进固件，disabled 构建产物里什么都不留 | okay 了还要配套 Kconfig，驱动才真进固件 |
+| `aliases` / `chosen` | 给硬件起通用名（led0）/ 指定内核用哪个设备（console） | 换调试口只改 chosen 一行，别去改板级其他节点 |
+| `compatible` | 节点的型号字符串，驱动认领节点的钥匙 | 写错一个字母，编译期 binding 检查直接报错 |
+| `DT_ALIAS` / `DT_NODELABEL` / `DT_PATH` | 第一层定位节点：别名 > 标签 > 完整路径 | 应用首选别名；nodelabel 是 SoC 实现细节 |
+| `DT_PROP` / `DT_REG_ADDR` / `DT_IRQN` | 第二层读属性：属性值 / 基址 / 中断号 | 属性名连字符要换下划线；读不存在属性编译期报错 |
+| `DT_PROP_OR` / `DT_NODE_HAS_STATUS` | 属性可缺席时给默认值 / 编译期判节点是否 okay | 节点可能缺席时不包 `#if`，编译直接炸 |
+| `GPIO_DT_SPEC_GET` + `gpio_pin_configure_dt` | 第三层打包 {控制器, 引脚, 标志} 并操作 | 取代书上的 `DT_GPIO_LABEL` + `device_get_binding` 老流程 |
+| `DEVICE_DT_GET` / `device_is_ready` | 取 okay 节点的 `struct device` / 查驱动 init 成败 | 忘 okay 控制器时构建不报错、运行时 ready 为 false |
+| `app.overlay` / `boards/<板名>.overlay` | 应用层 dts 补丁：前者全板生效，后者只对指定板 | 板相关改动优先放 boards/ 下，别污染所有板 |
+| `pinctrl-0` / `cs-gpios` | 引脚复用组 / SPI 片选 GPIO 数组（写在控制器上） | SPI 子节点 reg 是 cs-gpios 下标，不是地址 |
+| `SPI_DT_SPEC_GET` / `spi_write_dt` | 打包 SPI 设备 spec / 按 spec 收发 | 片选拉放由驱动完成，别再手动写 GPIO |
+| `build/zephyr/zephyr.dts` | 三层叠加合并产物，验证 overlay 写对没有 | 排查别看源码猜，先搜这个产物文件 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
