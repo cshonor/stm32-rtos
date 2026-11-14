@@ -29,6 +29,23 @@
 - 把 ZBus 当"更好的事件组"：事件组寄 32 个标志位无数据，ZBus 寄带类型的整条消息（11.3）
 - 严格一对一、要"队列满卡住发布者"的场景上 ZBus——背压隔离反而把你最想要的背压丢了（11.3）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `ZBUS_CHAN_DEFINE` | 静态定义通道：定死消息类型 + 初始值 | 消息按值拷贝，大结构体别进通道 |
+| `ZBUS_MSG_INIT` | 给通道消息填初始值 | 初值在首次发布前就生效 |
+| `ZBUS_LISTENER_DEFINE` | 定义回调式观察者 | 跑在发布者上下文，快进快出、禁止阻塞 |
+| `ZBUS_SUBSCRIBER_DEFINE(name, queue_size)` | 定义线程式观察者（自带队列） | 队列深度 = 容忍的消费滞后拍数，是 RAM 大头 |
+| `ZBUS_MSG_SUBSCRIBER_DEFINE` | subscriber 的静态队列化变体 | 语义同 subscriber |
+| `ZBUS_CHAN_ADD_OBS(chan, obs, prio)` | 给通道登记观察者（含优先级） | 静态列表 `ZBUS_OBSERVERS_EMPTY` 时靠它登记 |
+| `zbus_chan_pub(&chan, &msg, timeout)` | 按值发布一条消息 | 带 timeout：拿通道 mutex 失败会超时返回错误码 |
+| `zbus_chan_const_msg(chan)` | listener 里读通道消息（只读） | 只在回调内有效，别存指针 |
+| `zbus_chan_read` / `zbus_chan_notify` | 直接读通道现值 / 发无负载"门铃"通知 | "只关心最新值"用它，一条队列都不用 |
+| `zbus_chan_add_obs` / `zbus_chan_rm_obs` | 运行时增删观察者 | msgq 做不到的动态插拔 |
+| `zbus_chan_claim` / `zbus_chan_finish` | 发布期间原地填充大消息 | 大消息的省拷贝写法 |
+| `zbus_obs_set_enable` | 动态启停某个观察者 | 背压节流用 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
