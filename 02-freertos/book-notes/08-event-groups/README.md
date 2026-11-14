@@ -26,6 +26,17 @@
 - 以为 `xEventGroupSetBitsFromISR` 立即生效——实际是定时器守护任务代办，强实时链路别用它（8.1/8.3）。
 - Sync 参与者位号重复、或有人中途退出，all_bits 永远凑不齐，会合点直接失效（8.2）。
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `xEventGroupCreate` | 创建一个事件组（一个整数当布告栏） | 32 位 tick 只有 24 位可用，高 8 位被内核征用 |
+| `xEventGroupSetBits` | 置位（可一次多位），广播唤醒所有等待者 | 不是"救一个"，是唤醒全部满足条件的任务 |
+| `xEventGroupClearBits` | 清位 | 不查户口，谁都能清，误清没人拦 |
+| `xEventGroupSetBitsFromISR` | ISR 里置位 | 经定时器守护任务中转，有 tick 级延迟，强实时别用 |
+| `xEventGroupWaitBits` | 按 AND/OR 等一组位，可配退出清位 | 返回值是快照不是"哪几位满足"，要自己按位与 |
+| `xEventGroupSync` | 会合点：置我的位 + 等全员位，原子完成 | 位号不能重复；参与者中途退出全组卡死；超时返回要按位判定 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
