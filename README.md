@@ -1,6 +1,6 @@
-# STM32- · STM32 + FreeRTOS 学习仓库
+# STM32- · STM32 + FreeRTOS + Zephyr 学习仓库
 
-> 定位：MCU 裸机 → RTOS 的学习轨，与 `LDD-`（Linux 驱动轨）互补不混线。
+> 定位：MCU 裸机 → RTOS → 工程化 RTOS 的学习轨，与 `LDD-`（Linux 驱动轨）互补不混线。
 > **三条轨道各配一本书，笔记就放在各轨道目录下的 `book-notes/` 里**：
 >
 > | 轨道 | 配套教材 | 笔记位置 |
@@ -82,6 +82,48 @@ tools/newlab.sh labs/02-uart      # 生成下一个实验的骨架（板级参�
 
 **第二遍（工程化路线）**：stm32 + freertos 全通后进 `03-zephyr/`——devicetree / Kconfig /
 west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `03-zephyr/README.md`。
+
+## 面试备战（MCU 物联网岗 · 2026-11）
+
+> 目标岗位画像：小团队机器人/IoT 公司，MCU 固件岗（C + STM32 + UART/RS485/CAN/I2C/SPI +
+> MQTT + OTA + 看原理图）。
+> 诊断结论：**本仓库笔记能撑「技术深挖」，撑不起「项目故事」**——I2C/SPI/RS485/MQTT/OTA
+> 在笔记里只有提及、没有作品。以下按面试必考 5 题补：读什么、买什么、做什么。
+
+### 要读的笔记（按面试题组织）
+
+| 面试题 | 读什么 | 补什么 |
+|---|---|---|
+| ① I2C/SPI 怎么驱动传感器 | [03 章寄存器读写](01-stm32/book-notes/03-embedded-system-programming/README.md) + [06 章指针数组](01-stm32/book-notes/06-arrays-pointers-strings/README.md) + [04 章位操作](01-stm32/book-notes/04-numbers-and-bitops/README.md) | I2C 时序图另找一篇看熟（能徒手画一次完整读操作） |
+| ② UART/RS485 帧处理、粘包、校验 | [09 章串口](01-stm32/book-notes/09-uart-serial/README.md) + [10 章中断](01-stm32/book-notes/10-interrupts/README.md) + [freertos 04 队列](02-freertos/book-notes/04-queue-management/README.md)（ISR 收字节→队列→任务解包 = 标准答案） | RS485 话术骨架：**UART + DE/RE 方向切换 + 差分总线 + Modbus 帧（地址/功能码/数据/CRC16）**；粘包答「超时断帧或帧头+长度」 |
+| ③ 看原理图、万用表排错 | 笔记帮不了，动手活 | 实验 0 攒真实排错故事 |
+| ④ OTA 升级、断电保护 | [11 章链接器](01-stm32/book-notes/11-linker/README.md)（双分区跳转全靠链接脚本）+ [zephyr 06 文件系统](03-zephyr/book-notes/06-filesystems/README.md)（掉电安全/磨损均衡） | 话术骨架：Bootloader + A/B 双分区 → 下载到备用区 → CRC 校验 → **标志位最后写**（任何时刻断电都回得去） |
+| ⑤ MQTT 上云、断线重连 | [zephyr 08 网络](03-zephyr/book-notes/08-networking/README.md) + [12 WiFi](03-zephyr/book-notes/12-wifi/README.md) + [freertos 09 通知](02-freertos/book-notes/09-task-notifications/README.md) | 背五个词：Broker/Pub/Sub/QoS/KeepAlive；重连答「KeepAlive 超时 + 指数退避 + 重订阅 + QoS1 补发」 |
+| 通用打底 | [19 章 SysTick/定时器](01-stm32/book-notes/19-systick-and-timer/README.md)（PWM = 电机控制入场券）+ [freertos 03 任务调度](02-freertos/book-notes/03-task-management/README.md) + [21 章时钟树](01-stm32/book-notes/21-clock-tree/README.md) | — |
+
+### 要买什么（已按 [hardware/README.md](hardware/README.md) 修正）
+
+**F407 探索者板载已经有 MPU6050 / 24C02（I2C）、SP3485（RS485）、TJA1050（CAN）——
+传感器和总线硬件都不用买。** 真正缺的只有：
+
+| 买什么 | 参考价 | 用途 |
+|---|---|---|
+| ESP32-C3 开发板（Type-C） | ¥20–35 | 实验 2 的 MQTT 主角，自带 WiFi + USB 串口 |
+| 杜邦线 + 面包板 + 克隆 ST-Link + 逻辑分析仪 | ≈¥55–100 | hardware 必买四件，**若还没买则优先**，逻辑分析仪是调 I2C 时序的唯一现实手段 |
+| 万用表入门款 | ¥30–60 | 可选，题 3 道具（初期 gdb `mdw` 读寄存器能顶） |
+
+### 要做的实验
+
+| # | 内容 | 时间 | 对应题 |
+|---|---|---|---|
+| 0 | 万用表 + 原理图热身：找 NUCLEO 原理图定位 USART2/I2C 引脚，量通断，**故意制造一次 SDA 断开故障**记录排查过程 | 半天 | ③ |
+| 1 | **I2C 传感器采集**：day1 扫地址 → day2 读数据串口打印 → day3 自定义帧（帧头+长度+CRC8）→ day4 改中断收 + FreeRTOS 队列解耦。两条路线任选：**F407 板载 MPU6050**（零采购）或 F103 + 另购 AHT20（¥10） | 3–5 天 | ①② |
+| 2 | **ESP32-C3 MQTT 上云**：连公共 broker（如 broker.emqx.io）发数据 → 拔路由器练断线重连（指数退避 + 重订阅 + QoS1 补发，留日志截图）→ 进阶：F103/F407 经 UART 发帧给 ESP32 上云，串成「采集→传输→上云」完整项目故事 | 2–3 天 | ⑤ |
+| 3 | RS485 + OTA 话术腹稿各 200 字讲两遍；RS485 想真做可用 F407 板载 SP3485（需对端节点） | 0–1 天 | ②④ |
+
+时间预算：等快递期间读笔记（2–3 天）→ 实验 0→1→2（5–8 天）→ 面试前一天把项目串成
+3 分钟陈述。**总计约 1.5–2 周**，产出 = 简历上一行「STM32 传感器采集 + UART 帧协议 +
+ESP32 MQTT 上云（I2C/UART/中断/FreeRTOS）」。
 
 ## 与 LDD- 轨的概念对照（学两遍 = 记两遍）
 
