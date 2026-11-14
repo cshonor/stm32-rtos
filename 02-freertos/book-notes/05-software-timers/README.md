@@ -33,6 +33,23 @@ SysTick 手写"软件计数器到点翻标志"；软件定时器是同一思路�
 - 拿软件定时器当微秒级时基：精度上限 1 个 tick，硬实时定时请用硬件 TIM（5.1）
 - 调度器启动前调定时器 API 时 `xTicksToWait` 被忽略，队列满就直接失败（5.2）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `xTimerCreate(name, period, reload, id, cb)` | 建定时器：`pdFALSE` 单次 / `pdTRUE` 周期 | 回调跑在守护任务里，不是你自己的任务 |
+| `xTimerStart(t, wait)` | 发"启动"命令到命令队列 | `pdPASS` 只代表入队，不代表已生效 |
+| `xTimerReset(t, wait)` | 到期时刻重拨为 now + 周期 | 心跳看门狗的核心动作；失败 = 命令没排上队 |
+| `xTimerStop(t, wait)` | 发"停止"命令 | 等待参数等的是队列空位，不是"停生效" |
+| `xTimerDelete(t, wait)` | 删除定时器 | 无 FromISR 版；ISR 里只能 `xTimerStopFromISR` |
+| `xTimerStartFromISR` 等 | ISR 里的定时器操作 | 同 4.3 规则：永不阻塞，尾部配 yield |
+| `pvTimerGetTimerID(t)` | 回调里区分多个共用回调的定时器 | ID 指针别指局部变量 |
+| `xTaskNotifyGive` / `ulTaskNotifyTake` | 回调甩活给专用任务的标准通道 | 回调里只能零阻塞调用，慢活全在任务侧 |
+| `configUSE_TIMERS` | 软件定时器总开关 | 忘置 1 整个子系统不工作 |
+| `configTIMER_TASK_PRIORITY` | 守护任务优先级 | 配高全局卡顿、配低定时器不准；要比依赖它的最高任务略高一级 |
+| `configTIMER_QUEUE_LENGTH` | 命令队列深度 | 密集 start/reset 会占满，满了 API 返回 `pdFAIL` |
+| `configTIMER_TASK_STACK_DEPTH` | 守护任务栈深 | 单位是**字**不是字节，按最深回调调用链估算 |
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
