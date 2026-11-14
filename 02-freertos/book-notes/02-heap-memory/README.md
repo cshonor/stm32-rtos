@@ -31,6 +31,21 @@ heap_4 并用"先估算、再量水位、后收紧"的方法定 `configTOTAL_HEA
 - MSP 中断栈不走 heap，预算里漏留会悄悄踩 .bss/ucHeap，而不是立刻 HardFault（2.3）
 - 不配 `vApplicationMallocFailedHook`，`xTaskCreate` 失败就静默带病运行（2.3）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `pvPortMalloc( n )` | 从 `ucHeap` 静态数组分配 n 字节 | ISR 里不能调；返回 NULL 必须检查 |
+| `vPortFree( p )` | 归还 `pvPortMalloc` 拿的内存 | heap_1 下是空操作；释放后指针置 NULL 防悬空 |
+| `vPortDefineHeapRegions()` | heap_5 专用：登记多段不连续 RAM | heap_1~4 没有此函数；要在任何分配前调用 |
+| `configTOTAL_HEAP_SIZE` | 定死 `ucHeap` 数组大小 | 先宽后紧；给小了 `xTaskCreate` 静默失败 |
+| `vApplicationMallocFailedHook()` | 分配失败时内核回调 | 函数体要自己写，必须当场停车，空钩子等于没配 |
+| `configCHECK_FOR_STACK_OVERFLOW` | 栈溢出检测开关（1 或 2） | 方法 2 更可靠；有性能开销，调通后再开 |
+| `xPortGetFreeHeapSize()` | 当前堆剩余字节数 | 只是当前值，看不出峰值 |
+| `xPortGetMinimumEverFreeHeapSize()` | 历史最低堆剩余（峰值水位） | 收紧堆大小的依据；要跑过最忙场景再读 |
+| `uxTaskGetStackHighWaterMark( NULL )` | 本任务栈历史最深用量 | 单位是**字**不是字节 |
+| `taskDISABLE_INTERRUPTS()` | 关全部中断 | 只用在 hook/致命错误处理里，别当临界区常规手段 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
