@@ -10,6 +10,24 @@
 与 ch07 BLE 同属无线专题，同样**对本仓库是选读**——
 F103 平台没有 Wi-Fi；ESP32/带 Wi-Fi 的板子进入硬件清单后再启动。
 
+## 只看这一页（速览）
+
+**主线一句话**：这章解决"F103 想上 Wi-Fi 怎么办"——先看 Zephyr 把 Wi-Fi 劈成管理面（异步 API + 事件回调）与数据面（连上后就是 ch08 的 socket）的分层（12.1），再比较三条外挂硬件路径怎么选（12.2），最后把两者串成跑通 TCP client 的最小配置清单（12.3），三篇是"API → 硬件 → 配置"的递进线。
+
+| 小节 | 一句话结论 |
+|---|---|
+| 12.1 Wi-Fi 管理 API | Wi-Fi = 管理面（wifi_mgmt/net_mgmt 异步请求 + 事件）+ 数据面（普通 net_if 走 socket）两层完全解耦；事件回调跑在系统 workqueue 线程上下文 |
+| 12.2 外挂方案对比 | ESP-AT modem / 原生 Wi-Fi SoC / SPI/SDIO 协处理器三条路在 Zephyr 里都抽象成 net_if、socket 代码一行不改；F103 现实替代是 W5500 |
+| 12.3 Wi-Fi + socket 最小配置 | 最小配置 = ch08 网络栈 + CONFIG_WIFI/NET_MGMT_EVENT + DHCPv4；连接三步"注册回调 → 发请求 → k_sem_take 等结果"，连上后 socket 与 ch08 逐字节相同 |
+
+**本章最容易踩的坑**：
+
+- 事件回调里干长活/长日志：堵的是系统 workqueue，波及其他子系统（12.1）
+- ssid_length 多算了结尾 '\0'：多算 1 就把终止符发进认证流程导致失败（12.3）
+- 连上了但 socket 超时：DHCP 还没拿到地址就发数据，应等 IPv4 地址就绪事件（12.3）
+- 事件回调从不触发：漏 CONFIG_NET_MGMT_EVENT=y 或忘了 add_event_callback（12.3）
+- 把 ESP-AT 当完整网络栈用：socket offload 是功能子集，netstat/抓包这类本地栈能力缺（12.2）
+
 ## 小节清单
 
 | 小节 | 标题 | 状态 |
