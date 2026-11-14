@@ -28,6 +28,23 @@ socket API 与 POSIX 对齐——从 Linux 网络编程（`04-cpp/M2` 那条线�
 - 把 zsock_recv 返回 0 当错误——那是对端正常关闭，不是故障（8.2）
 - AT offload 路径的 fd 不是本机真 socket，错误码/并发/DNS 受模组固件约束，移植代码要在真模组上回归（8.3）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| `net_if_get_default` / `net_if_up` | 拿默认网卡、拉起接口 | 每块物理/虚拟网卡一个 `net_if` |
+| net_mgmt 事件 | "拿到 IP""接口上线"的事件通知 | 回调跑在协议栈线程，别干重活 |
+| `CONFIG_NET_RX_STACK_SIZE` / `CONFIG_NET_TX_STACK_SIZE` | 收/发线程栈大小 | 太小栈溢出；优先级决定抖动分布 |
+| `CONFIG_NET_PKT_RX_COUNT` / `CONFIG_NET_BUF_RX_COUNT` | 包/缓冲配额 | 耗尽 = 丢包、TCP 卡死、断流 |
+| `zsock_socket` / `zsock_bind` / `zsock_listen` / `zsock_accept` | 建监听 socket | `net_context_*` 已移除，一律 zsock_* |
+| `zsock_send` / `zsock_recv` / `zsock_sendto` / `zsock_recvfrom` | 收发数据 | recv 返回 0 = 对端正常关闭，不是故障 |
+| `zsock_poll` / `zsock_fcntl` | 多路复用 / 设非阻塞 | 没有 select/epoll |
+| `zsock_setsockopt`（SOL_TLS） | 给普通 socket 开 TLS | 证书以 sec tag 引用；F103 的 RAM 装不下 mbedTLS |
+| `CONFIG_POSIX_API` | 允许无前缀 POSIX 名 | 注意与文件系统 `close` 的区分 |
+| `CONFIG_NET_MAX_CONN` | 连接跟踪数上限 | 默认个位数到十几个，别照搬 PC 思维 |
+| `CONFIG_WIFI_ESP_AT` | ESP-AT 模组驱动（offloaded socket） | fd 不是真 socket；吞吐受 UART 波特率封顶 |
+| `wiznet,w5500`（dts）/ `gsm_ppp` | SPI 网卡 / 4G PPP 路径 | W5500 只 8 条硬件通道；PPP 栈在 MCU，F103 不现实 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
