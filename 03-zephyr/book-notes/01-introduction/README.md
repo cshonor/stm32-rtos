@@ -31,6 +31,18 @@ FreeRTOS 学**机制**，Zephyr 学**机制 + 框架的使用方式**。
 - 以为板子"在支持列表里 = 全功能"：支持是厂商/社区贡献的，冷门板可能缺驱动，先查官方 peripheral 支持表（1.3 Q2）
 - 自制板以为要大动干戈：原型期用 overlay 就近改一块现成板子的 dts 即可（1.3 Q1）
 
+## API 速查卡
+
+| API / 命令 / 配置项 | 一句话作用 | 易错点 |
+|---|---|---|
+| west 模块（modules，1.1） | TF-M、LittleFS 等外挂组件包挂进源码树的机制 | 可选模块各有许可证，选型看一眼模块 LICENSE |
+| `device_get_binding`（1.2） | Zephyr 统一驱动模型的设备获取 API | 它是"平台层"产物，FreeRTOS 里没有对应物 |
+| `west build -b <板名> app`（1.3） | 构建；换板只换 `-b` 参数 | 板名拼错直接配置失败，先去官方板卡页抄全名 |
+| `DT_ALIAS(led0)`（1.3） | 取 devicetree 别名的节点 ID | 板级 dts 没定义该别名，编译期就报错 |
+| `GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios)`（1.3） | 把别名变成可用的 gpio_dt_spec | 应用只引用逻辑名，别在代码里写死引脚 |
+| `gpio_pin_set_dt()`（1.3） | 统一 GPIO 操作入口，底下自动走各家驱动 | 用前先 `gpio_pin_configure_dt` 配好方向 |
+| `app.overlay`（1.3） | 应用层 dts 补丁，不动板级文件改硬件 | 原型期替代 fork 板级 dts；正式移植再写 board 目录 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
