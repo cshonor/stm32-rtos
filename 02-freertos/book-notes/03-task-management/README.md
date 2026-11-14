@@ -36,6 +36,23 @@
 - 比较 tick 写 `now >= last + period`，回绕时直接翻车；要用减法写法（3.4）
 - 任务删了之后旧句柄没清 NULL，再用就是悬垂指针（3.6）
 
+## API 速查卡
+
+| API / 命令 | 一句话作用 | 易错点 |
+|---|---|---|
+| `xTaskCreate( f, name, stack, param, prio, &h )` | 创建任务，立即可被调度 | 栈深单位是**字**；返回值要查 `pdPASS` |
+| `vTaskStartScheduler()` | 建空闲任务、配 SysTick、启动第一个任务 | 返回即异常（只有 heap 不够建空闲任务才返回） |
+| `vTaskSuspend( h )` / `vTaskResume( h )` | 挂起 / 恢复（进出 Suspended） | 挂起 Blocked 任务不会因事件醒；无超时概念 |
+| `configUSE_PREEMPTION` | 抢占式调度开关 | 关 0 变协作式，工程上没人关 |
+| `taskYIELD()` | 任务主动让出 CPU | 只对同/低优先级有效，高优先级让不出去 |
+| `vTaskDelay( ticks )` | 相对延时：从现在睡 N tick | 周期会漂；有 ±1 tick 量化误差 |
+| `vTaskDelayUntil( &last, period )` | 绝对节拍：睡到上次唤醒点 + period | `last` 必须先初始化成 `xTaskGetTickCount()` |
+| `pdMS_TO_TICKS( ms )` | 毫秒→tick 换算宏 | 别省它写死 tick 数，否则与 tick 配置耦合 |
+| `xTaskGetTickCount()` | 读当前 tick 计数 | 比较用减法写法防回绕 |
+| `vApplicationIdleHook()` | 空闲钩子，每轮空闲循环调一次 | 永不阻塞、快进快出；需 `configUSE_IDLE_HOOK=1` |
+| `vTaskDelete( h )` | 删除任务（NULL = 删自己） | 内存由空闲任务收尸；任务自己申请的资源自己还 |
+| `uxTaskPriorityGet( h )` / `vTaskPrioritySet( h, n )` | 读 / 改优先级 | 数字大 = 高；调高者比当前高会立刻抢占 |
+
 ## 小节清单
 
 | 小节 | 标题 | 笔记 |
