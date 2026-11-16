@@ -2,12 +2,12 @@
 # =============================================================================
 # tools/dbg.sh —— 一条命令起「openocd + gdb」
 #
-# 书里点一下 Debug 按钮，背后其实是三个进程（见 01-stm32/book-notes/02-ide/2.1 Q1）：
+# 书里点一下 Debug 按钮，背后其实是三个进程（见 01-stm32/02-ide/2.1 Q1）：
 #     gdb（主机）──RSP/TCP── OpenOCD（主机）──USB── ST-Link ──SWD── 芯片
 # 这个脚本把前两个拉起来；第三个在板子上，不用管。
 #
 # 用法：
-#   tools/dbg.sh 01-stm32/07-hello/hello.elf              在 Reset_Handler 停下
+#   tools/dbg.sh 01-stm32/labs/07-hello/hello.elf              在 Reset_Handler 停下
 #   tools/dbg.sh hello.elf --break main                   换断点
 #   tools/dbg.sh hello.elf --board f103c8t6
 #   tools/dbg.sh --attach                                 复用已在跑的 openocd
@@ -67,7 +67,7 @@ detect_all
 RC=0
 if [ -z "$TOOL_GDB" ]; then
   bad "找不到 arm-none-eabi-gdb"
-  note "只有调试需要它；编译链不用 GCC（见 01-stm32/00-toolchain-clang）"
+  note "只有调试需要它；编译链不用 GCC（见 01-stm32/labs/00-toolchain-clang）"
   RC=1
 fi
 

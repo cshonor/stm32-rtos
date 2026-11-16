@@ -1,64 +1,195 @@
-# stm32 —— 三条轨道
+# 01-stm32 —— 《裸机C编程》逐**小节**笔记
 
-同一个 LED（PA5 / LD2），三种写法，三条轨道一一对照：
+> 本目录 = 书 + 实验：笔记章节直接平铺在本目录下（00–21 + 附录），
+> 实验收在 [labs/](labs/README.md)（00-toolchain-clang → 07-hello，共 9 个）。
+
+> 教材：**《裸机C编程：嵌入式系统C程序设计》**（[美] 斯蒂芬·欧林 Stephen Oualline 著，黄俊彬 译，
+> 机械工业出版社 2025，"电子与嵌入式系统设计译丛"，ISBN 9787111792017）
+> 原书：*Bare Metal C: Embedded Programming for the Real World*, No Starch Press, 2022。
+> 原书配套：NUCLEO-F030R8（Cortex-M0）+ arm-none-eabi-gcc + System Workbench for STM32。
+> **本仓库的板子是 NUCLEO-F103RB（Cortex-M3），工具链主线是 clang + ld.lld**——
+> 所以每篇笔记都会写清"书里怎么做 / 我这里怎么做"。
+
+定位：**只记"我理解的 + 我实测的"，不抄书**。
+纪律：**先跑通，后落笔**；没实测的不写结论。
+
+---
+
+## 一、目录规范（2026-09-27 改版：一章一篇 → 一小节一篇）
 
 ```
-00-toolchain-clang/   公共起点：工具链（不属于任何一条轨道）
-01-bare-metal/        轨道一：裸机 C —— 对着 RM0008 手写寄存器（主线，书章节序）
-02-libopencm3/        轨道二：libopencm3 —— "能读完的寄存器库"（社区薄封装）
-03-hal/               轨道三：HAL —— ST 官方厚封装（最后一遍，工程视角）
+01-stm32/
+├── README.md                       ← 本文件：全书索引
+├── 00-mental-model/                ← 地基篇（书里没有，自己补的）
+│   ├── README.md
+│   ├── 00.1-没有OS的C语言.md
+│   ├── 00.2-操作硬件的三个手段.md
+│   └── 00.3-没有GCC行不行.md
+├── 01-hello-world/                 ← 第 1 章
+│   ├── README.md                   ← 章导航
+│   ├── 1.1-安装GCC.md
+│   └── ...
+├── 03-embedded-system-programming/ ← 第 3 章
+│   ├── README.md                   ← 章导航
+│   ├── 3.1-使用NUCLEO-F030R8开发板.md
+│   └── ... 3.10-其他问题.md
+└── labs/                           ← 实验（00-toolchain-clang → 07-hello）
 ```
 
-**为什么是三条而不是一条**：同一功能（点灯 → UART → 中断 → 定时器）在三条轨道各写一遍，
-差异会自己浮出来——代码行数、镜像大小、可读性、可移植性。规则沿用旧约：
-每个实验必须真机跑通再写笔记，实测输出贴进对应 README。
+**三条规则**：
 
-## 轨道一：裸机 C（主线，`01-bare-metal/`）
+1. **一个二级小节 = 一个文件**，文件名 `X.Y-小节名.md`，文件首行标题就是 `# X.Y 小节名`；
+2. **三级小节**（如 1.3.1、4.2.5、11.7.4）不单独开文件，作为所属小节笔记里的 `###` 标题；
+3. **每章一个目录** `NN-英文slug/`，目录内放 `README.md` 做本章导航。
 
-按书章节推进，不依赖任何库，直接写寄存器：
+> **为什么改**：原来一章一篇（400+ 行、2 万字节），信息密度太高，翻不动也记不住。
+> 按小节拆之后每篇 50–120 行，**读一节 = 读一篇**。
 
-- `01-bare-metal`：向量表 + 复位处理 + 跳 main（书 ch2）
-  - 汇编版 `startup.S`（主线）与 C 版 `startup_c.c` 双变体对照，实测**语义 24 项逐项等价**，
-    差异在可控性：C 版编译器会重排启动序列、`.text` 多 24 字节
-  - `check_vectors.py`：主机侧断言"上电时硬件会读到什么"（位置 / MSP / Thumb 位 / 保留位 / 镜像头）
-  - 反面教材 `linker-nokeep.ld`：只去掉 `KEEP(*(.isr_vector))`，链接不报错、
-    但镜像第 0 个字变成代码指令 —— 上电即崩且无任何编译期提示
-  - 自检目标：`make vectors` / `compare` / `check-nokeep` / `check-isr` / `check-gpr` / `check-stack` / `check-lds`
-- `03-gpio-blink`：✅ **真机实测**（烧录 Verified OK、gdb 单步、portprobe 探针）——
-  寄存器点灯 + `.noinit` 面包屑 + `-fstack-usage` 栈账（书 ch3/ch4）
-- 规划中（骨架已建）：[04-uart-printf](04-uart-printf/README.md)（书 ch9 + ch21）→
-  [05-exti-button](05-exti-button/README.md)（书 ch10 + ch05）→
-  [06-timer](06-timer/README.md)（补充 ch19）
-- [07-hello](07-hello/README.md)：工具台的参考实验（2026-11-16 自顶层 `labs/` 迁入书目录）——
-  Makefile 只有 4 行的最小可跑工程（Blue Pill PC13 点灯），是 `mk/arm-clang.mk` 共享层的实物证据
-- 「02-linker」不单列目录：链接脚本（书 ch3 主题）已在 `01-bare-metal/linker.ld` 逐段落地
-  + 反面教材 `linker-nokeep.ld`，笔记侧见 [book-notes/11-linker](book-notes/11-linker/README.md)
+**每篇固定体例**：
 
-## 轨道二：libopencm3（`02-libopencm3/`）
+```
+# X.Y 小节名
+> 书：第 N 章 … · X.Y …（原书 pXX）
+> 上一篇 / 下一篇 / 对应实验
+## 书这一节讲什么                    ← 一句话概括原书内容
+## （正题，若干节）                  ← 我的实测 / 展开 / 与 PC、LDD- 对照
+## 坑点（书 / 常识怎么说 / 实际是什么）  ← 统一表格
+## 衔接                              ← 通向哪几篇
+## 代码自测                          ← <details> 折叠 Q&A，2–5 题
+```
 
-引入第一个外部库依赖（git 子模块，钉在 `2da12dc9`），不写寄存器也能点灯：
+---
 
-- 双轨对照：手写寄存器版镜像 296 B，库版 1016 B（含 336 B 完整向量表），`main` 反汇编可见
-  `RCC_GPIOA=0x302` 这种"寄存器+位"打包编码
-- 与教程的差异（实测）：`LDSCRIPT=…/stm32f103rb.ld` 与 `lib/libopencm3.rules.mk`
-  **两个文件都已不存在**，正确契约是 `mk/{genlink,gcc}-{config,rules}.mk` + 只声明 `DEVICE`
-- `TARGETS`（编哪些家族，路径形式 `stm32/f1`）与 `DEVICE`（哪颗芯片，`stm32f103rb`）是两件事
-- 工具链换成 GNU：Arm GNU Toolchain 14.2.Rel1（darwin-arm64 官方包，装在 `~/.local`）；
-  同机还装了 xpack OpenOCD 0.12.0（2.3 MB）
-- 烧录配置：`openocd/f103rb.cfg`（NUCLEO 板载 ST-Link）/ `openocd/generic-stlink-f103.cfg`（外接）
-- ✅ **2026-09-24 真机首烧通过**：NUCLEO-F103RB（板载 ST-Link V2J28M18），program → verify OK →
-  reset，LD2(PA5) 闪烁；向量表断言 9 项全过
-- 自检目标：`make vectors`（通用版断言）/ `size` / `dump` / `lib` / `flash` / `openocd` / `gdb`
-- 坑点：GNU make 的赋值行尾注释会把空白带进变量值，报错指向无关目录（README 有最小复现）
+## 二、全书索引（18 章 + 附录 + 补充篇）
 
-## 轨道三：HAL（`03-hal/`，骨架）
+图例：✅ 已按小节拆分（点目录进去） ｜ 🚧 尚未拆分，暂时指向章级旧笔记
 
-ST 官方 HAL（STM32CubeF1，BSD-3）。**库源码暂未引入**（等第一个实验要做时再作 git
-submodule 挂进来，避免仓库先胖 1GB+），路线见 [`03-hal/README.md`](./03-hal/README.md)。
+### 第一部分 嵌入式编程（书第 1–12 章）
 
-## 公共起点：`00-toolchain-clang/`
+| 章 | 标题 | 原书页 | 小节 | 状态 |
+|---|---|---|---|---|
+| 00 | **地基篇**（自加，书里没有） | —— | 00.1–00.3 | ✅ [目录](00-mental-model/README.md) |
+| 01 | Hello World | 3–15 | 1.1–1.8 | ✅ [目录](01-hello-world/README.md) |
+| 02 | 集成开发环境介绍 | 16–26 | 2.1–2.6 | ✅ [目录](02-ide/README.md) |
+| 03 | 嵌入式系统编程 | 27–43 | 3.1–3.10 | ✅ [目录](03-embedded-system-programming/README.md) |
+| 04 | 数字和变量 | 44–64 | 4.1–4.12 | ✅ [目录](04-numbers-and-bitops/README.md) |
+| 05 | 决策和控制语句 | 65–77 | 5.1–5.14 | ✅ [目录](05-control-flow-button/README.md) |
+| 06 | 数组、指针和字符串 | 78–88 | 6.1–6.5 | ✅ [目录](06-arrays-pointers-strings/README.md) |
+| 07 | 局部变量和函数 | 89–97 | 7.1–7.6 | ✅ [目录](07-stack-frame-functions/README.md) |
+| 08 | 复杂数据类型 | 98–118 | 8.1–8.15 | ✅ [目录](08-complex-types/README.md) |
+| 09 | STM 上的串口输出 | 119–134 | 9.1–9.7 | ✅ [目录](09-uart-serial/README.md) |
+| 10 | 中断 | 135–153 | 10.1–10.5 | ✅ [目录](10-interrupts/README.md) |
+| 11 | 链接器 | 154–173 | 11.1–11.6 | ✅ [目录](11-linker/README.md) |
+| 12 | 预处理器 | 174–185 | 12.1–12.6 | ✅ [目录](12-preprocessor/README.md) |
 
-**不需要 arm-none-eabi-gcc**，用 clang + ld.lld 走通 `C → .o → .elf → .bin` 全流程；
-含 volatile / .data 搬运 / `__aeabi_*` 三组实测（书 ch1）。
-全部命令已在 macOS 26.6.2 + micromamba `cdev`（clang 23.1.0 / lld 23.1.0）实测通过。
-自检目标：`make check-lds` / `make check-libc` / `make check-eabi`
+### 第二部分 用于大型机器的 C 语言编程（书第 13–18 章）
+
+> 这部分**不在板子上跑**，跑在 Mac/Linux 这类"大型机器"上。
+> 与 TLPI 主线高度重叠，本轨只记"和裸机那半本对照时才有意思的点"，不做 TLPI 的重复劳动。
+
+| 章 | 标题 | 原书页 | 小节 | 状态 |
+|---|---|---|---|---|
+| 13 | 动态内存 | 189–201 | 13.1–13.4 | ✅ [目录](13-dynamic-memory/README.md) |
+| 14 | 缓冲文件 I/O | 202–211 | 14.1–14.6 | ✅ [目录](14-buffered-file-io/README.md) |
+| 15 | 命令行参数和原始 I/O | 212–218 | 15.1–15.4 | ✅ [目录](15-cli-args-raw-io/README.md) |
+| 16 | 浮点数 | 219–226 | 16.1–16.7 | ✅ [目录](16-floating-point/README.md) |
+| 17 | 模块化编程 | 227–239 | 17.1–17.6 | ✅ [目录](17-modular-programming/README.md) |
+| 18 | 后记 | 240–242 | 18.1–18.5 | ✅ [目录](18-next-steps/README.md) |
+| 附 | 项目创建清单 | 243 | A.1–A.3 | ✅ [目录](A-project-checklist/README.md) |
+
+### 补充篇（书里没写，但裸机上必须会）
+
+| 篇 | 主题 | 对应实验 | 状态 |
+|---|---|---|---|
+| ch19 | SysTick / 通用定时器：裸机的"时间"从哪来 | `labs/06-timer` | ✅ [目录](19-systick-and-timer/README.md)（19.1–19.7） |
+| ch20 | 从裸机到 FreeRTOS：任务/调度/队列/信号量的落点 | `02-freertos/labs/01-hello-task` | ✅ [目录](20-towards-freertos/README.md)（20.1–20.3，先行讲解篇，实验未做、实测待补） |
+| ch21 | 时钟树（RCC/PLL）：为什么 8MHz 晶振能跑 72MHz | —— | ✅ [目录](21-clock-tree/README.md)（21.1–21.2，先行讲解篇，实测待补） |
+
+---
+
+## 三、稳定小节 vs 会过期的小节（决定你怎么读这本书）
+
+| 类型 | 例子 | 读法 |
+|---|---|---|
+| **不会过期**（机制） | 1.5 编译器四步、4.4 位操作控寄存器、7.4 堆栈帧、11.x 链接器、12.x 预处理器 | 精读，笔记已展开实测 |
+| **会过期**（工具操作） | 1.1 装 GCC、1.2 下载系统工作台、2.1 用 System Workbench | 速读，笔记已换成 2026 年的等价做法 |
+| **书里没有**（工程必需） | 启动文件逐行、SysTick、时钟树、FreeRTOS | 看补充篇 |
+
+判据一句话：**属于"某个工具怎么用"的会过期，属于"计算机怎么工作"的不会。**
+
+---
+
+## 四、与根 README 学习路线的映射（实验编号 → 书章号）
+
+根 `README.md` 那张"学习路线"表按**实验**编号（0–8），本目录按**书章**编号（1–18）。
+对应关系统一在这一处，避免两边各说各话：
+
+| 根 README 实验编号 | 主题 | 本书笔记 |
+|---|---|---|
+| 0 | 工具链（clang + ld.lld） | [01 Hello World](01-hello-world/README.md) |
+| 1 | 烧录链路 + OpenOCD/ST-Link | [02 IDE](02-ide/README.md) |
+| 2 | 启动文件、向量表、上电到 main | [03 嵌入式系统编程](03-embedded-system-programming/README.md) |
+| 3 | 链接脚本（Flash/RAM 布局） | [11 链接器](11-linker/README.md) |
+| 4 | 寄存器与 CMSIS 头（GPIO 点灯） | 03 / 04 |
+| 5 | 时钟树与 UART | 09（+ 补充 ch21） |
+| 6 | 中断与 EXTI | 10 |
+| 7 | SysTick / 定时器 | [补充 ch19](19-systick-and-timer/README.md) |
+| 8 | FreeRTOS 任务/调度/队列 | [补充 ch20](20-towards-freertos/README.md) |
+
+---
+
+## 五、工具链事实（写在这，避免每篇重复）
+
+- **不用 GCC 的一条**（主线）：micromamba `cdev` 环境里的
+  clang 23.1.0 + ld.lld + llvm-objcopy/objdump/readelf/nm/size
+- **GNU 一条**（只在需要 gdb 时用）：
+  `~/.local/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-gdb`
+- **调试服务器**：`~/.local/xpack-openocd-0.12.0-7/bin/openocd`（xPack 0.12.0，darwin-arm64）
+  - 配置：`01-stm32/labs/02-libopencm3/openocd/f103rb.cfg`（NUCLEO 板载 ST-Link）
+  - gdb server 端口 3333，telnet 4444
+- 板子：**NUCLEO-F103RB**，ST-Link V2J28M18、Cortex-M3 r1p1、DPIDR `0x1ba01477`、
+  device id `0x20036410`、Flash 128 KiB、RAM 20 KiB（`_estack = 0x20005000`）
+
+**要不要装 GCC / 要不要装 CubeIDE**：
+
+| 你的需求 | 建议 |
+|---|---|
+| 寄存器级裸机（本仓库路线） | **都不用装**，clang + make + openocd 已实测跑通 |
+| 图形配时钟树/引脚，或用 HAL/LL | 装**独立 CubeMX**（不连带 Eclipse） |
+| 要外设寄存器位域视图 / FreeRTOS 线程视图 | VSCode + Cortex-Debug + SVD（复用现有 openocd） |
+| 公司标准 / 要一键复现别人的工程 | 装完整 STM32CubeIDE |
+
+> 附：STM32CubeIDE 2.1.0 起**内置两套工具链**（GNU tools for STM32 基于 GCC 14.3.rel1
+> **和** STARM-Clang 21.1.1），并提供 **macOS AArch64 原生包**。
+
+---
+
+## 六、进度
+
+| 批次 | 范围 | 篇数 | 状态 |
+|---|---|---|---|
+| 第 1 批 | 00 地基篇 3 篇 + 01（8 篇）+ 02（6 篇） | **17 篇 + 3 个章导航** | ✅ 2026-09-27 |
+| 第 2 批 | 03（10）+ 04（12）+ 05（14） | 36 篇 | ✅ 2026-09-28 完成：03（10）+ 04（12）+ 05（14）+ 3 个章导航 |
+| 第 3 批 | 06（5）+ 07（6）+ 08（15） | 26 篇 | ✅ 2026-09-28 完成：06（5）+ 07（6）+ 08（15）+ 3 个章导航 |
+| 第 4 批 | 09（7）+ 10（5）+ 11（6） | 18 篇 | ✅ 2026-09-28 完成：09（7）+ 10（5）+ 11（6）+ 3 个章导航 |
+| 第 5 批 | 12–18 + 附录 + 补充篇（6+4+6+4+7+6+5+1+3） | 42 篇 | ✅ 2026-09-28 完成：12（6）+ 13（4）+ 14（6）+ 15（4）+ 16（7）+ 17（6）+ 18（5）+ 7 个章导航；附录 + ch19 待办 |
+| 第 6 批 | 补充篇 ch19（7 篇 + 1 章导航） | 8 篇 | ✅ 2026-09-28 完成：19.1–19.7 + 章导航；⭐ 实测发现「向量表不写 ISR → 被 --gc-sections 删掉」（text 124→52，链接不报错） |
+| 第 7 批 | 附录（A.1–A.3 + 1 导航） | 4 篇 | ✅ 2026-09-28 完成：从零实测建了一个能链出 .bin 的最小工程（3 文件 37 行 → 228 B）；⭐ 实测 6 条「做错」里 **5 条静默通过**（漏 KEEP → 向量表被删、226→206 B） |
+| 第 8 批 | 补充篇 ch20（3 篇）+ ch21（2 篇）+ 2 个章导航 | 7 篇 | ✅ 2026-10-08 完成：20.1–20.3（任务/调度的硬件落点、队列与信号量、什么时候该上 RTOS）+ 21.1–21.2（时钟树原理、外设时钟门控）。**先行讲解篇**——对应实验（02-freertos/labs/01-hello-task、PLL 实配）未做，实测数据待实验落地后补 |
+
+> **全书 18 章 + 附录 + 补充篇 ch19–ch21 已全部完毕**
+> —— 实测清点：**150 篇小节笔记 + 23 个章导航**（00(3) 01(8) 02(6) 03(10) 04(12) 05(14) 06(5) 07(6)
+> 08(15) 09(7) 10(5) 11(6) 12(6) 13(4) 14(6) 15(4) 16(7) 17(6) 18(5) 19(7) 20(3) 21(2) 附录(3)）。
+> ch20 / ch21 为先行讲解篇：机制原理写清、落点标明，实测数据待对应实验落地后补（章导航已注明）。
+
+**同步落地的实验**（笔记里的实测数据全部来自这里）：
+
+| 实验目录 | 对应书 | 状态 |
+|---|---|---|
+| [`01-stm32/labs/00-toolchain-clang`](labs/00-toolchain-clang/README.md) | 1.1 | ✅ 主机侧 |
+| [`01-stm32/labs/01-bare-metal`](labs/01-bare-metal/README.md) | 3.1–3.3 的启动部分 | ✅ 真机实测 |
+| [`01-stm32/labs/02-libopencm3`](labs/02-libopencm3/README.md) | 2.x 的库路线 | ✅ |
+| [`01-stm32/labs/03-gpio-blink`](labs/03-gpio-blink/README.md) | **3.3–3.7（本章核心）** | ✅ 真机实测（烧录 Verified OK、gdb 单步、探针） |
+| [`01-stm32/labs/07-hello`](labs/07-hello/README.md) | 工具台参考实验（Makefile 4 行） | ✅ 编译实测 |
+
+完整实验线说明（三条轨道）见 [labs/README.md](labs/README.md)。

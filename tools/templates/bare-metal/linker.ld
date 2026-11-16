@@ -6,7 +6,7 @@
  * C 语言的视角：符号有地址，函数可以调用，变量可以读写。
  * 没人告诉 CPU 这些地址从哪来 —— 是链接脚本说的。
  * 换句话说：链接脚本 = 这枚芯片的物理内存地图（RM0008 第 4 章 Memory map）。
- * 逐段解释见 01-stm32/book-notes/11-linker。
+ * 逐段解释见 01-stm32/11-linker。
  */
 
 ENTRY(Reset_Handler)

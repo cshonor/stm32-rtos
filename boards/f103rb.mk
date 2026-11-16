@@ -2,14 +2,14 @@
 # boards/f103rb.mk —— NUCLEO-F103RB（ST 官方 Nucleo-64）
 #
 # 本仓库的主板：板载 ST-Link/V2-1，macOS 免驱、Windows 需装 ST-Link 驱动。
-# 布局来自 01-stm32/01-bare-metal/linker.ld 的实测（RM0008 第 4 章 Memory map）。
+# 布局来自 01-stm32/labs/01-bare-metal/linker.ld 的实测（RM0008 第 4 章 Memory map）。
 # =============================================================================
 
 BOARD_NAME   := NUCLEO-F103RB
 BOARD_DEVICE := stm32f103rb
 
 # Cortex-M3，无 FPU：所以浮点和 64 位除法会被编译器换成 __aeabi_* 调用
-# （见 01-stm32/00-toolchain-clang 的 make check-libc）
+# （见 01-stm32/labs/00-toolchain-clang 的 make check-libc）
 BOARD_CPU    := cortex-m3
 BOARD_TRIPLE := armv7m-none-eabi
 BOARD_CFLAGS :=

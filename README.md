@@ -1,16 +1,17 @@
 # STM32- · STM32 + FreeRTOS + Zephyr 学习仓库
 
 > 定位：MCU 裸机 → RTOS → 工程化 RTOS 的学习轨，与 `LDD-`（Linux 驱动轨）互补不混线。
-> **三条轨道各配一本书，笔记就放在各轨道目录下的 `book-notes/` 里**：
+> **三条轨道各配一本书：笔记章节直接平铺在各轨道目录下（一打开就是 ch01、ch02…），
+> 实验收在各轨道的 `labs/` 里**：
 >
 > | 轨道 | 配套教材 | 笔记位置 |
 > |---|---|---|
-> | `01-stm32/`（裸机 → 库 → HAL） | **《裸机C编程：嵌入式系统C程序设计》**（[美] Stephen Oualline 著，黄俊彬 译，机械工业出版社 2025，ISBN 9787111792017；原书 *Bare Metal C*, No Starch 2022，全 18 章） | [01-stm32/book-notes/](01-stm32/book-notes/README.md)（✅ 已写完） |
-> | `02-freertos/`（RTOS 第一遍） | **《Mastering the FreeRTOS Real Time Kernel》**（Richard Barry，FreeRTOS 官方书，官网免费 PDF，有社区中译本；纸质备选：野火刘火良《FreeRTOS 内核实现与应用开发实战指南——基于STM32》） | [02-freertos/book-notes/](02-freertos/book-notes/README.md)（✅ 已写满：12 章 44 篇，先行讲解——实验未做、实测数据待补） |
-> | `03-zephyr/`（工程化第二遍） | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页——Zephyr 唯一成体系的专门书；辅以官方文档） | [03-zephyr/book-notes/](03-zephyr/book-notes/README.md)（✅ 已写满：12 章 43 篇，先行讲解——API 以官方文档为准绳） |
+> | `01-stm32/`（裸机 → 库 → HAL） | **《裸机C编程：嵌入式系统C程序设计》**（[美] Stephen Oualline 著，黄俊彬 译，机械工业出版社 2025，ISBN 9787111792017；原书 *Bare Metal C*, No Starch 2022，全 18 章） | [01-stm32/](01-stm32/README.md)（✅ 已写完） |
+> | `02-freertos/`（RTOS 第一遍） | **《Mastering the FreeRTOS Real Time Kernel》**（Richard Barry，FreeRTOS 官方书，官网免费 PDF，有社区中译本；纸质备选：野火刘火良《FreeRTOS 内核实现与应用开发实战指南——基于STM32》） | [02-freertos/](02-freertos/README.md)（✅ 已写满：12 章 44 篇，先行讲解——实验未做、实测数据待补） |
+> | `03-zephyr/`（工程化第二遍） | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页——Zephyr 唯一成体系的专门书；辅以官方文档） | [03-zephyr/](03-zephyr/README.md)（✅ 已写满：12 章 43 篇，先行讲解——API 以官方文档为准绳） |
 >
-> `01-stm32/book-notes/` 的篇号 **chNN 与书的章号一一对齐**（ch01–ch18 + 补充篇），
-> 本篇下面的"学习路线"表按**实验**编号，两者的映射见 `01-stm32/book-notes/README.md`。
+> `01-stm32/` 的篇号 **chNN 与书的章号一一对齐**（ch01–ch18 + 补充篇），
+> 本篇下面的"学习路线"表按**实验**编号，两者的映射见 `01-stm32/README.md`。
 > 预习衔接：`LDD-/09` 学过中断下半部、`10` 章（规划中）Pi 5 裸机
 > 会先走一遍"上电 → 启动 → main → 寄存器"，到这里换地址表就是 STM32 本体。
 
@@ -21,16 +22,16 @@ tools/        工具台：环境自检 / 烧录 / 调试 / 生成新实验（说
 mk/           构建层：一份共享的 CFLAGS/LDFLAGS/规则，各 lab 的 Makefile 缩到 4 行
 boards/       板级层：CPU / 内存布局 / OpenOCD 配置 / LED 引脚，换板子只动这里
 hardware/     硬件采购：两块板板载资源盘点 + 外设必买/按需买清单（说明见 hardware/README.md）
-01-stm32/        实验线：00-toolchain-clang（clang 工具链）→ 01-bare-metal（裸机C，主线）→
+01-stm32/        《裸机C编程》笔记：章节平铺（00-mental-model → 21-clock-tree + 附录，
+                 篇号 = 书章号；00-mental-model 是读书前的三篇前提笔记）
+  labs/        实验线：00-toolchain-clang（clang 工具链）→ 01-bare-metal（裸机C，主线）→
                  02-libopencm3（库）→ 03-gpio-blink / 03-hal → 04-uart-printf → 05-exti-button → 06-timer
                  → 07-hello（工具台参考实验：Makefile 只有 4 行的最小可跑工程）
-  book-notes/ 《裸机C编程》逐章笔记（只记"我理解的+我实测的"，不抄书）；篇号 = 书章号（ch01–ch18 + 附录 + 补充篇 ch19–ch21）
-              00-mental-model/ 是读书前的三篇前提笔记（freestanding / MMIO·volatile / 没有GCC行不行）
-02-freertos/     FreeRTOS 移植与任务实验（等裸机三件套通了再进）
-  book-notes/ 《Mastering the FreeRTOS Real Time Kernel》配套笔记（✅ 已写满 44 篇，先行讲解篇）
-03-zephyr/       Zephyr 实验区（第二遍的工程化路线，最后走）
-  book-notes/ 《Zephyr RTOS Embedded C Programming》(Eliasz) 配套笔记（✅ 已写满 43 篇，先行讲解篇）
-third_party/  git 子模块：libopencm3（01-stm32/02-libopencm3 用；clone 后先 git submodule update --init）
+02-freertos/     《Mastering the FreeRTOS Real Time Kernel》笔记：章节平铺（01–12，✅ 已写满 44 篇）
+  labs/        FreeRTOS 移植与任务实验 01–04（等裸机三件套通了再进）
+03-zephyr/       《Zephyr RTOS Embedded C Programming》(Eliasz) 笔记：章节平铺（01–12，✅ 已写满 43 篇）
+  labs/        Zephyr 实验 01–04（第二遍的工程化路线，最后走）
+third_party/  git 子模块：libopencm3（01-stm32/labs/02-libopencm3 用；clone 后先 git submodule update --init）
 _refs/        只作参考的上游克隆，不进版本库（如 libopencm3-examples）
 ```
 
@@ -43,10 +44,10 @@ Eclipse 壳，把同一件事拆成三层，每层可单独替换、每步看得
 ```bash
 bash tools/env.sh                 # 这台机器现在能不能做嵌入式（8 层逐层真跑一遍）
 source tools/env.sh --export      # 工具不在 PATH 上时先做这一步
-cd 01-stm32/07-hello && make      # 编译一个最小工程
+cd 01-stm32/labs/07-hello && make      # 编译一个最小工程
 make flash                        # 插上板子再烧
-../../tools/dbg.sh hello.elf      # 一条命令起 openocd + gdb，退出时自动收摊
-tools/newlab.sh 01-stm32/08-uart  # 生成下一个实验的骨架（板级参数自动填好）
+../../../tools/dbg.sh hello.elf   # 一条命令起 openocd + gdb，退出时自动收摊
+tools/newlab.sh 01-stm32/labs/08-uart  # 生成下一个实验的骨架（板级参数自动填好）
 ```
 
 | 层 | 目录 | 职责 | 变动频率 |
@@ -63,19 +64,19 @@ tools/newlab.sh 01-stm32/08-uart  # 生成下一个实验的骨架（板级参�
 
 | # | 书主题 | 对应实验 | 状态 |
 |---|---|---|---|
-| 0 | 工具链（**不用 GCC**：clang + ld.lld + llvm 二进制工具） | 01-stm32/00-toolchain-clang | ✅ 主机侧实测 |
-| 1 | 开发环境（烧录链路 + OpenOCD/ST-Link） | 01-stm32/01-bare-metal | ✅ **真机实测（09-26 烧录 + 回读 + gdb 源码级停住）** |
-| 2 | 启动文件、向量表、上电到 main | 01-stm32/01-bare-metal | ✅ **真机实测（09-26 向量表/RAM 回读与 ELF 逐字节一致）** |
-| 3 | 链接脚本（Flash/RAM 布局） | 01-stm32/01-bare-metal（linker.ld 逐段 + nokeep 反面教材） | ✅ 真机实测（笔记：[book-notes/11-linker](01-stm32/book-notes/11-linker/README.md)） |
-| 4 | 寄存器与 CMSIS 头（GPIO 点灯） | 01-stm32/03-gpio-blink | ✅ 真机实测（烧录 Verified OK、gdb 单步、portprobe 探针） |
-| 5 | 时钟树与 UART | 01-stm32/04-uart-printf | ⬜ 骨架已建（笔记：书 ch09 + 补充 ch21） |
-| 6 | 中断与 EXTI | 01-stm32/05-exti-button | ⬜ 骨架已建（笔记：书 ch10 + ch05） |
-| 7 | SysTick / 定时器 | 01-stm32/06-timer | ⬜ 骨架已建（笔记：补充 ch19） |
-| 8 | FreeRTOS：任务/调度/队列/信号量 | 02-freertos/01–04 | ⬜ 骨架已建（笔记：补充 ch20） |
-| 轨道二 | 库路线：libopencm3（≠ HAL） | 01-stm32/02-libopencm3 | ✅ 真机首烧通过（09-24） |
-| 轨道三 | ST 官方 HAL | 01-stm32/03-hal | ⬜ 骨架已建，库未引入 |
+| 0 | 工具链（**不用 GCC**：clang + ld.lld + llvm 二进制工具） | 01-stm32/labs/00-toolchain-clang | ✅ 主机侧实测 |
+| 1 | 开发环境（烧录链路 + OpenOCD/ST-Link） | 01-stm32/labs/01-bare-metal | ✅ **真机实测（09-26 烧录 + 回读 + gdb 源码级停住）** |
+| 2 | 启动文件、向量表、上电到 main | 01-stm32/labs/01-bare-metal | ✅ **真机实测（09-26 向量表/RAM 回读与 ELF 逐字节一致）** |
+| 3 | 链接脚本（Flash/RAM 布局） | 01-stm32/labs/01-bare-metal（linker.ld 逐段 + nokeep 反面教材） | ✅ 真机实测（笔记：[11-linker](01-stm32/11-linker/README.md)） |
+| 4 | 寄存器与 CMSIS 头（GPIO 点灯） | 01-stm32/labs/03-gpio-blink | ✅ 真机实测（烧录 Verified OK、gdb 单步、portprobe 探针） |
+| 5 | 时钟树与 UART | 01-stm32/labs/04-uart-printf | ⬜ 骨架已建（笔记：书 ch09 + 补充 ch21） |
+| 6 | 中断与 EXTI | 01-stm32/labs/05-exti-button | ⬜ 骨架已建（笔记：书 ch10 + ch05） |
+| 7 | SysTick / 定时器 | 01-stm32/labs/06-timer | ⬜ 骨架已建（笔记：补充 ch19） |
+| 8 | FreeRTOS：任务/调度/队列/信号量 | 02-freertos/labs/01–04 | ⬜ 骨架已建（笔记：补充 ch20） |
+| 轨道二 | 库路线：libopencm3（≠ HAL） | 01-stm32/labs/02-libopencm3 | ✅ 真机首烧通过（09-24） |
+| 轨道三 | ST 官方 HAL | 01-stm32/labs/03-hal | ⬜ 骨架已建，库未引入 |
 
-**书的逐章笔记**：`01-stm32/book-notes/` 已全部按「一小节一笔记」写完 —— **ch01–ch18 + 附录
+**书的逐章笔记**：`01-stm32/` 已全部按「一小节一笔记」写完 —— **ch01–ch18 + 附录
 + 补充篇 ch19（SysTick/定时器）/ ch20（走向 FreeRTOS）/ ch21（时钟树）**，
 每篇带"原书怎么说 / 实测是什么"坑点表与折叠 Q&A。想按书推进就看那个索引，
 想按实验推进就看上面这张表。
@@ -94,12 +95,12 @@ west 与 Linux 机制同源，实验与 02-freertos/ 一一对照，规划见 `0
 
 | 面试题 | 读什么 | 补什么 |
 |---|---|---|
-| ① I2C/SPI 怎么驱动传感器 | [03 章寄存器读写](01-stm32/book-notes/03-embedded-system-programming/README.md) + [06 章指针数组](01-stm32/book-notes/06-arrays-pointers-strings/README.md) + [04 章位操作](01-stm32/book-notes/04-numbers-and-bitops/README.md) | I2C 时序图另找一篇看熟（能徒手画一次完整读操作） |
-| ② UART/RS485 帧处理、粘包、校验 | [09 章串口](01-stm32/book-notes/09-uart-serial/README.md) + [10 章中断](01-stm32/book-notes/10-interrupts/README.md) + [freertos 04 队列](02-freertos/book-notes/04-queue-management/README.md)（ISR 收字节→队列→任务解包 = 标准答案） | RS485 话术骨架：**UART + DE/RE 方向切换 + 差分总线 + Modbus 帧（地址/功能码/数据/CRC16）**；粘包答「超时断帧或帧头+长度」 |
+| ① I2C/SPI 怎么驱动传感器 | [03 章寄存器读写](01-stm32/03-embedded-system-programming/README.md) + [06 章指针数组](01-stm32/06-arrays-pointers-strings/README.md) + [04 章位操作](01-stm32/04-numbers-and-bitops/README.md) | I2C 时序图另找一篇看熟（能徒手画一次完整读操作） |
+| ② UART/RS485 帧处理、粘包、校验 | [09 章串口](01-stm32/09-uart-serial/README.md) + [10 章中断](01-stm32/10-interrupts/README.md) + [freertos 04 队列](02-freertos/04-queue-management/README.md)（ISR 收字节→队列→任务解包 = 标准答案） | RS485 话术骨架：**UART + DE/RE 方向切换 + 差分总线 + Modbus 帧（地址/功能码/数据/CRC16）**；粘包答「超时断帧或帧头+长度」 |
 | ③ 看原理图、万用表排错 | 笔记帮不了，动手活 | 实验 0 攒真实排错故事 |
-| ④ OTA 升级、断电保护 | [11 章链接器](01-stm32/book-notes/11-linker/README.md)（双分区跳转全靠链接脚本）+ [zephyr 06 文件系统](03-zephyr/book-notes/06-filesystems/README.md)（掉电安全/磨损均衡） | 话术骨架：Bootloader + A/B 双分区 → 下载到备用区 → CRC 校验 → **标志位最后写**（任何时刻断电都回得去） |
-| ⑤ MQTT 上云、断线重连 | [zephyr 08 网络](03-zephyr/book-notes/08-networking/README.md) + [12 WiFi](03-zephyr/book-notes/12-wifi/README.md) + [freertos 09 通知](02-freertos/book-notes/09-task-notifications/README.md) | 背五个词：Broker/Pub/Sub/QoS/KeepAlive；重连答「KeepAlive 超时 + 指数退避 + 重订阅 + QoS1 补发」 |
-| 通用打底 | [19 章 SysTick/定时器](01-stm32/book-notes/19-systick-and-timer/README.md)（PWM = 电机控制入场券）+ [freertos 03 任务调度](02-freertos/book-notes/03-task-management/README.md) + [21 章时钟树](01-stm32/book-notes/21-clock-tree/README.md) | — |
+| ④ OTA 升级、断电保护 | [11 章链接器](01-stm32/11-linker/README.md)（双分区跳转全靠链接脚本）+ [zephyr 06 文件系统](03-zephyr/06-filesystems/README.md)（掉电安全/磨损均衡） | 话术骨架：Bootloader + A/B 双分区 → 下载到备用区 → CRC 校验 → **标志位最后写**（任何时刻断电都回得去） |
+| ⑤ MQTT 上云、断线重连 | [zephyr 08 网络](03-zephyr/08-networking/README.md) + [12 WiFi](03-zephyr/12-wifi/README.md) + [freertos 09 通知](02-freertos/09-task-notifications/README.md) | 背五个词：Broker/Pub/Sub/QoS/KeepAlive；重连答「KeepAlive 超时 + 指数退避 + 重订阅 + QoS1 补发」 |
+| 通用打底 | [19 章 SysTick/定时器](01-stm32/19-systick-and-timer/README.md)（PWM = 电机控制入场券）+ [freertos 03 任务调度](02-freertos/03-task-management/README.md) + [21 章时钟树](01-stm32/21-clock-tree/README.md) | — |
 
 ### 要买什么（已按 [hardware/README.md](hardware/README.md) 修正）
 
@@ -142,7 +143,7 @@ ESP32 MQTT 上云（I2C/UART/中断/FreeRTOS）」。
 - 板 1（已到手）：**NUCLEO-F103RB**（ST 官方 Nucleo-64）
   - 板载 ST-Link/V2-1（macOS 免驱可直接用 openocd），用户 LED = **PA5**（LD2），
     128K Flash / 20K RAM，`_stack` = 0x20005000
-  - 是 `01-stm32/02-libopencm3` 的默认配置（`DEVICE=stm32f103rb`，无需覆盖）
+  - 是 `01-stm32/labs/02-libopencm3` 的默认配置（`DEVICE=stm32f103rb`，无需覆盖）
 - 板 2（正点原子 **F407 探索者**，STM32F407ZGT6）
   - 168MHz / Cortex-M4F（带 FPU）/ 1MB Flash / 192KB RAM；LED0 = **PF9**、LED1 = PF10（低电平点亮）
   - 接入步骤：① 库要重编家族 `make -C third_party/libopencm3 TARGETS=stm32/f4`；
@@ -154,13 +155,13 @@ ESP32 MQTT 上云（I2C/UART/中断/FreeRTOS）」。
 - 调试：ST-Link V2
   - OpenOCD 已装（xpack 0.12.0 darwin-arm64 原生构建，2.3 MB），脚本根在
     `~/.local/xpack-openocd-0.12.0-7/openocd/scripts`
-  - 烧录配置两份：`01-stm32/02-libopencm3/openocd/f103rb.cfg`（NUCLEO 板载 ST-Link）、
-    `01-stm32/02-libopencm3/openocd/generic-stlink-f103.cfg`（外接 ST-Link + 裸板）
+  - 烧录配置两份：`01-stm32/labs/02-libopencm3/openocd/f103rb.cfg`（NUCLEO 板载 ST-Link）、
+    `01-stm32/labs/02-libopencm3/openocd/generic-stlink-f103.cfg`（外接 ST-Link + 裸板）
 - 交叉链（两条，按 lab 选）：
-  - **不用装 GCC 的一条**（01-stm32/00–01）：Mac 端实测走 micromamba `cdev` 里的
+  - **不用装 GCC 的一条**（01-stm32/labs/00–01）：Mac 端实测走 micromamba `cdev` 里的
     clang 23.1.0 + ld.lld 23.1.0 + llvm-objcopy/objdump/readelf，全程 `-nostdlib`，
-    产出 296 字节可烧写镜像。踩过的坑见 `01-stm32/00-toolchain-clang/README.md`
-  - **GNU 一条**（01-stm32/02-libopencm3 及以后用库的场合）：Arm GNU Toolchain 14.2.Rel1
+    产出 296 字节可烧写镜像。踩过的坑见 `01-stm32/labs/00-toolchain-clang/README.md`
+  - **GNU 一条**（01-stm32/labs/02-libopencm3 及以后用库的场合）：Arm GNU Toolchain 14.2.Rel1
     （darwin-arm64 官方包，装在 `~/.local/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/`），
     libopencm3 的官方目标就是它
     - 本机没有 WSL / apt / docker，conda-forge 也没有 arm-none-eabi →
@@ -173,7 +174,7 @@ ESP32 MQTT 上云（I2C/UART/中断/FreeRTOS）」。
 ## 纪律（沿用 LDD- 惯例）
 
 - 每个实验必须真机跑通再写笔记，实测输出贴进对应 README
-- **笔记进 `book-notes/`，lab README 只写实验指南**（文件/构建/实测输出/坑点）+
+- **笔记进书目录根（章节平铺），实验进 `labs/`；lab README 只写实验指南**（文件/构建/实测输出/坑点）+
   笔记落点索引；概念性内容不堆在 lab README 里（2026-10-11 起，
   00-toolchain-clang 已按此瘦身）
 - 坑点记录进各 lab README，"原书怎么说 / 实际是什么"分开写

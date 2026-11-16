@@ -7,7 +7,7 @@
  *   3. .data 初值   —— 从 Flash 拷到 RAM
  *   4. .bss 清零    —— 全局/静态变量默认 0
  * 少第 3、4 条：`static int x = 5;` 的初值还在 Flash 里，RAM 里是垃圾。
- * 实测见 01-stm32/00-toolchain-clang 的第 2 条发现。
+ * 实测见 01-stm32/labs/00-toolchain-clang 的第 2 条发现。
  */
 
 typedef unsigned int u32;
@@ -80,7 +80,7 @@ void __aeabi_memset4(void *dst, u32 n, int c)
 /* ---- 向量表 -------------------------------------------------------------
  * Cortex-M 的系统异常向量是 0..15，16 之后是厂商外设中断。
  * 段名 .vectors + 链接脚本的 KEEP 把它钉在 Flash 首地址 —— 这个位置是硬件
- * 写死的。去掉 KEEP 会怎样？看 01-stm32/01-bare-metal 的反面教材 linker-nokeep.ld：
+ * 写死的。去掉 KEEP 会怎样？看 01-stm32/labs/01-bare-metal 的反面教材 linker-nokeep.ld：
  * 链接不报错，但镜像第 0 个字变成代码指令，上电即崩且无任何编译期提示。
  */
 __attribute__((used, section(".vectors")))

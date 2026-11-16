@@ -2,7 +2,7 @@
 # =============================================================================
 # tools/env.sh —— 工具台自检：一条命令回答「这台机器现在能不能做嵌入式」
 #
-# 这不是把 `command -v` 挨个敲一遍，而是把 01-stm32/book-notes/01-hello-world/1.2
+# 这不是把 `command -v` 挨个敲一遍，而是把 01-stm32/01-hello-world/1.2
 # 里那张"分层确认表"变成可执行脚本：**每一层都真跑一次**，
 # 哪一层没过，问题就在那一层，不要跳层猜。
 #
@@ -224,7 +224,7 @@ if [ -n "$TOOL_GDB" ]; then
   note "$("$TOOL_GDB" --version 2>&1 | head -1)"
 else
   warn "找不到 arm-none-eabi-gdb —— 能烧录，但没有源码级单步"
-  note "只有调试需要它；编译链完全不用 GCC（见 01-stm32/00-toolchain-clang）"
+  note "只有调试需要它；编译链完全不用 GCC（见 01-stm32/labs/00-toolchain-clang）"
 fi
 
 # ---------------------------------------------------------------- [8] 硬件
@@ -305,12 +305,12 @@ if [ "$FAIL" -eq 0 ]; then
   printf '  %s编译链完整可用。%s\n' "$C_GRN" "$C_OFF"
   printf '  下一步：\n'
   printf '    source tools/env.sh --export      # 工具不在 PATH 时先做这一步\n'
-  printf '    cd 01-stm32/07-hello && make      # 编一个最小的\n'
+  printf '    cd 01-stm32/labs/07-hello && make      # 编一个最小的\n'
   printf '    make BOARD=%s flash               # 插上板子再烧\n' "$BOARD"
   printf '    bash tools/env.sh --hw            # 想确认硬件链路就加这一层\n'
 else
   printf '  %s上面有 [FAIL]，先把那一层修掉再往下走。%s\n' "$C_RED" "$C_OFF"
-  printf '  排障口诀：哪一层没出现，问题就在那一层（见 01-stm32/book-notes/01-hello-world/1.2 的分层表）。\n'
+  printf '  排障口诀：哪一层没出现，问题就在那一层（见 01-stm32/01-hello-world/1.2 的分层表）。\n'
 fi
 printf '\n'
 

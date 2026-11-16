@@ -14,7 +14,7 @@
 ```bash
 make BOARD=f103c8t6
 make BOARD=f407zg flash
-tools/newlab.sh 01-stm32/08-x --board f103c8t6
+tools/newlab.sh 01-stm32/labs/08-x --board f103c8t6
 ```
 
 ## 字段
@@ -42,7 +42,7 @@ cp boards/f103rb.mk boards/f103re.mk     # 1. 抄一份最接近的
 $EDITOR boards/f103re.mk                 # 2. 改 CPU / 内存 / cfg 路径 / LED
 $EDITOR boards/openocd/f103re-stlink.cfg # 3. 写它的 OpenOCD 配置（多数情况改 interface/target 两行）
 bash tools/env.sh --board f103re         # 4. 自检确认 cfg 路径找得到
-tools/newlab.sh 01-stm32/09-x --board f103re # 5. 用它生成一个实验
+tools/newlab.sh 01-stm32/labs/09-x --board f103re # 5. 用它生成一个实验
 ```
 
 `tools/lib.sh` 的 `boards_list()` 会自动扫出所有 `.mk`，所以新增以后
@@ -50,8 +50,8 @@ tools/newlab.sh 01-stm32/09-x --board f103re # 5. 用它生成一个实验
 
 ## OpenOCD 配置的写法
 
-> 配置的唯一真源是本目录。`01-stm32/02-libopencm3/openocd/` 下还有同名两份，
-> 那是 2026-09 的首版：`01-stm32/book-notes/` 与 `01-stm32/03-gpio-blink/README.md` 里记录了
+> 配置的唯一真源是本目录。`01-stm32/labs/02-libopencm3/openocd/` 下还有同名两份，
+> 那是 2026-09 的首版：`01-stm32/` 与 `01-stm32/labs/03-gpio-blink/README.md` 里记录了
 > 当时实际敲过的命令，删掉它们那些记录就没法复现了，所以保留作历史副本。
 > 新实验一律用 `boards/openocd/`（`BOARD_OPENOCD_CFG` 已指过来）。
 

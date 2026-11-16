@@ -45,7 +45,7 @@ typedef unsigned int u32;
 
 /* 软件延时：参数必须是 volatile，否则 -Os 会把 while(n--) 优化成 while(1)。
  * 这只是粗略延时（复位后跑的是 HSI，F1 上是 8MHz）；
- * 精确计时要靠 SysTick —— 见 01-stm32/book-notes/19-systick-and-timer。 */
+ * 精确计时要靠 SysTick —— 见 01-stm32/19-systick-and-timer。 */
 static void delay(volatile u32 n)
 {
     while (n != 0u) {

@@ -67,8 +67,8 @@ OBJS   := $(addsuffix .o,$(basename $(SRCS)))
 
 OPT ?= -Os
 
-# 每一行注释为什么在，见 01-stm32/03-gpio-blink/Makefile 的历史版本与
-# 01-stm32/book-notes/11-linker；这里只留结论。
+# 每一行注释为什么在，见 01-stm32/labs/03-gpio-blink/Makefile 的历史版本与
+# 01-stm32/11-linker；这里只留结论。
 CFLAGS  += --target=$(BOARD_TRIPLE) -mcpu=$(BOARD_CPU) -mthumb $(BOARD_CFLAGS) \
            -ffreestanding -fno-builtin -fno-common \
            -Wall -Wextra $(OPT) -g \
@@ -122,7 +122,7 @@ symbols: $(TARGET).elf
 # 烧录 / 调试
 #   烧的是 .bin（纯字节流，必须显式给 Flash 起始地址），
 #   调的是 .elf（带符号表和 DWARF，gdb 靠它把地址翻译成 源码:行号）。
-#   两者同一次链接产出，用途不同，别混用 —— 见 01-stm32/book-notes/02-ide/2.2。
+#   两者同一次链接产出，用途不同，别混用 —— 见 01-stm32/02-ide/2.2。
 # -----------------------------------------------------------------------------
 flash: $(TARGET).bin
 	$(OPENOCD_CMD) -f $(BOARD_OPENOCD_CFG) \

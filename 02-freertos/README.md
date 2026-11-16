@@ -1,44 +1,41 @@
-# freertos —— FreeRTOS 实验区
+# 02-freertos —— 《Mastering the FreeRTOS Real Time Kernel》配套笔记
 
-> 定位：MCU 轨的**第一遍 RTOS**——不搞框架，只把「任务/调度/队列/信号量/互斥量」
-> 这五件事在真机上看明白。第二遍（工程化）在 [03-zephyr/](../03-zephyr/README.md) 用 Zephyr 重做。
-> 对应笔记：配套教材《Mastering the FreeRTOS Real Time Kernel》（官方免费书）的笔记在
-> [book-notes/](book-notes/README.md)（✅ 12 章 44 篇已写满，先行讲解——本目录实验落地后补实测数据）；
-> 先行讲解见 [补充 ch20 走向 FreeRTOS](../01-stm32/book-notes/20-towards-freertos/README.md)（
-> 机制原理都在那里，本目录负责出实测数据）
+> 状态：✅ **12 章小节笔记全部写满**（2026-10-11；ch02–ch04 先行，ch01/ch05–ch12 第二批补齐）。
+> 写作规范与 01-stm32 相同：一小节一篇（50–120 行）、篇号与书章号对齐、
+> 每篇带"原书怎么说 / 实测是什么"坑点表与折叠 Q&A、头部互链对应实验。
+> ⚠ 实验 ⬜ 未做（01-stm32/labs/01–06 未全通），现阶段笔记只讲机制，**实测数据待实验落地后补**。
 
-## 前置
+## 配套教材
 
-- 01-stm32/01–06 全部真机跑通：会点灯（03）、会串口（04）、会中断（05）、会定时器（06）
-- 读完 ch20 三篇再动手——PendSV/SysTick/双栈不懂，FreeRTOS 就是黑盒
+| 项 | 内容 |
+|---|---|
+| 首选 | **《Mastering the FreeRTOS Real Time Kernel: A Hands-On Tutorial Guide》**（Richard Barry，FreeRTOS 创始人） |
+| 获取 | **官方免费 PDF**：[freertos.org 文档页](https://www.freertos.org/Documentation/RTOS_book.html)；官方仓库 [FreeRTOS/FreeRTOS-Kernel-Book](https://github.com/FreeRTOS/FreeRTOS-Kernel-Book)（Markdown 源） |
+| 中译 | 社区译本：GitHub `brokensnow2/FreeRTOS-Kernel-Chinese-PDF`、`kashima19960/FreeRTOS-Kernel-Book-zh`。⚠ 非官方，API 行为以英文原版 + 源码为准 |
+| 纸质备选 | 野火《FreeRTOS 内核实现与应用开发实战指南——基于STM32》（刘火良）——"第二视角"，讲内核实现 |
+| 参考手册 | 《FreeRTOS Reference Manual》（API 逐条查阅，不精读） |
 
-## 实验规划（与 [03-zephyr/](../03-zephyr/README.md) 一一对照，学两遍 = 记两遍）
+## 章节导航（官方章号）
 
-| # | 实验 | 主题 | 对应笔记 | 对应 zephyr | 状态 |
-|---|---|---|---|---|---|
-| 01 | [hello-task](01-hello-task/README.md) | 两任务交替 + 调度器观测 | ch20.1 | 03-zephyr/01-hello | ⬜ 骨架已建 |
-| 02 | [queue](02-queue/README.md) | 中断→队列→任务（下半部的 RTOS 版） | ch20.2 + 书 10.5 | 03-zephyr/02-threads-msgq | ⬜ 骨架已建 |
-| 03 | [semaphore](03-semaphore/README.md) | 二值信号量按键去抖 | ch20.2 + 书 ch05 | 03-zephyr/03-semaphore | ⬜ 骨架已建 |
-| 04 | [mutex-priority](04-mutex-priority/README.md) | 优先级反转 vs 优先级继承 | ch20.3 | 03-zephyr/04-mutex-priority | ⬜ 骨架已建 |
+| 章 | 主题 | 章导航 | 小节进度 | 对应实验 |
+|---|---|---|---|---|
+| ch01 | FreeRTOS 内核分发包 | [01-distribution](01-distribution/README.md) | ✅ **3 篇写满** | 贯穿（移植取材） |
+| ch02 | 堆内存管理 | [02-heap-memory](02-heap-memory/README.md) | ✅ **3 篇写满** | 贯穿（01 的 heap_4 选型） |
+| ch03 | 任务管理 | [03-task-management](03-task-management/README.md) | ✅ **6 篇写满** | [01-hello-task](labs/01-hello-task/README.md) |
+| ch04 | 队列管理 | [04-queue-management](04-queue-management/README.md) | ✅ **5 篇写满** | [02-queue](labs/02-queue/README.md) |
+| ch05 | 软件定时器管理 | [05-software-timers](05-software-timers/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch06 | 中断管理 | [06-interrupt-management](06-interrupt-management/README.md) | ✅ **4 篇写满** | [03-semaphore](labs/03-semaphore/README.md)（二值信号量同步） |
+| ch07 | 资源管理 | [07-resource-management](07-resource-management/README.md) | ✅ **4 篇写满** | [04-mutex-priority](labs/04-mutex-priority/README.md) |
+| ch08 | 事件组 | [08-event-groups](08-event-groups/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch09 | 任务通知 | [09-task-notifications](09-task-notifications/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch10 | 低功耗支持 | [10-low-power](10-low-power/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch11 | 开发者支持 | [11-developer-support](11-developer-support/README.md) | ✅ **4 篇写满** | 工具向，随用随查 |
+| ch12 | 故障排查 | [12-troubleshooting](12-troubleshooting/README.md) | ✅ **3 篇写满** | 工具向，卡住时查 |
 
-## 源码与移植（F103 = Cortex-M3）
+## 先行讲解
 
-- 官方 **FreeRTOS-Kernel**（**MIT** 许可，静态链接无义务）：git clone 或下 release 包，
-  建议挂 `third_party/` 子模块（与 libopencm3 同规矩，钉死 commit）
-- 需要的文件只有：`tasks.c queue.c list.c` + `portable/GCC/ARM_CM3/port.c`
-  + `portable/MemMang/heap_4.c`——**port 层一行不改**
-- 自己要写的：`FreeRTOSConfig.h`（时钟/tick/heap/钩子是全部配置）+ 应用 `main.c`
-- 向量表里 `SVC/PendSV/SysTick` 三个 handler 指到 port 层函数（01-hello-task 的第一个坑）
+书之外的机制铺垫（PendSV/SysTick/双栈、超级循环的局限）在
+[01-stm32 补充 ch20 走向 FreeRTOS](../01-stm32/20-towards-freertos/README.md)——
+**先读那三篇再进 ch03**，否则任务切换是黑盒。
 
-## RAM 预算纪律（20K 是硬约束）
-
-- `configTOTAL_HEAP_SIZE` 先 8K；每个任务栈单独算（01 的验收项之一就是出 RAM 账）
-- `configCHECK_FOR_STACK_OVERFLOW=2` 和 `configASSERT` 从第一个实验就开——
-  裸机没有守卫页，RTOS 的栈检查是你唯一的网
-- 每加一个实验更新一次预算表（写进对应实验 README）
-
-## 纪律（沿用全仓惯例）
-
-- 每个实验真机跑通再写笔记，实测输出（串口文本、gdb 截图、RAM/Flash 账）贴进对应 README
-- 重点记「手写裸机版（书 ch10/19）怎么做 / FreeRTOS 怎么做 / 框架替我包了什么、代价多少」
-- ISR 里只调 `*FromISR` API；`pxHigherPriorityTaskWoken` 的用法每个实验都要检查
+- 实验：[labs/](labs/README.md)（01-hello-task → 04-mutex-priority）｜ 仓库顶层：[README](../README.md)

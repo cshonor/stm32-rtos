@@ -1,66 +1,42 @@
-# zephyr —— Zephyr 实验区（第二遍）
+# 03-zephyr —— 《Zephyr RTOS Embedded C Programming》配套笔记
 
-定位：**第二遍走的工程化路线**。01-stm32/（裸机寄存器）和 02-freertos/（调度原理）
-全部真机跑通后才进这里——Zephyr 抽象层厚，没有裸机底子会被包死在框架里。
+> 状态：✅ **12 章小节笔记全部写满**（2026-10-11；ch04/ch05 先行，ch01–ch03/ch06–ch12 第二批补齐）。
+> 写作规范与 01-stm32 相同：一小节一篇、篇号与书章号对齐、
+> 每篇带"原书怎么说 / 实测是什么"坑点表与折叠 Q&A、头部互链对应实验。
+> ⚠ 启动条件未达成（01-stm32/labs/01–06 + 02-freertos/labs/01–04 未全通），现阶段笔记只讲机制，
+> **且内容以 [Zephyr 官方文档](https://docs.zephyrproject.org) 为准**——
+> 书固定在 2024 年 API，冲突处记进"原书怎么说 / 实际是什么"表。
 
-> 配套教材：《Zephyr RTOS Embedded C Programming》（Andrew Eliasz, Apress 2024）——
-> Zephyr 唯一成体系的专门书，笔记在 [book-notes/](book-notes/README.md)
-> （✅ 12 章 43 篇已写满，先行讲解——书的 API 有年代差，以官方文档为准绳）。
+## 配套教材
 
-## 为什么值得走第二遍
-
-- Zephyr ≈ MCU 上的「小 Linux」：devicetree / Kconfig / west / menuconfig，
-  与 LDD-/09 的 Linux 设备树同一套语法，概念零迁移成本
-- 统一驱动模型：换板基本不改应用代码（FreeRTOS 做不到）
-- Apache 2.0，Linux 基金会托管，工业界采用面广（Nordic / NXP 等）
-
-## 前置
-
-- 01-stm32/01–06 + 02-freertos/01–04 真机全通
-- 板：NUCLEO-F103RB（官方 target `nucleo_f103rb`）或 Blue Pill（`stm32_min_dev_blue`）
-- 无板也能起步：`qemu_cortex_m3` target 可在 QEMU 里跑通前两个实验
-
-## 环境（写于 Windows 时期）
-
-> ⚠ 本节的命令记录自主机还是 Windows 的时期；macOS 侧**尚未实测**。
-> 命令本身跨平台（west 是 Python 包），但 macOS 上应走 venv / 用户级 pip，
-> 不碰系统 Python——实测后再把本行删掉。
-
-```bash
-pip install west
-west init zephyrproject && cd zephyrproject && west update
-pip install -r 03-zephyr/scripts/requirements.txt
-# 工具链：west sdk install（选 arm-zephyr-eabi）
-```
-
-构建模板：
-
-```bash
-west build -b nucleo_f103rb 03-zephyr/samples/hello_world
-west flash        # 板载 ST-LINK 直接烧
-west build -t menuconfig   # 配置界面，和 Linux 内核 menuconfig 同款交互
-```
-
-## 实验规划（与 02-freertos/ 一一对照，学两遍 = 记两遍）
-
-- 01-hello：hello world + shell（对照 02-freertos/01 两任务点灯，先熟悉 west 工作流）
-- 02-threads-msgq：双线程 + k_msgq（对照 02-queue，中断→队列→任务）
-- 03-semaphore：k_sem 做按键去抖（对照 03-semaphore）
-- 04-mutex-priority：k_mutex + 优先级反转（对照 04-mutex-priority，CONFIG_ 开配置看差异）
-
-## API 对照速查
-
-| 02-freertos/ 里学的 | Zephyr 对应 |
+| 项 | 内容 |
 |---|---|
-| xTaskCreate | k_thread_create |
-| xQueueSend / xQueueReceive | k_msgq_put / k_msgq_get |
-| xSemaphoreCreateBinary / take·give | k_sem_take / k_sem_give |
-| xSemaphoreCreateMutex | k_mutex_lock / k_mutex_unlock |
-| vTaskDelay | k_sleep / k_msleep |
-| FreeRTOSConfig.h | Kconfig（CONFIG_*） |
+| 首选 | **《Zephyr RTOS Embedded C Programming: Using Embedded RTOS POSIX API》**（Andrew Eliasz, Apress 2024，677 页，ISBN 9798868801068） |
+| 定位 | Zephyr 唯一成体系的专门书：构建系统（west+Kconfig+devicetree）/ 多线程 / IPC / 文件系统 / BLE / 网络 / ZBus / Renode |
+| 辅助 | **官方文档**（随版本更新；书的 API 有年代差，以它为准绳） |
+| 避坑 | 2025 自费出版《Zephyr RTOS for Embedded Developers》（Norms Albert）不作主线 |
 
-## 纪律（沿用全仓惯例）
+## 章节导航（书章号）
 
-- 每个实验真机（或 QEMU）跑通再写笔记，实测输出贴进 lab README
-- 重点记「FreeRTOS 里怎么做 / Zephyr 里怎么做 / 框架替我包了什么」
-- 64KB Flash 是硬约束：功能加不进去时看 .map 文件，分析谁的锅
+| 章 | 主题 | 章导航 | 小节进度 | 对应实验 |
+|---|---|---|---|---|
+| ch01 | 导论 | [01-introduction](01-introduction/README.md) | ✅ **3 篇写满** | 贯穿 |
+| ch02 | RTOS 基础复习 | [02-rtos-fundamentals](02-rtos-fundamentals/README.md) | ✅ **3 篇写满** | 与 02-freertos/labs/01–04 对照 |
+| ch03 | 开发环境与构建原理 | [03-dev-environment-build](03-dev-environment-build/README.md) | ✅ **4 篇写满** | [01-hello](labs/01-hello/README.md)（west 构建） |
+| ch04 | 多线程 | [04-multithreading](04-multithreading/README.md) | ✅ **6 篇写满** | [01-hello](labs/01-hello/README.md) |
+| ch05 | 队列/管道/邮箱/workqueue | [05-ipc-workqueues](05-ipc-workqueues/README.md) | ✅ **4 篇写满** | [02-threads-msgq](labs/02-threads-msgq/README.md) |
+| ch06 | 文件系统 | [06-filesystems](06-filesystems/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch07 | BLE | [07-ble](07-ble/README.md) | ✅ **3 篇写满** | F103 无 BLE，选读 |
+| ch08 | Ethernet/WiFi/TCP-IP | [08-networking](08-networking/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch09 | DeviceTree（SPI/I2C） | [09-devicetree](09-devicetree/README.md) | ✅ **5 篇写满** | 贯穿（每个实验的 overlay） |
+| ch10 | Renode 仿真 | [10-renode](10-renode/README.md) | ✅ **3 篇写满** | 无板替代路径 |
+| ch11 | ZBus | [11-zbus](11-zbus/README.md) | ✅ **3 篇写满** | 后续追加 |
+| ch12 | Wi-Fi 专题 | [12-wifi](12-wifi/README.md) | ✅ **3 篇写满** | F103 无 Wi-Fi，选读 |
+
+## 与 freertos 轨的对照关系
+
+Zephyr 是**第二遍**：02-freertos/labs/01–04 的四个实验在 03-zephyr/labs/ 有一一对应的重做
+（任务→线程、队列→msgq、信号量→k_sem、互斥量+优先级→k_mutex）。
+笔记里也保留"与 FreeRTOS 对照"小节——**学两遍 = 记两遍**。
+
+- 实验：[labs/](labs/README.md)（01-hello → 04-mutex-priority）｜ 仓库顶层：[README](../README.md)

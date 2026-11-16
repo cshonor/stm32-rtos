@@ -7,8 +7,8 @@
 #   .bin → 纯字节流没有地址信息，必须显式给（这里从 boards/<板子>.mk 取）
 #
 # 用法：
-#   tools/flash.sh 01-stm32/07-hello/hello.bin          默认板子 f103rb
-#   tools/flash.sh 01-stm32/07-hello/hello.elf          烧 .elf（带校验）
+#   tools/flash.sh 01-stm32/labs/07-hello/hello.bin          默认板子 f103rb
+#   tools/flash.sh 01-stm32/labs/07-hello/hello.elf          烧 .elf（带校验）
 #   tools/flash.sh out.bin --board f103c8t6             指定板子
 #   tools/flash.sh out.bin --no-verify                  跳过逐字节校验（快，但别常用）
 #

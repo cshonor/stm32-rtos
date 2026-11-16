@@ -47,7 +47,7 @@ bash tools/env.sh
 source tools/env.sh --export
 
 # 3. 编译一个 lab
-cd 01-stm32/07-hello && make
+cd 01-stm32/labs/07-hello && make
 
 # 4. 插上板子，烧录
 make flash
@@ -60,7 +60,7 @@ make flash
 
 ### `tools/env.sh` —— 分层自检
 
-把 `01-stm32/book-notes/01-hello-world/1.2` 里那张"分层确认表"变成可执行脚本。
+把 `01-stm32/01-hello-world/1.2` 里那张"分层确认表"变成可执行脚本。
 **每一层都真跑一次**（不是 `command -v` 挨个问），哪一层没过，问题就在那一层。
 
 | 层 | 检查什么 | 缺了会怎样 |
@@ -86,7 +86,7 @@ make flash
 ### `tools/flash.sh` —— 烧录
 
 ```bash
-tools/flash.sh 01-stm32/07-hello/hello.bin              # 默认板子 f103rb
+tools/flash.sh 01-stm32/labs/07-hello/hello.bin              # 默认板子 f103rb
 tools/flash.sh nothing/out.elf --board f103c8t6         # 指定板子
 tools/flash.sh out.bin --no-verify                      # 跳过逐字节校验
 ```
@@ -95,18 +95,18 @@ tools/flash.sh out.bin --no-verify                      # 跳过逐字节校验
 `.bin` 必须给（纯字节流没有地址信息，这里从 `boards/<板子>.mk` 取）。
 
 > ⚠ 命令末尾的 `exit` 不能省。少了它 openocd 会一直挂着不退
-> （`01-stm32/03-gpio-blink` 里记着这次教训：实测第一次两分钟没退出，只能 pkill）。
+> （`01-stm32/labs/03-gpio-blink` 里记着这次教训：实测第一次两分钟没退出，只能 pkill）。
 
 ### `tools/dbg.sh` —— 一条命令起 openocd + gdb
 
 ```bash
-tools/dbg.sh 01-stm32/07-hello/hello.elf        # 在 Reset_Handler 停下
+tools/dbg.sh 01-stm32/labs/07-hello/hello.elf        # 在 Reset_Handler 停下
 tools/dbg.sh hello.elf --break main             # 换断点
 tools/dbg.sh --attach                           # 复用已在跑的 openocd
 tools/dbg.sh hello.elf --batch -ex "info registers"
 ```
 
-书里点一下 Debug 按钮，背后是三个进程（`01-stm32/book-notes/02-ide/2.1` Q1）。
+书里点一下 Debug 按钮，背后是三个进程（`01-stm32/02-ide/2.1` Q1）。
 这个脚本拉起前两个：先起 OpenOCD，**等 `:3333` 真的可连**（不是固定 sleep——
 ST-Link 枚举快慢跟 USB 口有关），再起 gdb；gdb 退出后自动收摊。
 `:3333` 上已经有别人的 openocd 时直接复用，且退出时不会把它的杀掉。
@@ -114,9 +114,9 @@ ST-Link 枚举快慢跟 USB 口有关），再起 gdb；gdb 退出后自动收�
 ### `tools/newlab.sh` —— 生成新实验室
 
 ```bash
-tools/newlab.sh 01-stm32/08-uart                   # 默认板子 f103rb
-tools/newlab.sh 01-stm32/04-uart --board f103c8t6
-tools/newlab.sh 01-stm32/09-x --target probe_uart  # 产物名与目录名不同
+tools/newlab.sh 01-stm32/labs/08-uart                   # 默认板子 f103rb
+tools/newlab.sh 01-stm32/labs/04-uart --board f103c8t6
+tools/newlab.sh 01-stm32/labs/09-x --target probe_uart  # 产物名与目录名不同
 ```
 
 从 `tools/templates/bare-metal/` 拷一份，按板子把链接脚本的内存布局、
@@ -169,16 +169,16 @@ include ../../mk/arm-clang.mk
 
 ## 六、把老 lab 迁过来
 
-以 `01-stm32/03-gpio-blink` 为例，改动只有三处：
+以 `01-stm32/labs/03-gpio-blink` 为例，改动只有三处：
 
 1. 删掉 `CC/LD/OBJCOPY/…`、`CFLAGS/ASFLAGS/LDFLAGS`、`%.o`/`%.elf`/`%.bin` 规则——全在 `mk/arm-clang.mk`；
 2. 开头写 `BOARD / TARGET / SRCS` + `include ../../mk/arm-clang.mk`；
 3. 本目录特有的目标（`portprobe`、`regs`、`check-stack`）保留在 include **之后**；
    特有的 `probe` 观测点写成 `PROBE_EXTRA`，不必另写一条 probe 规则。
 
-已迁：`01-stm32/07-hello`（完整示范，原 `labs/01-hello`，2026-11-16 迁入书目录）、`01-stm32/03-gpio-blink`（含特有目标）。
-轻改（只把硬编码路径改成三级回退，结构不动）：`01-stm32/01-bare-metal`、`01-stm32/02-libopencm3`。
-`01-stm32/01-bare-metal` 刻意保留自己的规则——它同时构建汇编版和 C 版两个变体，
+已迁：`01-stm32/labs/07-hello`（完整示范，原 `labs/01-hello`，2026-11-16 迁入书目录）、`01-stm32/labs/03-gpio-blink`（含特有目标）。
+轻改（只把硬编码路径改成三级回退，结构不动）：`01-stm32/labs/01-bare-metal`、`01-stm32/labs/02-libopencm3`。
+`01-stm32/labs/01-bare-metal` 刻意保留自己的规则——它同时构建汇编版和 C 版两个变体，
 不属于"一个 TARGET 一份产物"的形态，硬套共享层反而更难读。
 
 ## 七、跨平台

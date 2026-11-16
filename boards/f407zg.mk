@@ -15,7 +15,7 @@ BOARD_TRIPLE := armv7m-none-eabi
 # FPU 开关：默认走软浮点（和 F103 的脚本保持一致，便于对照）。
 # 要用硬件浮点，把这行改成：-mfloat-abi=hard -mfpu=fpv4-sp-d16
 # 注意：开了之后中断服务函数会真的去碰 s0/s1，现场保护和栈对齐的要求都变了
-#       （01-stm32/01-bare-metal 的 make check-isr 有两个内核的对照输出）。
+#       （01-stm32/labs/01-bare-metal 的 make check-isr 有两个内核的对照输出）。
 BOARD_CFLAGS :=
 
 # 1MB Flash / 128KB SRAM + 64KB CCM（CCM 只能放数据，且不能被 DMA 访问，
