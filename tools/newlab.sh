@@ -6,10 +6,10 @@
 # Makefile 里的 BOARD、README 的标题全部填好。生成完 `make` 就能出 .bin。
 #
 # 用法：
-#   tools/newlab.sh labs/02-uart                       默认板子 f103rb
+#   tools/newlab.sh 01-stm32/08-uart                   默认板子 f103rb
 #   tools/newlab.sh 01-stm32/04-uart --board f103c8t6
-#   tools/newlab.sh labs/03-x --target probe_uart      产物名与目录名不同时用
-#   tools/newlab.sh labs/04-x --force                  目录已存在且非空时覆盖
+#   tools/newlab.sh 01-stm32/09-x --target probe_uart  产物名与目录名不同时用
+#   tools/newlab.sh 01-stm32/09-x --force              目录已存在且非空时覆盖
 #
 # 生成之后要自己改的两处（脚本不猜）：
 #   1. main.c 顶部的 LED_BASE / LED_PIN / LED_ACTIVE_LOW —— 模板里带三块板子的取值注释

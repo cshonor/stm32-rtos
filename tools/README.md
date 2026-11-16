@@ -11,7 +11,7 @@
 
 | 症状 | 具体表现 |
 |---|---|
-| 规则重复 | `01-stm32/00`、`01`、`03`、`labs/*` 各抄一份 CFLAGS / LDFLAGS / `%.o: %.c`，改一个编译选项要改五处 |
+| 规则重复 | `01-stm32/00`、`01`、`03` 等各实验目录各抄一份 CFLAGS / LDFLAGS / `%.o: %.c`，改一个编译选项要改五处 |
 | 路径硬编码 | `$(HOME)/.local/xpack-openocd-0.12.0-7/bin/openocd`、`/Users/a0000/micromamba/envs/cdev/bin` 写死在 Makefile 和笔记正文里，换台机器就找不到 |
 | 环境靠记 | "这台机器上 clang 在哪、openocd 的 scripts 目录在哪"只存在于上一轮的对话记录里 |
 | 新实验靠拷 | 开一个新实验 = 从旧目录拷 Makefile 再手改板子相关的数字（Flash 容量、LED 引脚） |
@@ -47,7 +47,7 @@ bash tools/env.sh
 source tools/env.sh --export
 
 # 3. 编译一个 lab
-cd labs/01-hello && make
+cd 01-stm32/07-hello && make
 
 # 4. 插上板子，烧录
 make flash
@@ -86,7 +86,7 @@ make flash
 ### `tools/flash.sh` —— 烧录
 
 ```bash
-tools/flash.sh labs/01-hello/hello.bin                  # 默认板子 f103rb
+tools/flash.sh 01-stm32/07-hello/hello.bin              # 默认板子 f103rb
 tools/flash.sh nothing/out.elf --board f103c8t6         # 指定板子
 tools/flash.sh out.bin --no-verify                      # 跳过逐字节校验
 ```
@@ -100,7 +100,7 @@ tools/flash.sh out.bin --no-verify                      # 跳过逐字节校验
 ### `tools/dbg.sh` —— 一条命令起 openocd + gdb
 
 ```bash
-tools/dbg.sh labs/01-hello/hello.elf            # 在 Reset_Handler 停下
+tools/dbg.sh 01-stm32/07-hello/hello.elf        # 在 Reset_Handler 停下
 tools/dbg.sh hello.elf --break main             # 换断点
 tools/dbg.sh --attach                           # 复用已在跑的 openocd
 tools/dbg.sh hello.elf --batch -ex "info registers"
@@ -114,9 +114,9 @@ ST-Link 枚举快慢跟 USB 口有关），再起 gdb；gdb 退出后自动收�
 ### `tools/newlab.sh` —— 生成新实验室
 
 ```bash
-tools/newlab.sh labs/02-uart                     # 默认板子 f103rb
+tools/newlab.sh 01-stm32/08-uart                   # 默认板子 f103rb
 tools/newlab.sh 01-stm32/04-uart --board f103c8t6
-tools/newlab.sh labs/03-x --target probe_uart    # 产物名与目录名不同
+tools/newlab.sh 01-stm32/09-x --target probe_uart  # 产物名与目录名不同
 ```
 
 从 `tools/templates/bare-metal/` 拷一份，按板子把链接脚本的内存布局、
@@ -176,7 +176,7 @@ include ../../mk/arm-clang.mk
 3. 本目录特有的目标（`portprobe`、`regs`、`check-stack`）保留在 include **之后**；
    特有的 `probe` 观测点写成 `PROBE_EXTRA`，不必另写一条 probe 规则。
 
-已迁：`labs/01-hello`（完整示范）、`01-stm32/03-gpio-blink`（含特有目标）。
+已迁：`01-stm32/07-hello`（完整示范，原 `labs/01-hello`，2026-11-16 迁入书目录）、`01-stm32/03-gpio-blink`（含特有目标）。
 轻改（只把硬编码路径改成三级回退，结构不动）：`01-stm32/01-bare-metal`、`01-stm32/02-libopencm3`。
 `01-stm32/01-bare-metal` 刻意保留自己的规则——它同时构建汇编版和 C 版两个变体，
 不属于"一个 TARGET 一份产物"的形态，硬套共享层反而更难读。

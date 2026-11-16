@@ -305,7 +305,7 @@ if [ "$FAIL" -eq 0 ]; then
   printf '  %s编译链完整可用。%s\n' "$C_GRN" "$C_OFF"
   printf '  下一步：\n'
   printf '    source tools/env.sh --export      # 工具不在 PATH 时先做这一步\n'
-  printf '    cd labs/01-hello && make          # 编一个最小的\n'
+  printf '    cd 01-stm32/07-hello && make      # 编一个最小的\n'
   printf '    make BOARD=%s flash               # 插上板子再烧\n' "$BOARD"
   printf '    bash tools/env.sh --hw            # 想确认硬件链路就加这一层\n'
 else

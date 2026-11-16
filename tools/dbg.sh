@@ -7,7 +7,7 @@
 # 这个脚本把前两个拉起来；第三个在板子上，不用管。
 #
 # 用法：
-#   tools/dbg.sh labs/01-hello/hello.elf                  在 Reset_Handler 停下
+#   tools/dbg.sh 01-stm32/07-hello/hello.elf              在 Reset_Handler 停下
 #   tools/dbg.sh hello.elf --break main                   换断点
 #   tools/dbg.sh hello.elf --board f103c8t6
 #   tools/dbg.sh --attach                                 复用已在跑的 openocd

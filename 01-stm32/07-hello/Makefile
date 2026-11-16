@@ -1,4 +1,4 @@
-# Makefile —— labs/01-hello
+# Makefile —— 01-stm32/07-hello
 #
 # 工具台改造示范：这个文件曾经把 CC/LD/OBJCOPY、CFLAGS、LDFLAGS 和规则全抄了
 # 一遍（每个 lab 一份，改一个选项要改五处），现在已经收拢进 mk/arm-clang.mk，

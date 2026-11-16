@@ -14,7 +14,7 @@
 ```bash
 make BOARD=f103c8t6
 make BOARD=f407zg flash
-tools/newlab.sh labs/05-x --board f103c8t6
+tools/newlab.sh 01-stm32/08-x --board f103c8t6
 ```
 
 ## 字段
@@ -42,7 +42,7 @@ cp boards/f103rb.mk boards/f103re.mk     # 1. 抄一份最接近的
 $EDITOR boards/f103re.mk                 # 2. 改 CPU / 内存 / cfg 路径 / LED
 $EDITOR boards/openocd/f103re-stlink.cfg # 3. 写它的 OpenOCD 配置（多数情况改 interface/target 两行）
 bash tools/env.sh --board f103re         # 4. 自检确认 cfg 路径找得到
-tools/newlab.sh labs/06-x --board f103re # 5. 用它生成一个实验
+tools/newlab.sh 01-stm32/09-x --board f103re # 5. 用它生成一个实验
 ```
 
 `tools/lib.sh` 的 `boards_list()` 会自动扫出所有 `.mk`，所以新增以后

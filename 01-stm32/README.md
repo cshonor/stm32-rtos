@@ -29,6 +29,8 @@
 - 规划中（骨架已建）：[04-uart-printf](04-uart-printf/README.md)（书 ch9 + ch21）→
   [05-exti-button](05-exti-button/README.md)（书 ch10 + ch05）→
   [06-timer](06-timer/README.md)（补充 ch19）
+- [07-hello](07-hello/README.md)：工具台的参考实验（2026-11-16 自顶层 `labs/` 迁入书目录）——
+  Makefile 只有 4 行的最小可跑工程（Blue Pill PC13 点灯），是 `mk/arm-clang.mk` 共享层的实物证据
 - 「02-linker」不单列目录：链接脚本（书 ch3 主题）已在 `01-bare-metal/linker.ld` 逐段落地
   + 反面教材 `linker-nokeep.ld`，笔记侧见 [book-notes/11-linker](book-notes/11-linker/README.md)
 
