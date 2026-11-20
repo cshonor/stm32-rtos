@@ -1,5 +1,11 @@
 # 01-stm32 —— 《裸机C编程》逐**小节**笔记
 
+> **freestanding 路径 · 第 1 站（含第 2 站）**：书 ch01–ch18 是从零起步的裸机 C——
+> `-nostdlib`、自己写启动/向量表/链接脚本，回答"上电到 main 之间发生了什么"；
+> `labs/02-libopencm3`、`03-hal` 则是第 2 站（同一片 freestanding 空地上借库/HAL 的轮子）。
+> 地基篇 [00-mental-model](00-mental-model/00.1-没有OS的C语言.md) 先把 freestanding 概念钉死，再进书。
+> 全路径主线见[仓库顶层 README](../README.md#这是一条-freestanding-学习路径)。
+>
 > 本目录 = 书 + 实验：笔记章节直接平铺在本目录下（00–21 + 附录），
 > 实验收在 [labs/](labs/README.md)（00-toolchain-clang → 07-hello，共 9 个）。
 

@@ -1,5 +1,9 @@
 # 03-zephyr —— 《Zephyr RTOS Embedded C Programming》配套笔记
 
+> **freestanding 路径 · 第 4 站（终点）**：工程化 RTOS——devicetree + Kconfig + west，
+> 把前几站的手工配置变成描述文件，回答"量产项目怎么组织一个 freestanding 工程"。
+> 启动链由 Zephyr 接管，但执行环境仍非 hosted。全路径主线见[仓库顶层 README](../README.md#这是一条-freestanding-学习路径)。
+>
 > 状态：✅ **12 章小节笔记全部写满**（2026-10-11；ch04/ch05 先行，ch01–ch03/ch06–ch12 第二批补齐）。
 > 写作规范与 01-stm32 相同：一小节一篇、篇号与书章号对齐、
 > 每篇带"原书怎么说 / 实测是什么"坑点表与折叠 Q&A、头部互链对应实验。
