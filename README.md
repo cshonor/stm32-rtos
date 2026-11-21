@@ -106,7 +106,7 @@ tools/newlab.sh 01-stm32/labs/08-uart  # 生成下一个实验的骨架（板级
 | 5 | 时钟树与 UART | 01-stm32/labs/04-uart-printf | ⬜ 骨架已建（笔记：书 ch09 + 补充 ch21） |
 | 6 | 中断与 EXTI | 01-stm32/labs/05-exti-button | ⬜ 骨架已建（笔记：书 ch10 + ch05） |
 | 7 | SysTick / 定时器 | 01-stm32/labs/06-timer | ⬜ 骨架已建（笔记：补充 ch19） |
-| 8 | FreeRTOS：任务/调度/队列/信号量 | 02-freertos/labs/01–04 | ⬜ 骨架已建（笔记：补充 ch20） |
+| 8 | FreeRTOS：任务/调度/队列/信号量 | 02-freertos/labs/01–04 | ⬜ 骨架已建（笔记：[02-freertos/ 12 章](02-freertos/README.md) 已写满；裸机前置见 [补充 ch20](01-stm32/20-towards-freertos/README.md)） |
 | 轨道二 | 库路线：libopencm3（≠ HAL） | 01-stm32/labs/02-libopencm3 | ✅ 真机首烧通过（09-24） |
 | 轨道三 | ST 官方 HAL | 01-stm32/labs/03-hal | ⬜ 骨架已建，库未引入 |
 

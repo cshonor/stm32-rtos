@@ -44,3 +44,12 @@ Zephyr 是**第二遍**：02-freertos/labs/01–04 的四个实验在 03-zephyr/
 笔记里也保留"与 FreeRTOS 对照"小节——**学两遍 = 记两遍**。
 
 - 实验：[labs/](labs/README.md)（01-hello → 04-mutex-priority）｜ 仓库顶层：[README](../README.md)
+
+## 旁支选读
+
+不进书章序列的横向对照篇，按需读，不影响主线进度：
+
+- [RT-Thread 对照：第三种 RTOS 路线，以及为什么不单开一条轨](rt-thread-contrast.md)
+  —— FreeRTOS / RT-Thread / Zephyr 三方在内核层与中间件层的逐项对照；结论是 RT-Thread 与
+  Zephyr 同层、机制重叠约 80%，故作旁支而非第 5 站。含优先级方向、邮箱 4 字节、
+  三套堆 + mempool、FinSH 可观测性等坑点。
